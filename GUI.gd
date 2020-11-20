@@ -45,3 +45,8 @@ func _seed_random():
 
 func _on_Button_pressed():
 	_seed_random()
+
+func _process(_delta):
+	var time = OS.get_ticks_msec() * 0.001
+	$Light.material.set_shader_param("time_elapsed", time)
+

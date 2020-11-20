@@ -10,7 +10,7 @@ code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform vec2 offset = vec2(0.0);
-
+uniform float time_elapsed;
 
 float rand(vec2 coord) {
 	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -22,14 +22,14 @@ vec2 rotate(vec2 coord, float angle){
 }
 
 void fragment() {
-	vec2 uv = rotate(UV, TIME * 0.2);
+	vec2 uv = rotate(UV, time_elapsed * 0.2);
 
-	vec4 col = vec4(1.0) + rand(UV + vec2(TIME*0.0000001,0.0)) * 0.03;
-	
+	vec4 col = vec4(1.0) + rand(UV + vec2(time_elapsed*0.0000001,0.0)) * 0.03;
+
 	col = col* vec4(
-		abs(sin(uv.x * cos(offset.x)+ TIME * 0.105)),
-		abs(sin((cos(uv.x + uv.y) + cos(offset.x + offset.y) + TIME * 0.059))) ,
-		abs(cos(uv.y * sin(offset.y) + TIME * 0.0253)) ,
+		abs(sin(uv.x * cos(offset.x)+ time_elapsed * 0.105)),
+		abs(sin((cos(uv.x + uv.y) + cos(offset.x + offset.y) + time_elapsed * 0.059))) ,
+		abs(cos(uv.y * sin(offset.y) + time_elapsed * 0.0253)) ,
 		1.0);
 
 	COLOR = col;
@@ -38,6 +38,7 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
 shader_param/offset = Vector2( 0, 0 )
+shader_param/time_elapsed = null
 
 [sub_resource type="CanvasItemMaterial" id=3]
 particles_animation = true
@@ -65,7 +66,7 @@ hue_variation_random = 1.0
 anim_offset = 1.0
 anim_offset_random = 1.0
 
-[sub_resource type="Shader" id=10]
+[sub_resource type="Shader" id=7]
 code = "shader_type canvas_item;
 render_mode unshaded;
 
@@ -84,8 +85,8 @@ void fragment () {
 	COLOR = color;
 }"
 
-[sub_resource type="ShaderMaterial" id=11]
-shader = SubResource( 10 )
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 7 )
 shader_param/abberation = 0.001
 
 [node name="GUI" type="Control"]
@@ -139,10 +140,10 @@ rect_pivot_offset = Vector2( 150, 150 )
 [node name="Control" parent="HBoxContainer/PlanetHolder" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 49.0
-margin_top = 49.0
-margin_right = 249.0
-margin_bottom = 249.0
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 250.0
+margin_bottom = 250.0
 
 [node name="Settings" type="Control" parent="HBoxContainer"]
 margin_left = 304.0
@@ -243,11 +244,10 @@ margin_right = 203.0
 margin_bottom = 155.0
 theme = ExtResource( 2 )
 min_value = 30.0
-max_value = 100.0
 value = 70.0
 
 [node name="Abberation" type="ColorRect" parent="."]
-material = SubResource( 11 )
+material = SubResource( 8 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2

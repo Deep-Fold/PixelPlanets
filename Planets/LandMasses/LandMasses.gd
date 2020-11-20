@@ -1,6 +1,6 @@
 extends "res://Planets/Planet.gd"
 
-func set_pixels(amount):	
+func set_pixels(amount):
 	$Water.material.set_shader_param("pixels", amount)
 	$Land.material.set_shader_param("pixels", amount)
 	$Cloud.material.set_shader_param("pixels", amount)
@@ -16,3 +16,10 @@ func set_seed(sd):
 	$Water.material.set_shader_param("seed", converted_seed)
 	$Land.material.set_shader_param("seed", converted_seed)
 	$Cloud.material.set_shader_param("cloud_cover", rand_range(0.35, 0.6))
+
+func _process(_delta):
+	var time = OS.get_ticks_msec() * 0.001
+	$Cloud.material.set_shader_param("time_elapsed", time)
+	$Water.material.set_shader_param("time_elapsed", time)
+	$Land.material.set_shader_param("time_elapsed", time)
+

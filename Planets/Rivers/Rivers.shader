@@ -16,6 +16,7 @@ uniform vec4 col4 : hint_color;
 uniform vec4 river_col : hint_color;
 uniform vec4 river_col_dark : hint_color;
 
+uniform float time_elapsed;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
@@ -34,7 +35,7 @@ float rand(vec2 coord) {
 float noise(vec2 coord){
 	vec2 i = floor(coord);
 	vec2 f = fract(coord);
-		
+
 	float a = rand(i);
 	float b = rand(i + vec2(1.0, 0.0));
 	float c = rand(i + vec2(0.0, 1.0));
@@ -77,27 +78,27 @@ bool dither(vec2 uv1, vec2 uv2) {
 void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
-	
+
 	float d_light = distance(uv , light_origin);
-	
+
 	// give planet a tilt
 	uv = rotate(uv, 0.2);
 //
 //	// map to sphere
 	uv = spherify(uv);
-	
+
 	// some scrolling noise for landmasses
-	vec2 base_fbm_uv = (uv)*size+vec2(TIME*time_speed,0.0);
-	
+	vec2 base_fbm_uv = (uv)*size+vec2(time_elapsed*time_speed,0.0);
+
 	// use multiple fbm's at different places so we can determine what color land gets
 	float fbm1 = fbm(base_fbm_uv);
 	float fbm2 = fbm(base_fbm_uv - light_origin*fbm1);
 	float fbm3 = fbm(base_fbm_uv - light_origin*1.5*fbm1);
 	float fbm4 = fbm(base_fbm_uv - light_origin*2.0*fbm1);
-	
+
 	float river_fbm = fbm(base_fbm_uv+fbm1*6.0);
 	river_fbm = step(river_cutoff, river_fbm);
-	
+
 	// size of edge in which colors should be dithered
 	float dither_border = (1.0/pixels)*dither_size;
 	// lots of magic numbers here
@@ -109,7 +110,7 @@ void fragment() {
 		fbm2 *= 1.05;
 		fbm3 *= 1.05;
 		fbm4 *= 1.05;
-	} 
+	}
 	if (d_light > light_border_2) {
 		fbm2 *= 1.3;
 		fbm3 *= 1.4;
@@ -117,12 +118,12 @@ void fragment() {
 		if (d_light < light_border_2 +dither_border && dither(uv, uv)) {
 			fbm4 *= 0.5;
 		}
-	} 
+	}
 //	if (d_light < light_border_1) {
 //		fbm4 *= 0.9;
 //	}
-	
-	
+
+
 	// increase contrast on d_light
 	d_light = pow(d_light, 2.0)*0.4;
 	vec3 col = col4.rgb;
@@ -141,6 +142,6 @@ void fragment() {
 			col = river_col.rgb;
 		}
 	}
-	
+
 	COLOR = vec4(col, step(distance(vec2(0.5), uv), 0.5));
 }

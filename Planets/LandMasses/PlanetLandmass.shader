@@ -14,6 +14,7 @@ uniform vec4 col2 : hint_color;
 uniform vec4 col3 : hint_color;
 uniform vec4 col4 : hint_color;
 
+uniform float time_elapsed;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
@@ -33,7 +34,7 @@ float rand(vec2 coord) {
 float noise(vec2 coord){
 	vec2 i = floor(coord);
 	vec2 f = fract(coord);
-		
+
 	float a = rand(i);
 	float b = rand(i + vec2(1.0, 0.0));
 	float c = rand(i + vec2(0.0, 1.0));
@@ -72,24 +73,24 @@ vec2 rotate(vec2 coord, float angle){
 void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
-	
+
 	float d_light = distance(uv , light_origin);
-	
+
 	// give planet a tilt
 	uv = rotate(uv, 0.2);
-	
+
 	// map to sphere
 	uv = spherify(uv);
-	
+
 	// some scrolling noise for landmasses
-	vec2 base_fbm_uv = (uv)*size+vec2(TIME*time_speed,0.0);
-	
+	vec2 base_fbm_uv = (uv)*size+vec2(time_elapsed*time_speed,0.0);
+
 	// use multiple fbm's at different places so we can determine what color land gets
 	float fbm1 = fbm(base_fbm_uv);
 	float fbm2 = fbm(base_fbm_uv - light_origin*fbm1);
 	float fbm3 = fbm(base_fbm_uv - light_origin*1.5*fbm1);
 	float fbm4 = fbm(base_fbm_uv - light_origin*2.0*fbm1);
-	
+
 	// lots of magic numbers here
 	// you can mess with them, it changes the color distribution
 	if (d_light < light_border_1) {
@@ -99,13 +100,13 @@ void fragment() {
 		fbm2 *= 1.05;
 		fbm3 *= 1.05;
 		fbm4 *= 1.05;
-	} 
+	}
 	if (d_light > light_border_2) {
 		fbm2 *= 1.3;
 		fbm3 *= 1.4;
 		fbm4 *= 1.8;
-	} 
-	
+	}
+
 	// increase contrast on d_light
 	d_light = pow(d_light, 2.0)*0.1;
 	vec3 col = col4.rgb;
@@ -120,6 +121,6 @@ void fragment() {
 	if (fbm2 + d_light < fbm1) {
 		col = col1.rgb;
 	}
-	
+
 	COLOR = vec4(col, step(land_cutoff, fbm1));
 }
