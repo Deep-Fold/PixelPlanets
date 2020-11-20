@@ -7,6 +7,7 @@ uniform float time_speed : hint_range(0.0, 1.0) = 0.2;
 uniform float light_border : hint_range(0.0, 1.0) = 0.4;
 uniform vec4 color1 : hint_color;
 uniform vec4 color2 : hint_color;
+uniform float time_elapsed;
 uniform float size = 50.0;
 uniform float seed: hint_range(1, 10);
 
@@ -49,26 +50,26 @@ vec2 rotate(vec2 coord, float angle){
 void fragment() {
 	//pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
-	
+
 	uv = rotate(uv, 0.4);
-	
+
 	// check distance from center & distance to light
 	float d_circle = distance(uv, vec2(0.5));
 	float d_light = distance(uv , vec2(light_origin));
-	
+
 	uv = spherify(uv);
-		
-	float c1 = crater(uv + vec2(TIME*time_speed, 0.0));
-	float c2 = crater(uv + vec2(TIME*time_speed, 0.0) +(light_origin-0.5)*0.03);
+
+	float c1 = crater(uv + vec2(time_elapsed*time_speed, 0.0));
+	float c2 = crater(uv + vec2(time_elapsed*time_speed, 0.0) +(light_origin-0.5)*0.03);
 	vec3 col = color1.rgb;
-	
+
 	float a = step(0.5, c1);
 	if (c2<c1-(0.5-d_light)*2.0) {
 		col = color2.rgb;
 	}
 	if (d_light > light_border) {
 		col = color2.rgb;
-	} 
+	}
 
 	// cut out a circle
 	a*= step(d_circle, 0.5);

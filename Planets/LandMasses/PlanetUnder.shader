@@ -10,6 +10,7 @@ uniform float light_border_2 : hint_range(0.0, 1.0) = 0.6;
 uniform vec4 color1 : hint_color;
 uniform vec4 color2 : hint_color;
 uniform vec4 color3 : hint_color;
+uniform float time_elapsed;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
@@ -26,7 +27,7 @@ float rand(vec2 coord) {
 float noise(vec2 coord){
 	vec2 i = floor(coord);
 	vec2 f = fract(coord);
-	
+
 	float a = rand(i);
 	float b = rand(i + vec2(1.0, 0.0));
 	float c = rand(i + vec2(0.0, 1.0));
@@ -59,13 +60,13 @@ void fragment() {
 	// check distance from center & distance to light
 	float d_circle = distance(uv, vec2(0.5));
 	float d_light = distance(uv , vec2(light_origin));
-	
+
 	// cut out a circle
 	float a = step(d_circle, 0.5);
-	
+
 	// get a noise value with light distance added
-	d_light += fbm(uv*size+vec2(TIME*time_speed, 0.0))*0.3; // change the magic 0.3 here for different light strengths
-	
+	d_light += fbm(uv*size+vec2(time_elapsed*time_speed, 0.0))*0.3; // change the magic 0.3 here for different light strengths
+
 	// size of edge in which colors should be dithered
 	float dither_border = (1.0/pixels)*dither_size;
 
@@ -83,6 +84,6 @@ void fragment() {
 			col = color2.rgb;
 		}
 	}
-	
+
 	COLOR = vec4(col, a);
 }

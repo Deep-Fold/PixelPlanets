@@ -13,3 +13,9 @@ func set_seed(sd):
 	$Cloud.material.set_shader_param("seed", converted_seed)
 	$Cloud.material.set_shader_param("cloud_cover", rand_range(0.35, 0.6))
 	$Land.material.set_shader_param("seed", converted_seed)
+
+func _process(_delta):
+	var time = OS.get_ticks_msec() * 0.001
+	$Land.material.set_shader_param("time_elapsed", time)
+	$Cloud.material.set_shader_param("time_elapsed", time)
+
