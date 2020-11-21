@@ -8,6 +8,7 @@
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
 shader_param/pixels = 100.0
+shader_param/rotation = 0.0
 shader_param/light_origin = Vector2( 0.25, 0.25 )
 shader_param/time_speed = 0.0
 shader_param/dither_size = 2.0
@@ -23,6 +24,7 @@ shader_param/seed = 1.012
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 3 )
 shader_param/pixels = 87.419
+shader_param/rotation = 0.0
 shader_param/light_origin = Vector2( 0.25, 0.25 )
 shader_param/time_speed = 0.0
 shader_param/light_border = 0.465
@@ -33,22 +35,21 @@ shader_param/seed = 5.579
 
 [node name="NoAtmosphere" instance=ExtResource( 1 )]
 margin_right = -212.0
-rect_min_size = Vector2( 200, 200 )
 rect_pivot_offset = Vector2( 100, 100 )
 script = ExtResource( 4 )
 
 [node name="PlanetUnder" type="ColorRect" parent="." index="0"]
 material = SubResource( 1 )
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_right = -300.0
+margin_bottom = -200.0
+rect_min_size = Vector2( 200, 200 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Craters" type="ColorRect" parent="." index="1"]
 material = SubResource( 2 )
-anchor_right = 1.0
-anchor_bottom = 1.0
+rect_min_size = Vector2( 200, 200 )
 rect_pivot_offset = Vector2( 150, 150 )
 __meta__ = {
 "_edit_use_anchors_": false

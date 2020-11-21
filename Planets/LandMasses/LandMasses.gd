@@ -16,3 +16,8 @@ func set_seed(sd):
 	$Water.material.set_shader_param("seed", converted_seed)
 	$Land.material.set_shader_param("seed", converted_seed)
 	$Cloud.material.set_shader_param("cloud_cover", rand_range(0.35, 0.6))
+
+func set_rotate(r):
+	$Cloud.material.set_shader_param("rotation", r)
+	$Water.material.set_shader_param("rotation", r)
+	$Land.material.set_shader_param("rotation", r)

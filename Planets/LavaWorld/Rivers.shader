@@ -4,22 +4,22 @@ render_mode blend_mix;
 uniform float pixels : hint_range(10,100);
 uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform vec2 light_origin = vec2(0.39, 0.39);
-uniform float time_speed : hint_range(0.0, 1.0) = 0.2;
-uniform float dither_size : hint_range(0.0, 10.0) = 2.0;
+uniform float time_speed : hint_range(-2.0, 3.0) = 0.2;
 uniform float light_border_1 : hint_range(0.0, 1.0) = 0.4;
-uniform float light_border_2 : hint_range(0.0, 1.0) = 0.6;
+uniform float light_border_2 : hint_range(0.0, 1.0) = 0.5;
+uniform float river_cutoff : hint_range(0.0, 1.0);
+
 uniform vec4 color1 : hint_color;
 uniform vec4 color2 : hint_color;
 uniform vec4 color3 : hint_color;
+
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
 
+
+
 float rand(vec2 coord) {
-	// land has to be tiled
-	// tiling only works for integer values, thus the rounding
-	// it would probably be better to only allow integer sizes
-	// multiply by vec2(2,1) to simulate planet having another side
 	coord = mod(coord, vec2(2.0,1.0)*round(size));
 	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
 }
@@ -27,7 +27,7 @@ float rand(vec2 coord) {
 float noise(vec2 coord){
 	vec2 i = floor(coord);
 	vec2 f = fract(coord);
-	
+		
 	float a = rand(i);
 	float b = rand(i + vec2(1.0, 0.0));
 	float c = rand(i + vec2(0.0, 1.0));
@@ -50,8 +50,11 @@ float fbm(vec2 coord){
 	return value;
 }
 
-bool dither(vec2 uv1, vec2 uv2) {
-	return mod(uv1.x+uv2.y,2.0/pixels) <= 1.0 / pixels;
+vec2 spherify(vec2 uv) {
+	vec2 centered= uv *2.0-1.0;
+	float z = sqrt(1.0 - dot(centered.xy, centered.xy));
+	vec2 sphere = centered/(z + 1.0);
+	return sphere * 0.5+0.5;
 }
 
 vec2 rotate(vec2 coord, float angle){
@@ -60,49 +63,42 @@ vec2 rotate(vec2 coord, float angle){
 	return coord + 0.5;
 }
 
-vec2 spherify(vec2 uv) {
-	vec2 centered= uv *2.0-1.0;
-	float z = sqrt(1.0 - dot(centered.xy, centered.xy));
-	vec2 sphere = centered/(z + 1.0);
-	return sphere * 0.5+0.5;
+bool dither(vec2 uv1, vec2 uv2) {
+	return mod(uv1.x+uv2.y,2.0/pixels) <= 1.0 / pixels;
 }
 
-
 void fragment() {
-	//pixelize uv
+	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
-	bool dith = dither(uv, UV);
+	float d_light = distance(uv , light_origin);
 	
-	uv = spherify(uv);
+	// give planet a tilt
 	uv = rotate(uv, rotation);
-	// check distance from center & distance to light
-	float d_circle = distance(uv, vec2(0.5));
-	float d_light = distance(uv , vec2(light_origin));
-	
-	// cut out a circle
-	float a = step(d_circle, 0.5);
-	
-	// get a noise value with light distance added
-	d_light += fbm(uv*size+vec2(TIME*time_speed, 0.0))*0.3; // change the magic 0.3 here for different light strengths
-	
-	// size of edge in which colors should be dithered
-	float dither_border = (1.0/pixels)*dither_size;
 
-	// now we can assign colors based on distance to light origin
+//	// map to sphere
+	uv = spherify(uv);
+	
+	// some scrolling noise for landmasses
+	float fbm1 = fbm(uv*size+vec2(TIME*time_speed,0.0));
+	float river_fbm = fbm(uv + fbm1*2.5);
+	
+	// increase contrast on d_light
+	d_light = pow(d_light, 2.0)*0.4;
+	d_light -= d_light * river_fbm;
+	
+	river_fbm = step(river_cutoff, river_fbm);
+	
+	// apply colors
 	vec3 col = color1.rgb;
 	if (d_light > light_border_1) {
 		col = color2.rgb;
-		if (d_light < light_border_1 + dither_border && dith) {
-			col = color1.rgb;
-		}
 	}
 	if (d_light > light_border_2) {
 		col = color3.rgb;
-		if (d_light < light_border_2 + dither_border && dith) {
-			col = color2.rgb;
-		}
 	}
 	
+	float a = step(river_cutoff, river_fbm);
+	a*= step(distance(vec2(0.5), uv), 0.5);
 	COLOR = vec4(col, a);
 }

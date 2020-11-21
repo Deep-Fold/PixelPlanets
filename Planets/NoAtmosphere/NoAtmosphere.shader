@@ -2,6 +2,7 @@ shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float pixels : hint_range(10,100);
+uniform float rotation : hint_range(0.0, 6.28) = 1.0;
 uniform vec2 light_origin = vec2(0.39, 0.39);
 uniform float time_speed : hint_range(0.0, 1.0) = 0.2;
 uniform float dither_size : hint_range(0.0, 10.0) = 2.0;
@@ -48,10 +49,17 @@ bool dither(vec2 uv1, vec2 uv2) {
 	return mod(uv1.x+uv2.y,2.0/pixels) <= 1.0 / pixels;
 }
 
+vec2 rotate(vec2 coord, float angle){
+	coord -= 0.5;
+	coord *= mat2(vec2(cos(angle),-sin(angle)),vec2(sin(angle),cos(angle)));
+	return coord + 0.5;
+}
+
 void fragment() {
 	//pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
-
+	bool dith = dither(uv ,UV);
+	uv = rotate(uv, rotation);
 	// check distance from center & distance to light
 	float d_circle = distance(uv, vec2(0.5));
 	float d_light = distance(uv , vec2(light_origin));
@@ -71,13 +79,13 @@ void fragment() {
 	vec3 col = color1.rgb;
 	if (d_light > light_border_1) {
 		col = color2.rgb;
-		if (d_light < light_border_1 + dither_border && dither(uv, UV)) {
+		if (d_light < light_border_1 + dither_border && dith) {
 			col = color1.rgb;
 		}
 	}
 	if (d_light > light_border_2) {
 		col = color3.rgb;
-		if (d_light < light_border_2 + dither_border && dither(uv, UV)) {
+		if (d_light < light_border_2 + dither_border && dith) {
 			col = color2.rgb;
 		}
 	}

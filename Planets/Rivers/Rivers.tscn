@@ -1,17 +1,18 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Planets/Rivers/Rivers.shader" type="Shader" id=1]
+[ext_resource path="res://Planets/Rivers/LandRivers.shader" type="Shader" id=1]
 [ext_resource path="res://Planets/LandMasses/Clouds.shader" type="Shader" id=2]
 [ext_resource path="res://Planets/Rivers/Rivers.gd" type="Script" id=3]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 1 )
 shader_param/pixels = 100.0
+shader_param/rotation = 0.2
 shader_param/light_origin = Vector2( 0.39, 0.39 )
 shader_param/time_speed = 0.124
-shader_param/dither_size = 2.805
-shader_param/light_border_1 = 0.262
-shader_param/light_border_2 = 0.489
+shader_param/dither_size = 3.951
+shader_param/light_border_1 = 0.287
+shader_param/light_border_2 = 0.476
 shader_param/river_cutoff = 0.368
 shader_param/col1 = Color( 0.388235, 0.670588, 0.247059, 1 )
 shader_param/col2 = Color( 0.231373, 0.490196, 0.309804, 1 )
@@ -26,7 +27,8 @@ shader_param/seed = 8.98
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 2 )
 shader_param/pixels = 100.0
-shader_param/cloud_cover = 0.738
+shader_param/rotation = 0.0
+shader_param/cloud_cover = 0.47
 shader_param/light_origin = Vector2( 0.39, 0.39 )
 shader_param/time_speed = 0.322
 shader_param/stretch = 2.0
@@ -54,18 +56,16 @@ __meta__ = {
 
 [node name="Land" type="ColorRect" parent="."]
 material = SubResource( 1 )
-anchor_right = 1.0
-anchor_bottom = 1.0
 margin_right = 3.05176e-05
 margin_bottom = 3.05176e-05
+rect_min_size = Vector2( 200, 200 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Cloud" type="ColorRect" parent="."]
 material = SubResource( 2 )
-anchor_right = 1.0
-anchor_bottom = 1.0
+rect_min_size = Vector2( 200, 200 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -2,12 +2,14 @@ shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float pixels : hint_range(10,100);
+uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform vec2 light_origin = vec2(0.39, 0.39);
 uniform float time_speed : hint_range(0.0, 1.0) = 0.2;
 uniform float dither_size : hint_range(0.0, 10.0) = 2.0;
 uniform float light_border_1 : hint_range(0.0, 1.0) = 0.4;
 uniform float light_border_2 : hint_range(0.0, 1.0) = 0.5;
 uniform float river_cutoff : hint_range(0.0, 1.0);
+
 
 uniform vec4 col1 : hint_color;
 uniform vec4 col2 : hint_color;
@@ -79,9 +81,10 @@ void fragment() {
 	vec2 uv = floor(UV*pixels)/pixels;
 	
 	float d_light = distance(uv , light_origin);
+	bool dith = dither(uv, UV);
 	
 	// give planet a tilt
-	uv = rotate(uv, 0.2);
+	uv = rotate(uv, rotation);
 //
 //	// map to sphere
 	uv = spherify(uv);
@@ -114,14 +117,10 @@ void fragment() {
 		fbm2 *= 1.3;
 		fbm3 *= 1.4;
 		fbm4 *= 1.8;
-		if (d_light < light_border_2 +dither_border && dither(uv, uv)) {
+		if (d_light < light_border_2 + dither_border && dith) {
 			fbm4 *= 0.5;
 		}
 	} 
-//	if (d_light < light_border_1) {
-//		fbm4 *= 0.9;
-//	}
-	
 	
 	// increase contrast on d_light
 	d_light = pow(d_light, 2.0)*0.4;

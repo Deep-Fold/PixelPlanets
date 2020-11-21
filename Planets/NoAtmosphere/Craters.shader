@@ -2,6 +2,7 @@ shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float pixels : hint_range(10,100);
+uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform vec2 light_origin = vec2(0.39, 0.39);
 uniform float time_speed : hint_range(0.0, 1.0) = 0.2;
 uniform float light_border : hint_range(0.0, 1.0) = 0.4;
@@ -50,16 +51,16 @@ void fragment() {
 	//pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
-	uv = rotate(uv, 0.4);
 	
+	uv = rotate(uv, rotation);
 	// check distance from center & distance to light
 	float d_circle = distance(uv, vec2(0.5));
 	float d_light = distance(uv , vec2(light_origin));
 	
 	uv = spherify(uv);
 		
-	float c1 = crater(uv + vec2(TIME*time_speed, 0.0));
-	float c2 = crater(uv + vec2(TIME*time_speed, 0.0) +(light_origin-0.5)*0.03);
+	float c1 = crater(uv + vec2(TIME*time_speed,0.0));
+	float c2 = crater(uv +(light_origin-0.5)*0.03 + vec2(TIME*time_speed,0.0));
 	vec3 col = color1.rgb;
 	
 	float a = step(0.5, c1);

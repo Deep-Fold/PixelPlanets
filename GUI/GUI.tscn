@@ -1,0 +1,347 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://GUI/GUI.gd" type="Script" id=1]
+[ext_resource path="res://GUI/Theme.tres" type="Theme" id=2]
+[ext_resource path="res://Planets/Rivers/Rivers.tscn" type="PackedScene" id=3]
+[ext_resource path="res://stars.png" type="Texture" id=4]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform vec2 offset = vec2(0.0);
+
+
+float rand(vec2 coord) {
+	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+vec2 rotate(vec2 coord, float angle){
+	coord -= 0.5;
+	coord *= mat2(vec2(cos(angle),-sin(angle)),vec2(sin(angle),cos(angle)));
+	return coord + 0.5;
+}
+
+void fragment() {
+	vec2 uv = rotate(UV, TIME * 0.2);
+
+	vec4 col = vec4(1.0) + rand(UV + vec2(TIME*0.0000001,0.0)) * 0.03;
+	
+	col = col* vec4(
+		abs(sin(uv.x * cos(offset.x)+ TIME * 0.105)),
+		abs(sin((cos(uv.x + uv.y) + cos(offset.x + offset.y) + TIME * 0.059))) ,
+		abs(cos(uv.y * sin(offset.y) + TIME * 0.0253)) ,
+		1.0);
+
+	COLOR = col;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/offset = Vector2( 0, 0 )
+
+[sub_resource type="CanvasItemMaterial" id=3]
+particles_animation = true
+particles_anim_h_frames = 11
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0, 0.0518519, 0.881481, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+emission_shape = 2
+emission_box_extents = Vector3( 256, 150, 1 )
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color_ramp = SubResource( 5 )
+hue_variation = 0.05
+hue_variation_random = 1.0
+anim_offset = 1.0
+anim_offset_random = 1.0
+
+[sub_resource type="ViewportTexture" id=7]
+viewport_path = NodePath("PlanetViewport")
+
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform float abberation: hint_range(-0.1, 0.1);
+
+
+void fragment () {
+	vec4 color = vec4(1.0);
+
+
+
+
+	color.r = texture(SCREEN_TEXTURE, SCREEN_UV - vec2(abberation,0.0)).r;
+	color.g = texture(SCREEN_TEXTURE, SCREEN_UV).g;
+	color.b = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(abberation,0.0)).b;
+	COLOR = color;
+}"
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 8 )
+shader_param/abberation = 0.001
+
+[node name="GUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Light" type="ColorRect" parent="."]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Dark" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.878431 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Particles2D" type="Particles2D" parent="."]
+modulate = Color( 1, 1, 1, 0.513726 )
+material = SubResource( 3 )
+position = Vector2( 256, 150 )
+amount = 50
+lifetime = 50.0
+preprocess = 50.0
+process_material = SubResource( 6 )
+texture = ExtResource( 4 )
+
+[node name="PlanetHolder" type="CenterContainer" parent="."]
+margin_left = -150.0
+margin_top = -150.0
+margin_right = 450.0
+margin_bottom = 450.0
+rect_pivot_offset = Vector2( 300, 300 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ViewportTexture" type="TextureRect" parent="PlanetHolder"]
+margin_right = 600.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 600, 600 )
+texture = SubResource( 7 )
+stretch_mode = 3
+
+[node name="Settings" type="Control" parent="."]
+margin_left = 300.0
+margin_right = 512.0
+margin_bottom = 300.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 5.0
+margin_right = -1.99998
+custom_constants/separation = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label5" type="Label" parent="Settings/VBoxContainer"]
+margin_right = 210.0
+margin_bottom = 17.0
+theme = ExtResource( 2 )
+custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+text = "Planet type:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OptionButton" type="OptionButton" parent="Settings/VBoxContainer"]
+margin_top = 22.0
+margin_right = 210.0
+margin_bottom = 39.0
+focus_mode = 0
+theme = ExtResource( 2 )
+shortcut_in_tooltip = false
+enabled_focus_mode = 0
+text = "Terran Wet"
+
+[node name="Control2" type="Control" parent="Settings/VBoxContainer"]
+margin_top = 44.0
+margin_right = 210.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="Label" type="Label" parent="Settings/VBoxContainer"]
+margin_top = 59.0
+margin_right = 210.0
+margin_bottom = 76.0
+theme = ExtResource( 2 )
+custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+text = "seed:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Seed" type="HBoxContainer" parent="Settings/VBoxContainer"]
+margin_top = 81.0
+margin_right = 210.0
+margin_bottom = 98.0
+custom_constants/separation = 0
+
+[node name="SeedText" type="LineEdit" parent="Settings/VBoxContainer/Seed"]
+margin_right = 152.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+theme = ExtResource( 2 )
+text = "0"
+expand_to_text_length = true
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Settings/VBoxContainer/Seed"]
+margin_left = 152.0
+margin_right = 210.0
+margin_bottom = 17.0
+theme = ExtResource( 2 )
+text = "rand"
+
+[node name="Control4" type="Control" parent="Settings/VBoxContainer"]
+margin_top = 103.0
+margin_right = 210.0
+margin_bottom = 113.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="Label2" type="Label" parent="Settings/VBoxContainer"]
+margin_top = 118.0
+margin_right = 210.0
+margin_bottom = 135.0
+theme = ExtResource( 2 )
+custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+text = "sprite scale:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SliderScale" type="HSlider" parent="Settings/VBoxContainer"]
+margin_top = 140.0
+margin_right = 210.0
+margin_bottom = 156.0
+theme = ExtResource( 2 )
+min_value = 0.2
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="Control" type="Control" parent="Settings/VBoxContainer"]
+margin_top = 161.0
+margin_right = 210.0
+margin_bottom = 171.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="Label3" type="Label" parent="Settings/VBoxContainer"]
+margin_top = 176.0
+margin_right = 210.0
+margin_bottom = 193.0
+theme = ExtResource( 2 )
+custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+text = "pixels:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SliderPixels" type="HSlider" parent="Settings/VBoxContainer"]
+margin_top = 198.0
+margin_right = 210.0
+margin_bottom = 214.0
+theme = ExtResource( 2 )
+min_value = 20.0
+step = 5.0
+value = 100.0
+
+[node name="Label4" type="Label" parent="Settings/VBoxContainer"]
+margin_top = 219.0
+margin_right = 210.0
+margin_bottom = 236.0
+theme = ExtResource( 2 )
+custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+text = "Rotation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SliderRotation" type="HSlider" parent="Settings/VBoxContainer"]
+margin_top = 241.0
+margin_right = 210.0
+margin_bottom = 257.0
+theme = ExtResource( 2 )
+max_value = 6.28
+step = 0.01
+value = 6.28
+
+[node name="Control3" type="Control" parent="Settings/VBoxContainer"]
+margin_top = 262.0
+margin_right = 210.0
+margin_bottom = 272.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="ExportPNG" type="Button" parent="Settings/VBoxContainer"]
+margin_top = 277.0
+margin_right = 210.0
+margin_bottom = 294.0
+theme = ExtResource( 2 )
+text = "export png"
+
+[node name="Abberation" type="ColorRect" parent="."]
+material = SubResource( 9 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="."]
+margin_right = 300.0
+margin_bottom = 300.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlanetViewport" type="Viewport" parent="."]
+size = Vector2( 600, 600 )
+transparent_bg = true
+usage = 1
+render_target_v_flip = true
+
+[node name="Control" parent="PlanetViewport" instance=ExtResource( 3 )]
+margin_left = 200.0
+margin_top = 200.0
+margin_right = 200.0
+margin_bottom = 200.0
+[connection signal="item_selected" from="Settings/VBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
+[connection signal="text_changed" from="Settings/VBoxContainer/Seed/SeedText" to="." method="_on_LineEdit_text_changed"]
+[connection signal="pressed" from="Settings/VBoxContainer/Seed/Button" to="." method="_on_Button_pressed"]
+[connection signal="value_changed" from="Settings/VBoxContainer/SliderScale" to="." method="_on_SliderScale_value_changed"]
+[connection signal="value_changed" from="Settings/VBoxContainer/SliderPixels" to="." method="_on_SliderPixels_value_changed"]
+[connection signal="value_changed" from="Settings/VBoxContainer/SliderRotation" to="." method="_on_SliderRotation_value_changed"]
+[connection signal="pressed" from="Settings/VBoxContainer/ExportPNG" to="." method="_on_ExportPNG_pressed"]
+[connection signal="gui_input" from="Control" to="." method="_on_Control_gui_input"]

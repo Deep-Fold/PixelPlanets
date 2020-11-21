@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/grabber-highlight.png-ab85f191348b440c121ac1f68d11d3db.stex"
+path="res://.import/grabber.png-ecd4c574c7515e2c5e0171cca1c6331e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://grabber-highlight.png"
-dest_files=[ "res://.import/grabber-highlight.png-ab85f191348b440c121ac1f68d11d3db.stex" ]
+source_file="res://GUI/grabber.png"
+dest_files=[ "res://.import/grabber.png-ecd4c574c7515e2c5e0171cca1c6331e.stex" ]
 
 [params]
 

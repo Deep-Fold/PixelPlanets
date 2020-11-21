@@ -1,0 +1,78 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Planets/Planet.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Planets/GasPlanetLayers/GasPlanetLayers.gd" type="Script" id=2]
+[ext_resource path="res://Planets/GasPlanetLayers/Ring.shader" type="Shader" id=3]
+[ext_resource path="res://Planets/GasPlanetLayers/GasLayers.shader" type="Shader" id=4]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0, 0.498182, 1 )
+colors = PoolColorArray( 0.933333, 0.764706, 0.603922, 1, 0.85098, 0.627451, 0.4, 1, 0.560784, 0.337255, 0.231373, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="Gradient" id=3]
+offsets = PoolRealArray( 0, 0.5, 1 )
+colors = PoolColorArray( 0.4, 0.223529, 0.192157, 1, 0.270588, 0.156863, 0.235294, 1, 0.133333, 0.12549, 0.203922, 1 )
+
+[sub_resource type="GradientTexture" id=4]
+gradient = SubResource( 3 )
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = ExtResource( 4 )
+shader_param/pixels = 100.0
+shader_param/rotation = 0.0
+shader_param/cloud_cover = 0.61
+shader_param/light_origin = Vector2( -0.1, 0.3 )
+shader_param/time_speed = 0.113
+shader_param/stretch = 2.204
+shader_param/cloud_curve = 1.376
+shader_param/light_border_1 = 0.52
+shader_param/light_border_2 = 0.62
+shader_param/bands = 0.892
+shader_param/size = 10.107
+shader_param/OCTAVES = 3
+shader_param/seed = 6.314
+shader_param/colorscheme = SubResource( 2 )
+shader_param/dark_colorscheme = SubResource( 4 )
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = ExtResource( 3 )
+shader_param/pixels = 300.0
+shader_param/rotation = 0.7
+shader_param/light_origin = Vector2( -0.1, 0.3 )
+shader_param/time_speed = 0.087
+shader_param/light_border_1 = 0.52
+shader_param/light_border_2 = 0.62
+shader_param/ring_width = 0.127
+shader_param/ring_perspective = 4.0
+shader_param/scale_rel_to_planet = 6.0
+shader_param/size = 15.0
+shader_param/OCTAVES = 4
+shader_param/seed = 8.545
+shader_param/colorscheme = SubResource( 2 )
+shader_param/dark_colorscheme = SubResource( 4 )
+
+[node name="Planet" instance=ExtResource( 1 )]
+margin_left = 0.222717
+margin_right = -311.777
+script = ExtResource( 2 )
+
+[node name="GasLayers" type="ColorRect" parent="." index="0"]
+material = SubResource( 5 )
+rect_min_size = Vector2( 200, 200 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ring" type="ColorRect" parent="." index="1"]
+material = SubResource( 6 )
+margin_left = -200.0
+margin_top = -200.0
+margin_right = 400.0
+margin_bottom = 400.0
+rect_min_size = Vector2( 200, 200 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

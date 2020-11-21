@@ -1,20 +1,18 @@
 shader_type canvas_item;
 render_mode blend_mix;
 
-uniform float pixels : hint_range(10,100);
+uniform float pixels : hint_range(10,300) = 100.0;
 uniform float rotation : hint_range(0.0, 6.28) = 0.0;
-uniform float cloud_cover : hint_range(0.0, 1.0);
 uniform vec2 light_origin = vec2(0.39, 0.39);
 uniform float time_speed : hint_range(-1.0, 1.0) = 0.2;
-uniform float stretch : hint_range(1.0,3.0) = 2.0;
-uniform float cloud_curve : hint_range(1.0, 2.0) = 1.3;
 uniform float light_border_1 : hint_range(0.0, 1.0) = 0.52;
 uniform float light_border_2 : hint_range(0.0, 1.0) = 0.62;
+uniform float ring_width : hint_range(0.0, 0.15) = 0.1;
+uniform float ring_perspective = 4.0;
+uniform float scale_rel_to_planet = 6.0;
 
-uniform vec4 base_color : hint_color;
-uniform vec4 outline_color : hint_color;
-uniform vec4 shadow_base_color : hint_color;
-uniform vec4 shadow_outline_color : hint_color;
+uniform sampler2D colorscheme;
+uniform sampler2D dark_colorscheme;
 
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
@@ -65,17 +63,15 @@ float circleNoise(vec2 uv) {
     return smoothstep(0.0, r, m*0.75);
 }
 
-float cloud_alpha(vec2 uv, float time) {
+float turbulence(vec2 uv, float time) {
 	float c_noise = 0.0;
 	
 	
 	// more iterations for more turbulence
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 10; i++) {
 		c_noise += circleNoise((uv * size *0.3) + (float(i+1)*10.) + (vec2(time*0.1, 0.0)));
 	}
-	float fbm = fbm(uv*size+c_noise + vec2(time*0.5, 0.0));
-	
-	return fbm;//step(a_cutoff, fbm);
+	return c_noise;
 }
 
 bool dither(vec2 uv_pixel, vec2 uv_real) {
@@ -99,33 +95,47 @@ void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
-	// distance to light source
-	float d_light = distance(uv , light_origin);
+	// we use this value later to dither between colors
+	bool dith = dither(UV, uv);
 	
+	float light_d = distance(uv, light_origin);
 	uv = rotate(uv, rotation);
 	
-	// map to sphere
-	uv = spherify(uv);
-	// slightly make uv go down on the right, and up in the left
-	uv.y += smoothstep(0.0, cloud_curve, abs(uv.x-0.4));
+	// center is used to determine ring position
+	vec2 uv_center = uv - vec2(0.0, 0.5);
+	
+	// tilt ring
+	uv_center *= vec2(1.0, ring_perspective);
+	float center_d = distance(uv_center,vec2(0.5, 0.0));
 	
 	
-	float c = cloud_alpha(uv*vec2(1.0, stretch), TIME*time_speed);
+	// cut out 2 circles of different sizes and only intersection of the 2.
+	float ring = smoothstep(0.5-ring_width*2.0, 0.5-ring_width, center_d);
+	ring *= smoothstep(center_d-ring_width, center_d, 0.4);
 	
-	// assign some colors based on cloud depth & distance from light
-	vec3 col = base_color.rgb;
-	if (c < cloud_cover + 0.03) {
-		col = outline_color.rgb;
-	}
-	if (d_light + c*0.2 > light_border_1) {
-		col = shadow_base_color.rgb;
-
-	}
-	if (d_light + c*0.2 > light_border_2) {
-		col = shadow_outline_color.rgb;
+	// pretend like the ring goes behind the planet by removing it if it's in the uppper half.
+	if (uv.y < 0.5) {
+		ring *= step(1.0/scale_rel_to_planet, distance(uv,vec2(0.5)));
 	}
 	
-
 	
-	COLOR = vec4(col, step(cloud_cover, c));
+	// rotate material in the ring
+	uv_center = rotate(uv_center+vec2(0, 0.5), TIME*time_speed);
+	// some noise
+	ring *= fbm(uv_center*size);
+	
+	//if (dith) {
+	//	ring *= 1.05;
+	//}
+	
+	// apply some colors based on final value
+	float posterized = floor((ring+pow(light_d, 2.0)*2.0)*4.0)/4.0;
+	vec3 col;
+	if (posterized <= 1.0) {
+		col = texture(colorscheme, vec2(posterized, uv.y)).rgb;
+	} else {
+		col = texture(dark_colorscheme, vec2(posterized-1.0, uv.y)).rgb;
+	}
+	float ring_a = step(0.28, ring);
+	COLOR = vec4(col, ring_a);
 }

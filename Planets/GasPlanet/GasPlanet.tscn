@@ -177,16 +177,14 @@ __meta__ = {
 
 [node name="Cloud" type="ColorRect" parent="."]
 material = SubResource( 2 )
-anchor_right = 1.0
-anchor_bottom = 1.0
+rect_min_size = Vector2( 200, 200 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Cloud2" type="ColorRect" parent="."]
 material = SubResource( 3 )
-anchor_right = 1.0
-anchor_bottom = 1.0
+rect_min_size = Vector2( 200, 200 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

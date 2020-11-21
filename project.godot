@@ -16,8 +16,12 @@ _global_script_class_icons={
 [application]
 
 config/name="PixelPlanets"
-run/main_scene="res://GUI.tscn"
+run/main_scene="res://GUI/GUI.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+HTML5File="*res://addons/HTML5FileExchange/HTML5FileExchange.gd"
 
 [display]
 
@@ -27,6 +31,10 @@ window/size/test_width=1024
 window/size/test_height=600
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "HTML5FileExchange" )
 
 [importer_defaults]
 

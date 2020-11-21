@@ -2,6 +2,7 @@ shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float pixels : hint_range(10,100);
+uniform float rotation : hint_range(0.0, 6.28);
 uniform vec2 light_origin = vec2(0.39, 0.39);
 uniform float time_speed : hint_range(0.0, 1.0) = 0.2;
 uniform float dither_size : hint_range(0.0, 10.0) = 2.0;
@@ -76,7 +77,7 @@ void fragment() {
 	float d_light = distance(uv , light_origin);
 	
 	// give planet a tilt
-	uv = rotate(uv, 0.2);
+	uv = rotate(uv, rotation);
 	
 	// map to sphere
 	uv = spherify(uv);

@@ -1,7 +1,7 @@
 shader_type canvas_item;
 render_mode blend_mix;
 
-uniform float pixels : hint_range(10,100);
+uniform float pixels : hint_range(10,100) = 100.0;
 uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform float cloud_cover : hint_range(0.0, 1.0);
 uniform vec2 light_origin = vec2(0.39, 0.39);
@@ -10,11 +10,10 @@ uniform float stretch : hint_range(1.0,3.0) = 2.0;
 uniform float cloud_curve : hint_range(1.0, 2.0) = 1.3;
 uniform float light_border_1 : hint_range(0.0, 1.0) = 0.52;
 uniform float light_border_2 : hint_range(0.0, 1.0) = 0.62;
+uniform float bands = 1.0;
 
-uniform vec4 base_color : hint_color;
-uniform vec4 outline_color : hint_color;
-uniform vec4 shadow_base_color : hint_color;
-uniform vec4 shadow_outline_color : hint_color;
+uniform sampler2D colorscheme;
+uniform sampler2D dark_colorscheme;
 
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
@@ -65,17 +64,15 @@ float circleNoise(vec2 uv) {
     return smoothstep(0.0, r, m*0.75);
 }
 
-float cloud_alpha(vec2 uv, float time) {
+float turbulence(vec2 uv, float time) {
 	float c_noise = 0.0;
 	
 	
 	// more iterations for more turbulence
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 10; i++) {
 		c_noise += circleNoise((uv * size *0.3) + (float(i+1)*10.) + (vec2(time*0.1, 0.0)));
 	}
-	float fbm = fbm(uv*size+c_noise + vec2(time*0.5, 0.0));
-	
-	return fbm;//step(a_cutoff, fbm);
+	return c_noise;
 }
 
 bool dither(vec2 uv_pixel, vec2 uv_real) {
@@ -98,34 +95,48 @@ vec2 rotate(vec2 coord, float angle){
 void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
+	float light_d = distance(uv, light_origin);
 	
-	// distance to light source
-	float d_light = distance(uv , light_origin);
-	
+	// we use this value later to dither between colors
+	bool dith = dither(uv, UV);
 	uv = rotate(uv, rotation);
+
 	
 	// map to sphere
 	uv = spherify(uv);
-	// slightly make uv go down on the right, and up in the left
-	uv.y += smoothstep(0.0, cloud_curve, abs(uv.x-0.4));
-	
-	
-	float c = cloud_alpha(uv*vec2(1.0, stretch), TIME*time_speed);
-	
-	// assign some colors based on cloud depth & distance from light
-	vec3 col = base_color.rgb;
-	if (c < cloud_cover + 0.03) {
-		col = outline_color.rgb;
-	}
-	if (d_light + c*0.2 > light_border_1) {
-		col = shadow_base_color.rgb;
 
-	}
-	if (d_light + c*0.2 > light_border_2) {
-		col = shadow_outline_color.rgb;
-	}
+	// a band is just one dimensional noise
+	float band = fbm(vec2(0.0, uv.y*size*bands));
 	
+	// turbulence value is circles on top of each other
+	float turb = turbulence(uv, TIME*time_speed);
+
+	// by layering multiple noise values & combining with turbulence and bands
+	// we get some dynamic looking shape	
+	float fbm1 = fbm(uv*size);
+	float fbm2 = fbm(uv*vec2(1.0, 2.0)*size+fbm1+vec2(-TIME*time_speed,0.0)+turb);
 
 	
-	COLOR = vec4(col, step(cloud_cover, c));
+	// all of this is just increasing some contrast & applying light
+	fbm2 *= pow(band,2.0)*7.0;
+	float light = fbm2 + light_d*1.8;
+	fbm2 += pow(light_d, 1.0)-0.3;	
+	fbm2 = smoothstep(-0.2, 4.0-fbm2, light);
+	
+	// here apply the dither value
+	if (dith ) {
+		fbm2 *= 1.1;
+	}
+	
+	// finally add colors
+	float posterized = floor(fbm2*4.0)/2.0;
+	vec3 col;
+	if (fbm2 < 0.625) {
+		col = texture(colorscheme, vec2(posterized, uv.y)).rgb;
+	} else {
+		col = texture(dark_colorscheme, vec2(posterized-1.0, uv.y)).rgb;
+	}
+	
+	float a = step(length(uv-vec2(0.5)), 0.5);
+	COLOR = vec4(col, a);
 }

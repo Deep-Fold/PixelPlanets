@@ -1,16 +1,20 @@
-shader_type canvas_item;
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Planets/Planet.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Planets/DryTerran/DryTerran.gd" type="Script" id=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float pixels : hint_range(10,100);
 uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform vec2 light_origin = vec2(0.39, 0.39);
+uniform float light_distance1 = 0.5;
+uniform float light_distance2 = 0.75;
 uniform float time_speed : hint_range(0.0, 1.0) = 0.2;
 uniform float dither_size : hint_range(0.0, 10.0) = 2.0;
-uniform float light_border_1 : hint_range(0.0, 1.0) = 0.4;
-uniform float light_border_2 : hint_range(0.0, 1.0) = 0.6;
-uniform vec4 color1 : hint_color;
-uniform vec4 color2 : hint_color;
-uniform vec4 color3 : hint_color;
+uniform sampler2D colors;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
@@ -71,38 +75,79 @@ vec2 spherify(vec2 uv) {
 void fragment() {
 	//pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
-	
 	bool dith = dither(uv, UV);
 	
 	uv = spherify(uv);
-	uv = rotate(uv, rotation);
+	
 	// check distance from center & distance to light
 	float d_circle = distance(uv, vec2(0.5));
 	float d_light = distance(uv , vec2(light_origin));
 	
+	uv = rotate(uv, rotation);
+	
 	// cut out a circle
 	float a = step(d_circle, 0.5);
 	
-	// get a noise value with light distance added
-	d_light += fbm(uv*size+vec2(TIME*time_speed, 0.0))*0.3; // change the magic 0.3 here for different light strengths
+	// noise
+	float f = fbm(uv*size+vec2(TIME*time_speed, 0.0));
 	
-	// size of edge in which colors should be dithered
-	float dither_border = (1.0/pixels)*dither_size;
-
+	// remap light
+	d_light = smoothstep(-0.3, 1.2, d_light);
+	
+	if (d_light < light_distance1) {
+		d_light *= 0.9;
+	}
+	if (d_light < light_distance2) {
+		d_light *= 0.9;
+	}
+	
+	
+	float c = d_light*pow(f,0.8)*3.5; // change the magic nums here for different light strengths
+	
+	// apply dithering
+	if (dith) {
+		c += 0.02;
+		c *= 1.05;
+	}
+	
 	// now we can assign colors based on distance to light origin
-	vec3 col = color1.rgb;
-	if (d_light > light_border_1) {
-		col = color2.rgb;
-		if (d_light < light_border_1 + dither_border && dith) {
-			col = color1.rgb;
-		}
-	}
-	if (d_light > light_border_2) {
-		col = color3.rgb;
-		if (d_light < light_border_2 + dither_border && dith) {
-			col = color2.rgb;
-		}
-	}
+	float posterize = floor(c*4.0)/4.0;
+	vec3 col = texture(colors, vec2(posterize, 0.0)).rgb;
+	
 	
 	COLOR = vec4(col, a);
+}
+"
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0, 0.25, 0.5, 0.75, 1 )
+colors = PoolColorArray( 1, 0.537255, 0.2, 1, 0.901961, 0.270588, 0.223529, 1, 0.678431, 0.184314, 0.270588, 1, 0.321569, 0.2, 0.247059, 1, 0.239216, 0.160784, 0.211765, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 1 )
+shader_param/pixels = 100.0
+shader_param/rotation = 0.0
+shader_param/light_origin = Vector2( 0.4, 0.3 )
+shader_param/light_distance1 = 0.362
+shader_param/light_distance2 = 0.525
+shader_param/time_speed = 0.1
+shader_param/dither_size = 2.0
+shader_param/size = 8.0
+shader_param/OCTAVES = 3
+shader_param/seed = 1.175
+shader_param/colors = SubResource( 3 )
+
+[node name="DryTerran" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Land" type="ColorRect" parent="." index="0"]
+material = SubResource( 4 )
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 200, 200 )
+__meta__ = {
+"_edit_use_anchors_": false
 }
