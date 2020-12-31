@@ -14,6 +14,7 @@ uniform vec4 color3 : hint_color;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
+uniform float time = 0.0;
 
 float rand(vec2 coord) {
 	// land has to be tiled
@@ -84,7 +85,7 @@ void fragment() {
 	float a = step(d_circle, 0.5);
 	
 	// get a noise value with light distance added
-	d_light += fbm(uv*size+vec2(TIME*time_speed, 0.0))*0.3; // change the magic 0.3 here for different light strengths
+	d_light += fbm(uv*size+vec2(time*time_speed, 0.0))*0.3; // change the magic 0.3 here for different light strengths
 	
 	// size of edge in which colors should be dithered
 	float dither_border = (1.0/pixels)*dither_size;

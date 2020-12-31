@@ -18,8 +18,10 @@ uniform sampler2D dark_colorscheme;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
+uniform float time = 0.0;
 
 float rand(vec2 coord) {
+	coord = mod(coord, vec2(2.0,1.0)*round(size));
 	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
 }
 
@@ -49,28 +51,24 @@ float fbm(vec2 coord){
 	return value;
 }
 
-vec2 hash( float n ) {
-    float sn = sin(n);
-    return fract(vec2(sn,sn*42125.13)*seed);
-}
 // by Leukbaars from https://www.shadertoy.com/view/4tK3zR
 float circleNoise(vec2 uv) {
     float uv_y = floor(uv.y);
     uv.x += uv_y*.31;
     vec2 f = fract(uv);
-    vec2 h = hash(floor(uv.x)*uv_y);
-    float m = (length(f-0.25-(h.x*0.5)));
-    float r = h.y*0.25;
+	float h = rand(vec2(floor(uv.x),floor(uv_y)));
+    float m = (length(f-0.25-(h*0.5)));
+    float r = h*0.25;
     return smoothstep(0.0, r, m*0.75);
 }
 
-float turbulence(vec2 uv, float time) {
+float turbulence(vec2 uv) {
 	float c_noise = 0.0;
 	
 	
 	// more iterations for more turbulence
 	for (int i = 0; i < 10; i++) {
-		c_noise += circleNoise((uv * size *0.3) + (float(i+1)*10.) + (vec2(time*0.1, 0.0)));
+		c_noise += circleNoise((uv * size *0.3) + (float(i+1)+10.) + (vec2(time * time_speed, 0.0)));
 	}
 	return c_noise;
 }
@@ -109,12 +107,12 @@ void fragment() {
 	float band = fbm(vec2(0.0, uv.y*size*bands));
 	
 	// turbulence value is circles on top of each other
-	float turb = turbulence(uv, TIME*time_speed);
+	float turb = turbulence(uv);
 
 	// by layering multiple noise values & combining with turbulence and bands
 	// we get some dynamic looking shape	
 	float fbm1 = fbm(uv*size);
-	float fbm2 = fbm(uv*vec2(1.0, 2.0)*size+fbm1+vec2(-TIME*time_speed,0.0)+turb);
+	float fbm2 = fbm(uv*vec2(1.0, 2.0)*size+fbm1+vec2(-time*time_speed,0.0)+turb);
 
 	
 	// all of this is just increasing some contrast & applying light

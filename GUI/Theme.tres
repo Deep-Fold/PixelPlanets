@@ -13,17 +13,17 @@ bg_color = Color( 0, 0, 0, 1 )
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=15]
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 border_width_top = 16
 border_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 
-[sub_resource type="StyleBoxFlat" id=16]
+[sub_resource type="StyleBoxFlat" id=5]
 bg_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 border_width_top = 16
 border_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 
-[sub_resource type="StyleBoxFlat" id=17]
+[sub_resource type="StyleBoxFlat" id=6]
 border_width_bottom = 14
 border_color = Color( 0, 0, 0, 1 )
 
@@ -42,17 +42,17 @@ bg_color = Color( 0, 0, 0, 1 )
 [sub_resource type="StyleBoxFlat" id=11]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=13]
+[sub_resource type="StyleBoxFlat" id=12]
 bg_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 
-[sub_resource type="StyleBoxFlat" id=14]
+[sub_resource type="StyleBoxFlat" id=13]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=14]
 font_data = ExtResource( 1 )
 
 [resource]
-default_font = SubResource( 12 )
+default_font = SubResource( 14 )
 Button/colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
 Button/colors/font_color_hover = Color( 0, 0, 0, 1 )
@@ -68,9 +68,9 @@ HSlider/icons/grabber = ExtResource( 3 )
 HSlider/icons/grabber_disabled = null
 HSlider/icons/grabber_highlight = ExtResource( 2 )
 HSlider/icons/tick = null
-HSlider/styles/grabber_area = SubResource( 15 )
-HSlider/styles/grabber_area_highlight = SubResource( 16 )
-HSlider/styles/slider = SubResource( 17 )
+HSlider/styles/grabber_area = SubResource( 4 )
+HSlider/styles/grabber_area_highlight = SubResource( 5 )
+HSlider/styles/slider = SubResource( 6 )
 Label/colors/font_color = Color( 1, 1, 1, 1 )
 Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
@@ -118,9 +118,9 @@ PopupMenu/icons/radio_checked = null
 PopupMenu/icons/radio_unchecked = null
 PopupMenu/icons/submenu = null
 PopupMenu/icons/unchecked = null
-PopupMenu/styles/hover = SubResource( 13 )
+PopupMenu/styles/hover = SubResource( 12 )
 PopupMenu/styles/labeled_separator_left = null
 PopupMenu/styles/labeled_separator_right = null
-PopupMenu/styles/panel = SubResource( 14 )
+PopupMenu/styles/panel = SubResource( 13 )
 PopupMenu/styles/panel_disabled = null
 PopupMenu/styles/separator = null

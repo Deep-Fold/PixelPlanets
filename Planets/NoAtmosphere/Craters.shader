@@ -4,32 +4,34 @@ render_mode blend_mix;
 uniform float pixels : hint_range(10,100);
 uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform vec2 light_origin = vec2(0.39, 0.39);
-uniform float time_speed : hint_range(0.0, 1.0) = 0.2;
+uniform float time_speed : hint_range(0.0, 1.0);
 uniform float light_border : hint_range(0.0, 1.0) = 0.4;
 uniform vec4 color1 : hint_color;
 uniform vec4 color2 : hint_color;
 uniform float size = 50.0;
 uniform float seed: hint_range(1, 10);
+uniform float time = 0.0;
 
-vec2 hash( float n ) {
-    float sn = sin(n);
-    return fract(vec2(sn,sn*42125.13)*seed);
+float rand(vec2 coord) {
+	coord = mod(coord, vec2(1.0,1.0)*round(size));
+	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
 }
+
 // by Leukbaars from https://www.shadertoy.com/view/4tK3zR
 float circleNoise(vec2 uv) {
-	float uv_y = floor(uv.y);
-	uv.x += uv_y*.31;
-	vec2 f = fract(uv);
-	vec2 h = hash(floor(uv.x)*uv_y);
-	float m = (length(f-0.25-(h.x*0.5)));
-	float r = h.y*0.25;
-	return m = smoothstep(r-.10*r,r,m);
+    float uv_y = floor(uv.y);
+    uv.x += uv_y*.31;
+    vec2 f = fract(uv);
+	float h = rand(vec2(floor(uv.x),floor(uv_y)));
+    float m = (length(f-0.25-(h*0.5)));
+    float r = h*0.25;
+    return m = smoothstep(r-.10*r,r,m);
 }
 
 float crater(vec2 uv) {
 	float c = 1.0;
 	for (int i = 0; i < 2; i++) {
-		c *= circleNoise((uv * size) + (float(i+1)*10.));
+		c *= circleNoise((uv * size) + (float(i+1)+10.) + vec2(time*time_speed,0.0));
 	}
 	return 1.0 - c;
 }
@@ -51,16 +53,15 @@ void fragment() {
 	//pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
-	
-	uv = rotate(uv, rotation);
 	// check distance from center & distance to light
 	float d_circle = distance(uv, vec2(0.5));
 	float d_light = distance(uv , vec2(light_origin));
 	
+	uv = rotate(uv, rotation);
 	uv = spherify(uv);
 		
-	float c1 = crater(uv + vec2(TIME*time_speed,0.0));
-	float c2 = crater(uv +(light_origin-0.5)*0.03 + vec2(TIME*time_speed,0.0));
+	float c1 = crater(uv );
+	float c2 = crater(uv +(light_origin-0.5)*0.03);
 	vec3 col = color1.rgb;
 	
 	float a = step(0.5, c1);

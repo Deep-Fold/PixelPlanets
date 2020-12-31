@@ -20,6 +20,7 @@ shader_param/color3 = Color( 0.572549, 0.560784, 0.721569, 1 )
 shader_param/size = 8.0
 shader_param/OCTAVES = 2
 shader_param/seed = 1.036
+shader_param/time = 0.0
 
 [sub_resource type="Shader" id=2]
 code = "shader_type canvas_item;
@@ -40,7 +41,7 @@ uniform vec4 color3 : hint_color;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
-
+uniform float time = 0.0;
 
 
 float rand(vec2 coord) {
@@ -104,8 +105,8 @@ void fragment() {
 	uv = spherify(uv);
 	
 	// some scrolling noise for landmasses
-	float fbm1 = fbm(uv*size+vec2(TIME*time_speed,0.0));
-	float lake = fbm(uv*size+vec2(TIME*time_speed,0.0));
+	float fbm1 = fbm(uv*size+vec2(time*time_speed,0.0));
+	float lake = fbm(uv*size+vec2(time*time_speed,0.0));
 	
 	// increase contrast on d_light
 	d_light = pow(d_light, 2.0)*0.4;
@@ -141,6 +142,7 @@ shader_param/color3 = Color( 0.227451, 0.247059, 0.368627, 1 )
 shader_param/size = 10.0
 shader_param/OCTAVES = 3
 shader_param/seed = 1.14
+shader_param/time = 0.0
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 4 )
@@ -160,33 +162,34 @@ shader_param/shadow_outline_color = Color( 0.25098, 0.286275, 0.45098, 1 )
 shader_param/size = 4.0
 shader_param/OCTAVES = 4
 shader_param/seed = 1.14
+shader_param/time = 0.0
 
 [node name="Planet" instance=ExtResource( 1 )]
+margin_right = -412.0
+margin_bottom = -200.0
+rect_min_size = Vector2( 0, 0 )
 script = ExtResource( 3 )
 
 [node name="PlanetUnder" type="ColorRect" parent="." index="0"]
 material = SubResource( 1 )
-margin_right = 40.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 200, 200 )
+margin_right = 100.0
+margin_bottom = 100.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Lakes" type="ColorRect" parent="." index="1"]
 material = SubResource( 3 )
-margin_right = 40.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 200, 200 )
+margin_right = 100.0
+margin_bottom = 100.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Clouds" type="ColorRect" parent="." index="2"]
 material = SubResource( 4 )
-margin_right = 40.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 200, 200 )
+margin_right = 100.0
+margin_bottom = 100.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

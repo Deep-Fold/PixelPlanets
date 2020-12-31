@@ -16,7 +16,7 @@ uniform vec4 color3 : hint_color;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
-
+uniform float time = 0.0;
 
 
 float rand(vec2 coord) {
@@ -80,7 +80,7 @@ void fragment() {
 	uv = spherify(uv);
 	
 	// some scrolling noise for landmasses
-	float fbm1 = fbm(uv*size+vec2(TIME*time_speed,0.0));
+	float fbm1 = fbm(uv*size+vec2(time*time_speed,0.0));
 	float river_fbm = fbm(uv + fbm1*2.5);
 	
 	// increase contrast on d_light

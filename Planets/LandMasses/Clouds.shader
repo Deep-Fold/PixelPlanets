@@ -20,7 +20,10 @@ uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
 
+uniform float time = 0.0;
+
 float rand(vec2 coord) {
+	coord = mod(coord, vec2(1.0,1.0)*round(size));
 	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
 }
 
@@ -50,30 +53,26 @@ float fbm(vec2 coord){
 	return value;
 }
 
-vec2 hash( float n ) {
-    float sn = sin(n);
-    return fract(vec2(sn,sn*42125.13)*seed);
-}
+
 // by Leukbaars from https://www.shadertoy.com/view/4tK3zR
 float circleNoise(vec2 uv) {
     float uv_y = floor(uv.y);
     uv.x += uv_y*.31;
     vec2 f = fract(uv);
-    vec2 h = hash(floor(uv.x)*uv_y);
-    float m = (length(f-0.25-(h.x*0.5)));
-    float r = h.y*0.25;
+	float h = rand(vec2(floor(uv.x),floor(uv_y)));
+    float m = (length(f-0.25-(h*0.5)));
+    float r = h*0.25;
     return smoothstep(0.0, r, m*0.75);
 }
 
-float cloud_alpha(vec2 uv, float time) {
+float cloud_alpha(vec2 uv) {
 	float c_noise = 0.0;
-	
 	
 	// more iterations for more turbulence
 	for (int i = 0; i < 9; i++) {
-		c_noise += circleNoise((uv * size *0.3) + (float(i+1)*10.) + (vec2(time*0.1, 0.0)));
+		c_noise += circleNoise((uv * size * 0.3) + (float(i+1)+10.) + (vec2(time*time_speed, 0.0)));
 	}
-	float fbm = fbm(uv*size+c_noise + vec2(time*0.5, 0.0));
+	float fbm = fbm(uv*size+c_noise + vec2(time*time_speed, 0.0));
 	
 	return fbm;//step(a_cutoff, fbm);
 }
@@ -102,6 +101,8 @@ void fragment() {
 	// distance to light source
 	float d_light = distance(uv , light_origin);
 	
+	float d_to_center = distance(uv, vec2(0.5));
+	
 	uv = rotate(uv, rotation);
 	
 	// map to sphere
@@ -110,7 +111,7 @@ void fragment() {
 	uv.y += smoothstep(0.0, cloud_curve, abs(uv.x-0.4));
 	
 	
-	float c = cloud_alpha(uv*vec2(1.0, stretch), TIME*time_speed);
+	float c = cloud_alpha(uv*vec2(1.0, stretch));
 	
 	// assign some colors based on cloud depth & distance from light
 	vec3 col = base_color.rgb;
@@ -125,7 +126,6 @@ void fragment() {
 		col = shadow_outline_color.rgb;
 	}
 	
-
-	
+	c *= step(d_to_center, 0.5);
 	COLOR = vec4(col, step(cloud_cover, c));
 }

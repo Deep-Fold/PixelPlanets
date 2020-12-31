@@ -18,6 +18,7 @@ uniform sampler2D colors;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
+uniform float time = 0.0;
 
 float rand(vec2 coord) {
 	// land has to be tiled
@@ -89,7 +90,7 @@ void fragment() {
 	float a = step(d_circle, 0.5);
 	
 	// noise
-	float f = fbm(uv*size+vec2(TIME*time_speed, 0.0));
+	float f = fbm(uv*size+vec2(time*time_speed, 0.0));
 	
 	// remap light
 	d_light = smoothstep(-0.3, 1.2, d_light);
@@ -138,16 +139,21 @@ shader_param/dither_size = 2.0
 shader_param/size = 8.0
 shader_param/OCTAVES = 3
 shader_param/seed = 1.175
+shader_param/time = 0.0
 shader_param/colors = SubResource( 3 )
 
 [node name="DryTerran" instance=ExtResource( 1 )]
+margin_right = -412.0
+margin_bottom = -200.0
+rect_min_size = Vector2( 0, 0 )
+size_flags_horizontal = 1
+size_flags_vertical = 1
 script = ExtResource( 2 )
 
 [node name="Land" type="ColorRect" parent="." index="0"]
 material = SubResource( 4 )
-margin_right = 40.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 200, 200 )
+margin_right = 100.0
+margin_bottom = 100.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

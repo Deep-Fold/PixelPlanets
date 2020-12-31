@@ -17,8 +17,10 @@ uniform sampler2D dark_colorscheme;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
+uniform float time = 0.0;
 
 float rand(vec2 coord) {
+	coord = mod(coord, vec2(2.0,1.0)*round(size));
 	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
 }
 
@@ -48,30 +50,15 @@ float fbm(vec2 coord){
 	return value;
 }
 
-vec2 hash( float n ) {
-    float sn = sin(n);
-    return fract(vec2(sn,sn*42125.13)*seed);
-}
 // by Leukbaars from https://www.shadertoy.com/view/4tK3zR
 float circleNoise(vec2 uv) {
     float uv_y = floor(uv.y);
     uv.x += uv_y*.31;
     vec2 f = fract(uv);
-    vec2 h = hash(floor(uv.x)*uv_y);
-    float m = (length(f-0.25-(h.x*0.5)));
-    float r = h.y*0.25;
+	float h = rand(vec2(floor(uv.x),floor(uv_y)));
+    float m = (length(f-0.25-(h*0.5)));
+    float r = h*0.25;
     return smoothstep(0.0, r, m*0.75);
-}
-
-float turbulence(vec2 uv, float time) {
-	float c_noise = 0.0;
-	
-	
-	// more iterations for more turbulence
-	for (int i = 0; i < 10; i++) {
-		c_noise += circleNoise((uv * size *0.3) + (float(i+1)*10.) + (vec2(time*0.1, 0.0)));
-	}
-	return c_noise;
 }
 
 bool dither(vec2 uv_pixel, vec2 uv_real) {
@@ -113,20 +100,15 @@ void fragment() {
 	float ring = smoothstep(0.5-ring_width*2.0, 0.5-ring_width, center_d);
 	ring *= smoothstep(center_d-ring_width, center_d, 0.4);
 	
-	// pretend like the ring goes behind the planet by removing it if it's in the uppper half.
+	// pretend like the ring goes behind the planet by removing it if it's in the upper half.
 	if (uv.y < 0.5) {
 		ring *= step(1.0/scale_rel_to_planet, distance(uv,vec2(0.5)));
 	}
 	
-	
 	// rotate material in the ring
-	uv_center = rotate(uv_center+vec2(0, 0.5), TIME*time_speed);
+	uv_center = rotate(uv_center+vec2(0, 0.5), time*time_speed);
 	// some noise
 	ring *= fbm(uv_center*size);
-	
-	//if (dith) {
-	//	ring *= 1.05;
-	//}
 	
 	// apply some colors based on final value
 	float posterized = floor((ring+pow(light_d, 2.0)*2.0)*4.0)/4.0;

@@ -1,9 +1,12 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://GUI/GUI.gd" type="Script" id=1]
 [ext_resource path="res://GUI/Theme.tres" type="Theme" id=2]
 [ext_resource path="res://Planets/Rivers/Rivers.tscn" type="PackedScene" id=3]
 [ext_resource path="res://stars.png" type="Texture" id=4]
+[ext_resource path="res://GUI/SpritesheetPopup.gd" type="Script" id=5]
+[ext_resource path="res://GUI/progress-under.png" type="Texture" id=6]
+[ext_resource path="res://GUI/progress-over.png" type="Texture" id=7]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -126,19 +129,19 @@ process_material = SubResource( 6 )
 texture = ExtResource( 4 )
 
 [node name="PlanetHolder" type="CenterContainer" parent="."]
-margin_left = -150.0
-margin_top = -150.0
-margin_right = 450.0
-margin_bottom = 450.0
-rect_pivot_offset = Vector2( 300, 300 )
+margin_left = -50.0
+margin_top = -50.0
+margin_right = 250.0
+margin_bottom = 250.0
+rect_scale = Vector2( 2, 2 )
+rect_pivot_offset = Vector2( 100, 100 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ViewportTexture" type="TextureRect" parent="PlanetHolder"]
-margin_right = 600.0
-margin_bottom = 600.0
-rect_min_size = Vector2( 600, 600 )
+margin_right = 300.0
+margin_bottom = 300.0
 texture = SubResource( 7 )
 stretch_mode = 3
 
@@ -225,12 +228,14 @@ theme = ExtResource( 2 )
 text = "rand"
 
 [node name="Control4" type="Control" parent="Settings/VBoxContainer"]
+visible = false
 margin_top = 103.0
 margin_right = 210.0
 margin_bottom = 113.0
 rect_min_size = Vector2( 0, 10 )
 
 [node name="Label2" type="Label" parent="Settings/VBoxContainer"]
+visible = false
 margin_top = 118.0
 margin_right = 210.0
 margin_bottom = 135.0
@@ -242,6 +247,7 @@ __meta__ = {
 }
 
 [node name="SliderScale" type="HSlider" parent="Settings/VBoxContainer"]
+visible = false
 margin_top = 140.0
 margin_right = 210.0
 margin_bottom = 156.0
@@ -252,35 +258,34 @@ step = 0.01
 value = 1.0
 
 [node name="Control" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 161.0
+margin_top = 103.0
 margin_right = 210.0
-margin_bottom = 171.0
+margin_bottom = 113.0
 rect_min_size = Vector2( 0, 10 )
 
 [node name="Label3" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 176.0
+margin_top = 118.0
 margin_right = 210.0
-margin_bottom = 193.0
+margin_bottom = 135.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
-text = "pixels:"
+text = "pixels: 100x100"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="SliderPixels" type="HSlider" parent="Settings/VBoxContainer"]
-margin_top = 198.0
+margin_top = 140.0
 margin_right = 210.0
-margin_bottom = 214.0
+margin_bottom = 156.0
 theme = ExtResource( 2 )
-min_value = 20.0
-step = 5.0
+min_value = 16.0
 value = 100.0
 
 [node name="Label4" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 219.0
+margin_top = 161.0
 margin_right = 210.0
-margin_bottom = 236.0
+margin_bottom = 178.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 text = "Rotation"
@@ -289,26 +294,44 @@ __meta__ = {
 }
 
 [node name="SliderRotation" type="HSlider" parent="Settings/VBoxContainer"]
-margin_top = 241.0
+margin_top = 183.0
 margin_right = 210.0
-margin_bottom = 257.0
+margin_bottom = 199.0
 theme = ExtResource( 2 )
 max_value = 6.28
 step = 0.01
 value = 6.28
 
 [node name="Control3" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 262.0
+margin_top = 204.0
 margin_right = 210.0
-margin_bottom = 272.0
+margin_bottom = 214.0
 rect_min_size = Vector2( 0, 10 )
 
-[node name="ExportPNG" type="Button" parent="Settings/VBoxContainer"]
-margin_top = 277.0
+[node name="Label6" type="Label" parent="Settings/VBoxContainer"]
+margin_top = 219.0
 margin_right = 210.0
-margin_bottom = 294.0
+margin_bottom = 236.0
 theme = ExtResource( 2 )
-text = "export png"
+custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+text = "Export:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ExportPNG" type="Button" parent="Settings/VBoxContainer"]
+margin_top = 241.0
+margin_right = 210.0
+margin_bottom = 258.0
+theme = ExtResource( 2 )
+text = "png"
+
+[node name="ExportSpriteSheet" type="Button" parent="Settings/VBoxContainer"]
+margin_top = 263.0
+margin_right = 210.0
+margin_bottom = 280.0
+theme = ExtResource( 2 )
+text = "spritesheet"
 
 [node name="Abberation" type="ColorRect" parent="."]
 material = SubResource( 9 )
@@ -326,17 +349,165 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Popup" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.172549, 0.207843, 0.301961, 0.596078 )
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PopupFront" type="ColorRect" parent="Popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 30.0
+margin_top = 30.0
+margin_right = -30.0
+margin_bottom = -30.0
+color = Color( 0.172549, 0.207843, 0.301961, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup/PopupFront"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpritesheetSettings" type="HBoxContainer" parent="Popup/PopupFront/VBoxContainer"]
+margin_right = 432.0
+margin_bottom = 199.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings"]
+margin_right = 214.0
+margin_bottom = 199.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
+margin_right = 214.0
+margin_bottom = 17.0
+theme = ExtResource( 2 )
+text = "frames (width)"
+
+[node name="WidthFrames" type="SpinBox" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
+margin_top = 21.0
+margin_right = 214.0
+margin_bottom = 38.0
+theme = ExtResource( 2 )
+max_value = 1000.0
+value = 50.0
+rounded = true
+
+[node name="Label2" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
+margin_top = 42.0
+margin_right = 214.0
+margin_bottom = 59.0
+theme = ExtResource( 2 )
+text = "frames (height)"
+
+[node name="HeightFrames" type="SpinBox" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
+margin_top = 63.0
+margin_right = 214.0
+margin_bottom = 80.0
+theme = ExtResource( 2 )
+max_value = 1000.0
+value = 1.0
+
+[node name="Control" type="Control" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
+margin_top = 84.0
+margin_right = 214.0
+margin_bottom = 114.0
+rect_min_size = Vector2( 0, 30 )
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings"]
+margin_left = 218.0
+margin_right = 432.0
+margin_bottom = 199.0
+size_flags_horizontal = 3
+
+[node name="FrameInfo" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2"]
+margin_right = 214.0
+margin_bottom = 17.0
+theme = ExtResource( 2 )
+text = "Total Frames: 50"
+
+[node name="ResolutionInfo" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2"]
+margin_top = 21.0
+margin_right = 214.0
+margin_bottom = 58.0
+theme = ExtResource( 2 )
+text = "Image resolution:
+5000x100"
+
+[node name="WarningResolution" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2"]
+visible = false
+margin_top = 62.0
+margin_right = 238.0
+margin_bottom = 119.0
+theme = ExtResource( 2 )
+text = "Image Width/Height cannot exceed 16384 pixels."
+autowrap = true
+
+[node name="TextureProgress" type="TextureProgress" parent="Popup/PopupFront/VBoxContainer"]
+visible = false
+margin_top = 183.0
+margin_right = 432.0
+margin_bottom = 199.0
+rect_min_size = Vector2( 0, 16 )
+size_flags_horizontal = 3
+texture_under = ExtResource( 6 )
+texture_progress = ExtResource( 7 )
+nine_patch_stretch = true
+stretch_margin_left = 4
+stretch_margin_top = 4
+stretch_margin_right = 4
+stretch_margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/PopupFront/VBoxContainer"]
+margin_top = 203.0
+margin_right = 432.0
+margin_bottom = 220.0
+
+[node name="CancelButton" type="Button" parent="Popup/PopupFront/VBoxContainer/HBoxContainer"]
+margin_right = 214.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+theme = ExtResource( 2 )
+text = "cancel"
+
+[node name="ExportButton" type="Button" parent="Popup/PopupFront/VBoxContainer/HBoxContainer"]
+margin_left = 218.0
+margin_right = 432.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+theme = ExtResource( 2 )
+text = "export"
+
 [node name="PlanetViewport" type="Viewport" parent="."]
-size = Vector2( 600, 600 )
+size = Vector2( 300, 300 )
 transparent_bg = true
 usage = 1
 render_target_v_flip = true
 
-[node name="Control" parent="PlanetViewport" instance=ExtResource( 3 )]
-margin_left = 200.0
-margin_top = 200.0
-margin_right = 200.0
-margin_bottom = 200.0
+[node name="PlanetHolder" type="Control" parent="PlanetViewport"]
+margin_left = 100.0
+margin_top = 100.0
+margin_right = 140.0
+margin_bottom = 140.0
+
+[node name="Control" parent="PlanetViewport/PlanetHolder" instance=ExtResource( 3 )]
+margin_right = -40.0
+margin_bottom = -40.0
 [connection signal="item_selected" from="Settings/VBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="text_changed" from="Settings/VBoxContainer/Seed/SeedText" to="." method="_on_LineEdit_text_changed"]
 [connection signal="pressed" from="Settings/VBoxContainer/Seed/Button" to="." method="_on_Button_pressed"]
@@ -344,4 +515,9 @@ margin_bottom = 200.0
 [connection signal="value_changed" from="Settings/VBoxContainer/SliderPixels" to="." method="_on_SliderPixels_value_changed"]
 [connection signal="value_changed" from="Settings/VBoxContainer/SliderRotation" to="." method="_on_SliderRotation_value_changed"]
 [connection signal="pressed" from="Settings/VBoxContainer/ExportPNG" to="." method="_on_ExportPNG_pressed"]
+[connection signal="pressed" from="Settings/VBoxContainer/ExportSpriteSheet" to="." method="_on_ExportSpriteSheet_pressed"]
 [connection signal="gui_input" from="Control" to="." method="_on_Control_gui_input"]
+[connection signal="value_changed" from="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/WidthFrames" to="Popup" method="_on_WidthFrames_value_changed"]
+[connection signal="value_changed" from="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/HeightFrames" to="Popup" method="_on_HeightFrames_value_changed"]
+[connection signal="pressed" from="Popup/PopupFront/VBoxContainer/HBoxContainer/CancelButton" to="Popup" method="_on_CancelButton_pressed"]
+[connection signal="pressed" from="Popup/PopupFront/VBoxContainer/HBoxContainer/ExportButton" to="Popup" method="_on_ExportButton_pressed"]

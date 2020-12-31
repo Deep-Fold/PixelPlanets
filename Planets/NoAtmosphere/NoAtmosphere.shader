@@ -14,8 +14,10 @@ uniform vec4 color3 : hint_color;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
+uniform float time = 0.0;
 
 float rand(vec2 coord) {
+	coord = mod(coord, vec2(1.0,1.0)*round(size));
 	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
 }
 
@@ -58,11 +60,14 @@ vec2 rotate(vec2 coord, float angle){
 void fragment() {
 	//pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
-	bool dith = dither(uv ,UV);
-	uv = rotate(uv, rotation);
+	
 	// check distance from center & distance to light
 	float d_circle = distance(uv, vec2(0.5));
 	float d_light = distance(uv , vec2(light_origin));
+	
+	bool dith = dither(uv ,UV);
+	uv = rotate(uv, rotation);
+	
 	
 	// cut out a circle
 	float a = step(d_circle, 0.5);
@@ -70,7 +75,7 @@ void fragment() {
 	// get a noise value with light distance added
 	// this creates a moving dynamic shape
 	float fbm1 = fbm(uv);
-	d_light += fbm(uv*size+fbm1+vec2(TIME*time_speed, 0.0))*0.3; // change the magic 0.3 here for different light strengths
+	d_light += fbm(uv*size+fbm1+vec2(time*time_speed, 0.0))*0.3; // change the magic 0.3 here for different light strengths
 	
 	// size of edge in which colors should be dithered
 	float dither_border = (1.0/pixels)*dither_size;

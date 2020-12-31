@@ -2,7 +2,6 @@ shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float pixels : hint_range(10,100);
-uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform float cloud_cover : hint_range(0.0, 1.0);
 uniform vec2 light_origin = vec2(0.39, 0.39);
 uniform float time_speed : hint_range(-1.0, 1.0) = 0.2;
@@ -19,8 +18,10 @@ uniform vec4 shadow_outline_color : hint_color;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
+uniform float time = 0.0;
 
 float rand(vec2 coord) {
+	coord = mod(coord, vec2(1.0,1.0)*round(size));
 	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
 }
 
@@ -50,30 +51,25 @@ float fbm(vec2 coord){
 	return value;
 }
 
-vec2 hash( float n ) {
-    float sn = sin(n);
-    return fract(vec2(sn,sn*42125.13)*seed);
-}
 // by Leukbaars from https://www.shadertoy.com/view/4tK3zR
 float circleNoise(vec2 uv) {
     float uv_y = floor(uv.y);
     uv.x += uv_y*.31;
     vec2 f = fract(uv);
-    vec2 h = hash(floor(uv.x)*uv_y);
-    float m = (length(f-0.25-(h.x*0.5)));
-    float r = h.y*0.25;
+	float h = rand(vec2(floor(uv.x),floor(uv_y)));
+    float m = (length(f-0.25-(h*0.5)));
+    float r = h*0.25;
     return smoothstep(0.0, r, m*0.75);
 }
 
-float cloud_alpha(vec2 uv, float time) {
+float cloud_alpha(vec2 uv) {
 	float c_noise = 0.0;
 	
-	
 	// more iterations for more turbulence
-	for (int i = 0; i < 15; i++) {
-		c_noise += circleNoise((uv * size *0.3) + (float(i+1)*10.) + (vec2(time*0.1, 0.0)));
+	for (int i = 0; i < 9; i++) {
+		c_noise += circleNoise((uv * size * 0.3) + (float(i+1)+10.) + (vec2(time*time_speed, 0.0)));
 	}
-	float fbm = fbm(uv*size+c_noise + vec2(time*0.5, 0.0));
+	float fbm = fbm(uv*size+c_noise + vec2(time*time_speed, 0.0));
 	
 	return fbm;//step(a_cutoff, fbm);
 }
@@ -89,19 +85,12 @@ vec2 spherify(vec2 uv) {
 	return sphere * 0.5+0.5;
 }
 
-vec2 rotate(vec2 coord, float angle){
-	coord -= 0.5;
-	coord *= mat2(vec2(cos(angle),-sin(angle)),vec2(sin(angle),cos(angle)));
-	return coord + 0.5;
-}
-
 void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
 	// distance to light source
 	float d_light = distance(uv , light_origin);
-	uv = rotate(uv, rotation);
 	
 	// map to sphere
 	uv = spherify(uv);
@@ -109,11 +98,11 @@ void fragment() {
 	uv.y += smoothstep(0.0, cloud_curve, abs(uv.x-0.4));
 	
 	
-	float c = cloud_alpha(uv*vec2(1.0, stretch), TIME*time_speed);
+	float c = cloud_alpha(uv*vec2(1.0, stretch));
 	
 	// assign some colors based on cloud depth & distance from light
 	vec3 col = base_color.rgb;
-	if (c < cloud_cover + 0.1) {
+	if (c < cloud_cover + 0.03) {
 		col = outline_color.rgb;
 	}
 	if (d_light + c*0.2 > light_border_1) {
@@ -123,6 +112,8 @@ void fragment() {
 	if (d_light + c*0.2 > light_border_2) {
 		col = shadow_outline_color.rgb;
 	}
+	
+
 	
 	COLOR = vec4(col, step(cloud_cover, c));
 }

@@ -18,21 +18,23 @@ shader_param/light_border_2 = 0.6
 shader_param/color1 = Color( 0.560784, 0.301961, 0.341176, 1 )
 shader_param/color2 = Color( 0.321569, 0.2, 0.247059, 1 )
 shader_param/color3 = Color( 0.239216, 0.160784, 0.211765, 1 )
-shader_param/size = 9.175
+shader_param/size = 10.0
 shader_param/OCTAVES = 3
 shader_param/seed = 1.551
+shader_param/time = 0.0
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 3 )
 shader_param/pixels = 100.0
 shader_param/rotation = 0.0
 shader_param/light_origin = Vector2( 0.3, 0.3 )
-shader_param/time_speed = 0.018
+shader_param/time_speed = 0.2
 shader_param/light_border = 0.4
 shader_param/color1 = Color( 0.321569, 0.2, 0.247059, 1 )
 shader_param/color2 = Color( 0.239216, 0.160784, 0.211765, 1 )
-shader_param/size = 4.515
-shader_param/seed = 1.679
+shader_param/size = 3.5
+shader_param/seed = 1.561
+shader_param/time = 0.0
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 5 )
@@ -49,27 +51,31 @@ shader_param/color3 = Color( 0.678431, 0.184314, 0.270588, 1 )
 shader_param/size = 10.0
 shader_param/OCTAVES = 4
 shader_param/seed = 2.527
+shader_param/time = 0.0
 
 [node name="LavaWorld" instance=ExtResource( 1 )]
+margin_right = -412.0
+margin_bottom = -200.0
+rect_min_size = Vector2( 0, 0 )
 script = ExtResource( 4 )
 
 [node name="PlanetUnder" type="ColorRect" parent="." index="0"]
 material = SubResource( 1 )
-margin_right = 40.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 200, 200 )
+margin_right = 100.0
+margin_bottom = 100.0
 
 [node name="Craters" type="ColorRect" parent="." index="1"]
 material = SubResource( 2 )
-margin_right = 200.0
-margin_bottom = 200.0
-rect_min_size = Vector2( 200, 200 )
+margin_right = 100.0
+margin_bottom = 100.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="LavaRivers" type="ColorRect" parent="." index="2"]
 material = SubResource( 3 )
-margin_right = 40.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 200, 200 )
+margin_right = 100.0
+margin_bottom = 100.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

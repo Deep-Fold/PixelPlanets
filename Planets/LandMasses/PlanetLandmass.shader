@@ -18,7 +18,7 @@ uniform vec4 col4 : hint_color;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
-
+uniform float time = 0.0;
 
 
 float rand(vec2 coord) {
@@ -83,7 +83,7 @@ void fragment() {
 	uv = spherify(uv);
 	
 	// some scrolling noise for landmasses
-	vec2 base_fbm_uv = (uv)*size+vec2(TIME*time_speed,0.0);
+	vec2 base_fbm_uv = (uv)*size+vec2(time*time_speed,0.0);
 	
 	// use multiple fbm's at different places so we can determine what color land gets
 	float fbm1 = fbm(base_fbm_uv);

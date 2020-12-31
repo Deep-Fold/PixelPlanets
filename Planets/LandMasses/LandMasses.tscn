@@ -20,6 +20,7 @@ shader_param/color3 = Color( 0.172549, 0.207843, 0.301961, 1 )
 shader_param/size = 5.228
 shader_param/OCTAVES = 3
 shader_param/seed = 10.0
+shader_param/time = 0.0
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 3 )
@@ -38,6 +39,7 @@ shader_param/col4 = Color( 0.156863, 0.207843, 0.25098, 1 )
 shader_param/size = 4.292
 shader_param/OCTAVES = 6
 shader_param/seed = 7.947
+shader_param/time = 0.0
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 2 )
@@ -57,13 +59,13 @@ shader_param/shadow_outline_color = Color( 0.25098, 0.286275, 0.45098, 1 )
 shader_param/size = 7.745
 shader_param/OCTAVES = 2
 shader_param/seed = 5.939
+shader_param/time = 0.0
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -312.0
-margin_bottom = -100.0
-rect_min_size = Vector2( 200, 200 )
+margin_right = -412.0
+margin_bottom = -200.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource( 4 )
@@ -73,24 +75,24 @@ __meta__ = {
 
 [node name="Water" type="ColorRect" parent="."]
 material = SubResource( 1 )
-margin_right = 3.05176e-05
-margin_bottom = 3.05176e-05
-rect_min_size = Vector2( 200, 200 )
+margin_right = 100.0
+margin_bottom = 100.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Land" type="ColorRect" parent="."]
 material = SubResource( 2 )
-margin_bottom = 3.05176e-05
-rect_min_size = Vector2( 200, 200 )
+margin_right = 100.0
+margin_bottom = 100.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Cloud" type="ColorRect" parent="."]
 material = SubResource( 3 )
-rect_min_size = Vector2( 200, 200 )
+margin_right = 100.0
+margin_bottom = 100.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
