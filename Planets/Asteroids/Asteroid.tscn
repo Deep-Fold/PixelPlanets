@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Planets/Asteroids/Asteroids.shader" type="Shader" id=1]
+[ext_resource path="res://Planets/Planet.tscn" type="PackedScene" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends \"res://Planets/Planet.gd\"
+
+func set_pixels(amount):
+	$Asteroid.material.set_shader_param(\"pixels\", amount)
+	$Asteroid.rect_size = Vector2(amount, amount)
+
+func set_light(pos):
+	$Asteroid.material.set_shader_param(\"light_origin\", pos)
+
+func set_seed(sd):
+	var converted_seed = sd%1000/100.0
+	$Asteroid.material.set_shader_param(\"seed\", converted_seed)
+
+func set_rotate(r):
+	$Asteroid.material.set_shader_param(\"rotation\", r)
+
+func update_time(_t):
+	pass
+
+func set_custom_time(t):
+	$Asteroid.material.set_shader_param(\"rotation\", t * PI * 2.0)
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/pixels = 100.0
+shader_param/rotation = 0.0
+shader_param/light_origin = Vector2( 0, 0 )
+shader_param/time_speed = 0.4
+shader_param/color1 = Color( 0.639216, 0.654902, 0.760784, 1 )
+shader_param/color2 = Color( 0.298039, 0.407843, 0.521569, 1 )
+shader_param/color3 = Color( 0.227451, 0.247059, 0.368627, 1 )
+shader_param/size = 5.294
+shader_param/OCTAVES = 2
+shader_param/seed = 1.567
+
+[node name="Asteroid" instance=ExtResource( 2 )]
+margin_right = -412.0
+margin_bottom = -200.0
+rect_min_size = Vector2( 100, 100 )
+script = SubResource( 1 )
+
+[node name="Asteroid" type="ColorRect" parent="." index="0"]
+material = SubResource( 2 )
+margin_right = 100.0
+margin_bottom = 100.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

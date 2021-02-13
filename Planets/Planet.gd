@@ -1,6 +1,6 @@
 extends Control
 
-var time = 0.0
+var time = 1000.0
 var override_time = false
 export (float) var relative_scale = 1.0
 
@@ -17,6 +17,7 @@ func update_time(_t):
 	pass
 func set_custom_time(_t):
 	pass
+
 func get_multiplier(mat):
 	return (round(mat.get_shader_param("size")) * 2.0) / mat.get_shader_param("time_speed")
 	

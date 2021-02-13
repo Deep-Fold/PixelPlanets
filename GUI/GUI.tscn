@@ -506,8 +506,6 @@ margin_right = 140.0
 margin_bottom = 140.0
 
 [node name="Control" parent="PlanetViewport/PlanetHolder" instance=ExtResource( 3 )]
-margin_right = -40.0
-margin_bottom = -40.0
 [connection signal="item_selected" from="Settings/VBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="text_changed" from="Settings/VBoxContainer/Seed/SeedText" to="." method="_on_LineEdit_text_changed"]
 [connection signal="pressed" from="Settings/VBoxContainer/Seed/Button" to="." method="_on_Button_pressed"]

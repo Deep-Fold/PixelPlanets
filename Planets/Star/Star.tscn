@@ -1,0 +1,497 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://Planets/Star/Star.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform float pixels : hint_range(10,300);
+uniform vec4 color : hint_color;
+uniform sampler2D colorramp;
+uniform float time_speed : hint_range(0.0, 1.0) = 0.05;
+uniform float time = 0.0;
+uniform float rotation : hint_range(0.0, 6.28) = 0.0;
+
+uniform float storm_width : hint_range(0.0, 0.5) = 0.3;
+uniform float storm_dither_width : hint_range(0.0, 0.5) = 0.07;
+
+uniform float seed: hint_range(1, 10);
+uniform float circle_amount : hint_range(2.0, 30.0) = 5.0;
+uniform float circle_size : hint_range(0.0, 1.0) = 1.0;
+
+uniform float size = 50.0;
+uniform int OCTAVES : hint_range(0, 20, 1);
+
+
+float rand(vec2 co){
+	co = mod(co, vec2(1.0,1.0)*round(size));
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+}
+
+
+vec2 rotate(vec2 vec, float angle) {
+	vec -=vec2(0.5);
+	vec *= mat2(vec2(cos(angle),-sin(angle)), vec2(sin(angle),cos(angle)));
+	vec += vec2(0.5);
+	return vec;
+}
+
+float circle(vec2 uv) {
+	float invert = 1.0 / circle_amount;
+	
+	if (mod(uv.y, invert*2.0) < invert) {
+		uv.x += invert*0.5;
+	}
+	vec2 rand_co = floor(uv*circle_amount)/circle_amount;
+	uv = mod(uv, invert)*circle_amount;
+	
+	float r = rand(rand_co);
+	r = clamp(r, invert, 1.0 - invert);
+	float circle = distance(uv, vec2(r));
+	return smoothstep(circle, circle+0.5, invert * circle_size * rand(rand_co*1.5));
+}
+
+
+float noise(vec2 coord){
+	vec2 i = floor(coord);
+	vec2 f = fract(coord);
+		
+	float a = rand(i);
+	float b = rand(i + vec2(1.0, 0.0));
+	float c = rand(i + vec2(0.0, 1.0));
+	float d = rand(i + vec2(1.0, 1.0));
+
+	vec2 cubic = f * f * (3.0 - 2.0 * f);
+
+	return mix(a, b, cubic.x) + (c - a) * cubic.y * (1.0 - cubic.x) + (d - b) * cubic.x * cubic.y;
+}
+
+float fbm(vec2 coord){
+	float value = 0.0;
+	float scl = 0.5;
+
+	for(int i = 0; i < OCTAVES ; i++){
+		value += noise(coord) * scl;
+		coord *= 2.0;
+		scl *= 0.5;
+	}
+	return value;
+}
+
+bool dither(vec2 uv1, vec2 uv2) {
+	return mod(uv1.x+uv2.y,2.0/pixels) <= 1.0 / pixels;
+}
+
+vec2 spherify(vec2 uv) {
+	vec2 centered= uv *2.0-1.0;
+	float z = sqrt(1.0 - dot(centered.xy, centered.xy));
+	vec2 sphere = centered/(z + 1.0);
+	return sphere * 0.5+0.5;
+}
+
+void fragment() {
+	vec2 pixelized = floor(UV*pixels)/pixels;
+	bool dith = dither(UV, pixelized);
+	
+	vec2 uv = rotate(pixelized, rotation);
+
+	// angle from centered uv's
+	float angle = atan(uv.x - 0.5, uv.y - 0.5);
+	float d = distance(pixelized, vec2(0.5));
+	
+	
+	float c = 0.0;
+	for(int i = 0; i < 15; i++) {
+		float r = rand(vec2(float(i)));
+		vec2 circleUV = vec2(d, angle);
+		c += circle(circleUV*size -time * time_speed - (1.0/d) * 0.1 + r);
+	}
+	
+	c *= 0.385 - d;
+	c = step(0.05, c - d);
+	
+	COLOR = vec4(vec3(color.rgb), c);
+}
+
+"
+
+[sub_resource type="Gradient" id=2]
+colors = PoolColorArray( 0.466667, 0.839216, 0.756863, 1, 1, 1, 0.894118, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 1 )
+shader_param/pixels = 200.0
+shader_param/color = Color( 1, 1, 0.894118, 1 )
+shader_param/time_speed = 0.05
+shader_param/time = 0.0
+shader_param/rotation = 0.0
+shader_param/storm_width = 0.3
+shader_param/storm_dither_width = 0.07
+shader_param/seed = 3.078
+shader_param/circle_amount = 2.0
+shader_param/circle_size = 1.0
+shader_param/size = 4.93
+shader_param/OCTAVES = 4
+shader_param/colorramp = SubResource( 3 )
+
+[sub_resource type="Shader" id=5]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform float pixels : hint_range(10,100);
+uniform vec4 color : hint_color;
+uniform float time_speed : hint_range(0.0, 1.0) = 0.05;
+uniform float time;
+uniform float rotation : hint_range(0.0, 6.28) = 0.0;
+uniform sampler2D colorramp;
+
+uniform float seed: hint_range(1, 10);
+uniform float size = 50.0;
+uniform int OCTAVES : hint_range(0, 20, 1);
+uniform float TILES : hint_range(0, 20, 1);
+
+
+float rand(vec2 co) {
+	co = mod(co, vec2(1.0,1.0)*round(size));
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+}
+
+vec2 rotate(vec2 vec, float angle) {
+	vec -=vec2(0.5);
+	vec *= mat2(vec2(cos(angle),-sin(angle)), vec2(sin(angle),cos(angle)));
+	vec += vec2(0.5);
+	return vec;
+}
+
+float noise(vec2 coord){
+	vec2 i = floor(coord);
+	vec2 f = fract(coord);
+		
+	float a = rand(i);
+	float b = rand(i + vec2(1.0, 0.0));
+	float c = rand(i + vec2(0.0, 1.0));
+	float d = rand(i + vec2(1.0, 1.0));
+
+	vec2 cubic = f * f * (3.0 - 2.0 * f);
+
+	return mix(a, b, cubic.x) + (c - a) * cubic.y * (1.0 - cubic.x) + (d - b) * cubic.x * cubic.y;
+}
+
+vec2 Hash2(vec2 p) {
+	float t = (time+10.0)*.3;
+	//p = mod(p, vec2(1.0,1.0)*round(size));
+	return vec2(noise(p), noise(p*vec2(.3135+sin(t), .5813-cos(t))));
+}
+
+// Tileable cell noise by Dave_Hoskins from shadertoy: https://www.shadertoy.com/view/4djGRh
+float Cells(in vec2 p, in float numCells) {
+	p *= numCells;
+	float d = 1.0e10;
+	for (int xo = -1; xo <= 1; xo++)
+	{
+		for (int yo = -1; yo <= 1; yo++)
+		{
+			vec2 tp = floor(p) + vec2(float(xo), float(yo));
+			tp = p - tp - Hash2(mod(tp, numCells / TILES));
+			d = min(d, dot(tp, tp));
+		}
+	}
+	return sqrt(d);
+}
+
+bool dither(vec2 uv1, vec2 uv2) {
+	return mod(uv1.x+uv2.y,2.0/pixels) <= 1.0 / pixels;
+}
+
+vec2 spherify(vec2 uv) {
+	vec2 centered= uv *2.0-1.0;
+	float z = sqrt(1.0 - dot(centered.xy, centered.xy));
+	vec2 sphere = centered/(z + 1.0);
+	return sphere * 0.5+0.5;
+}
+
+void fragment() {
+	// pixelize uv
+	vec2 pixelized = floor(UV*pixels)/pixels;
+	
+	// use dither val later to mix between colors
+	bool dith = dither(UV, pixelized);
+	
+	pixelized = rotate(pixelized, rotation);
+	
+	// spherify has to go after dither
+	pixelized = spherify(pixelized);
+	
+	// use two different sized cells for some variation
+	float n = Cells(pixelized - vec2(time * time_speed * 2.0, 0), 10);
+	n *= Cells(pixelized - vec2(time * time_speed * 2.0, 0), 20);
+	//n *= Cells(pixelized - vec2(time * time_speed * 2.0, 0), 30);
+	
+	// adjust cell value to get better looking stuff
+	n*= 2.;
+	n = clamp(n, 0.0, 1.0);
+	if (dith) { // here we dither
+		n *= 1.3;
+	}
+	
+	// constrain values 4 possibilities and then choose color based on those
+	float interpolate = floor(n * 3.0) / 3.0;
+	vec3 c = texture(colorramp, vec2(interpolate, 0.0)).rgb;
+	
+	// cut out a circle
+	float a = step(distance(pixelized, vec2(0.5)), .5);
+	
+	COLOR = vec4(c, a * color.a);
+}"
+
+[sub_resource type="Gradient" id=6]
+offsets = PoolRealArray( 0, 0.33, 0.66, 1 )
+colors = PoolColorArray( 0.960784, 1, 0.909804, 1, 0.466667, 0.839216, 0.756863, 1, 0.109804, 0.572549, 0.654902, 1, 0.0117647, 0.243137, 0.368627, 1 )
+
+[sub_resource type="GradientTexture" id=7]
+gradient = SubResource( 6 )
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 5 )
+shader_param/pixels = 100.0
+shader_param/color = Color( 1, 0.545098, 0.105882, 1 )
+shader_param/time_speed = 0.05
+shader_param/time = 122.981
+shader_param/rotation = 0.0
+shader_param/seed = 1.0
+shader_param/size = 4.658
+shader_param/OCTAVES = 4
+shader_param/TILES = 1.0
+shader_param/colorramp = SubResource( 7 )
+
+[sub_resource type="Shader" id=9]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform float pixels : hint_range(10,300);
+uniform sampler2D colorramp;
+uniform float time_speed : hint_range(0.0, 1.0) = 0.05;
+uniform float time;
+uniform float rotation : hint_range(0.0, 6.28) = 0.0;
+
+uniform float storm_width : hint_range(0.0, 0.5) = 0.3;
+uniform float storm_dither_width : hint_range(0.0, 0.5) = 0.07;
+
+uniform float scale = 1.0;
+uniform float seed: hint_range(1, 10);
+uniform float circle_amount : hint_range(2.0, 30.0) = 5.0;
+uniform float circle_scale : hint_range(0.0, 1.0) = 1.0;
+
+uniform float size = 50.0;
+uniform int OCTAVES : hint_range(0, 20, 1);
+
+
+float rand(vec2 co){
+	co = mod(co, vec2(1.0,1.0)*round(size));
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+}
+
+
+vec2 rotate(vec2 vec, float angle) {
+	vec -=vec2(0.5);
+	vec *= mat2(vec2(cos(angle),-sin(angle)), vec2(sin(angle),cos(angle)));
+	vec += vec2(0.5);
+	return vec;
+}
+
+float circle(vec2 uv) {
+	float invert = 1.0 / circle_amount;
+	
+	if (mod(uv.y, invert*2.0) < invert) {
+		uv.x += invert*0.5;
+	}
+	vec2 rand_co = floor(uv*circle_amount)/circle_amount;
+	uv = mod(uv, invert)*circle_amount;
+	
+	float r = rand(rand_co);
+	r = clamp(r, invert, 1.0 - invert);
+	float circle = distance(uv, vec2(r));
+	return smoothstep(circle, circle+0.5, invert * circle_scale * rand(rand_co*1.5));
+}
+
+
+float noise(vec2 coord){
+	vec2 i = floor(coord);
+	vec2 f = fract(coord);
+		
+	float a = rand(i);
+	float b = rand(i + vec2(1.0, 0.0));
+	float c = rand(i + vec2(0.0, 1.0));
+	float d = rand(i + vec2(1.0, 1.0));
+
+	vec2 cubic = f * f * (3.0 - 2.0 * f);
+
+	return mix(a, b, cubic.x) + (c - a) * cubic.y * (1.0 - cubic.x) + (d - b) * cubic.x * cubic.y;
+}
+
+float fbm(vec2 coord){
+	float value = 0.0;
+	float scl = 0.5;
+
+	for(int i = 0; i < OCTAVES ; i++){
+		value += noise(coord) * scl;
+		coord *= 2.0;
+		scl *= 0.5;
+	}
+	return value;
+}
+
+bool dither(vec2 uv1, vec2 uv2) {
+	return mod(uv1.x+uv2.y,2.0/pixels) <= 1.0 / pixels;
+}
+
+vec2 spherify(vec2 uv) {
+	vec2 centered= uv *2.0-1.0;
+	float z = sqrt(1.0 - dot(centered.xy, centered.xy));
+	vec2 sphere = centered/(z + 1.0);
+	return sphere * 0.5+0.5;
+}
+
+
+void fragment() {
+	// pixelize uv
+	vec2 pixelized = floor(UV*pixels)/pixels;
+	
+	// use dither val later to interpolate between alpha
+	bool dith = dither(UV, pixelized);
+	
+	pixelized = rotate(pixelized, rotation);
+	
+	// counter rotation against rotation caused by the way uv's are made later
+	vec2 uv = pixelized;//rotate(pixelized, -time  * time_speed);
+	
+	// angle from centered uv's
+	float angle = atan(uv.x - 0.5, uv.y - 0.5) * 0.4;
+	// distance from center
+	float d = distance(pixelized, vec2(0.5));
+	
+	// we make uv circular here to have eternally outward moving stuff
+	vec2 circleUV = vec2(d, angle);
+	
+	// two types of noise values
+	float n = fbm(circleUV*size -time * time_speed);
+	float nc = circle(circleUV*scale -time * time_speed + n);
+	
+	nc *= 1.5;
+	float n2 = fbm(circleUV*size -time + vec2(100, 100));
+	nc -= n2 * 0.1;
+	
+	// our alpha, default 0
+	float a = 0.0;
+	if (1.0 - d > nc) {
+		// now we generate very thin strips of positive alpha if our noise has certain values and is close enough to center
+		if (nc > storm_width - storm_dither_width + d && dith) {
+			a = 1.0;
+		} else if (nc > storm_width + d) { // could use an or statement instead, but this looks more clear to me
+			a = 1.0;
+		}
+	}
+	
+	// use our two noise values to assign colors
+	float interpolate = floor(n2 + nc);
+	vec3 c = texture(colorramp, vec2(interpolate, 0.0)).rgb;	
+	
+	// final step to not have everything appear from the center
+	a *= step(n2 * 0.25, d);
+	COLOR = vec4(c, a);
+}"
+
+[sub_resource type="Gradient" id=10]
+colors = PoolColorArray( 0.819608, 0.25098, 0.121569, 1, 1, 0.509804, 0.231373, 1 )
+
+[sub_resource type="GradientTexture" id=11]
+gradient = SubResource( 10 )
+
+[sub_resource type="ShaderMaterial" id=12]
+shader = SubResource( 9 )
+shader_param/pixels = 200.0
+shader_param/time_speed = 0.05
+shader_param/time = 80.0
+shader_param/rotation = 0.0
+shader_param/storm_width = 0.3
+shader_param/storm_dither_width = 0.07
+shader_param/scale = 1.0
+shader_param/seed = 1.679
+shader_param/circle_amount = 2.0
+shader_param/circle_scale = 1.0
+shader_param/size = 1.6
+shader_param/OCTAVES = 3
+shader_param/colorramp = SubResource( 11 )
+
+[sub_resource type="ShaderMaterial" id=13]
+shader = SubResource( 9 )
+shader_param/pixels = 200.0
+shader_param/time_speed = 0.05
+shader_param/time = null
+shader_param/rotation = 0.0
+shader_param/storm_width = 0.3
+shader_param/storm_dither_width = 0.0
+shader_param/scale = 1.0
+shader_param/seed = 3.078
+shader_param/circle_amount = 2.0
+shader_param/circle_scale = 1.0
+shader_param/size = 1.6
+shader_param/OCTAVES = 4
+shader_param/colorramp = SubResource( 3 )
+
+[node name="Star" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -412.0
+margin_bottom = -200.0
+rect_pivot_offset = Vector2( 100, 100 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+relative_scale = 2.0
+
+[node name="StarBackground" type="ColorRect" parent="."]
+material = SubResource( 4 )
+margin_left = -50.0
+margin_top = -50.0
+margin_right = 150.0
+margin_bottom = 150.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Star" type="ColorRect" parent="."]
+material = SubResource( 8 )
+margin_right = 100.0
+margin_bottom = 100.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StarFlares" type="ColorRect" parent="."]
+visible = false
+material = SubResource( 12 )
+margin_left = -50.0
+margin_top = -50.0
+margin_right = 150.0
+margin_bottom = 150.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StarFlares2" type="ColorRect" parent="."]
+material = SubResource( 13 )
+margin_left = -50.0
+margin_top = -50.0
+margin_right = 150.0
+margin_bottom = 150.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

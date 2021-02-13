@@ -9,6 +9,7 @@ uniform float stretch : hint_range(1.0,3.0) = 2.0;
 uniform float cloud_curve : hint_range(1.0, 2.0) = 1.3;
 uniform float light_border_1 : hint_range(0.0, 1.0) = 0.52;
 uniform float light_border_2 : hint_range(0.0, 1.0) = 0.62;
+uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 
 uniform vec4 base_color : hint_color;
 uniform vec4 outline_color : hint_color;
@@ -85,12 +86,20 @@ vec2 spherify(vec2 uv) {
 	return sphere * 0.5+0.5;
 }
 
+vec2 rotate(vec2 coord, float angle){
+	coord -= 0.5;
+	coord *= mat2(vec2(cos(angle),-sin(angle)),vec2(sin(angle),cos(angle)));
+	return coord + 0.5;
+}
+
 void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
 	// distance to light source
 	float d_light = distance(uv , light_origin);
+	
+	uv = rotate(uv, rotation);
 	
 	// map to sphere
 	uv = spherify(uv);

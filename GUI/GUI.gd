@@ -15,6 +15,8 @@ onready var planets = {
 	"Gas giant 2": preload("res://Planets/GasPlanetLayers/GasPlanetLayers.tscn"),
 	"Ice World": preload("res://Planets/IceWorld/IceWorld.tscn"),
 	"Lava World": preload("res://Planets/LavaWorld/LavaWorld.tscn"),
+	"Asteroid": preload("res://Planets/Asteroids/Asteroid.tscn"),
+	"Star": preload("res://Planets/Star/Star.tscn"),
 }
 const max_pixel_size = 100.0;
 var pixels = 100.0
@@ -24,6 +26,7 @@ var sd = 0
 func _ready():
 	for k in planets.keys():
 		optionbutton.add_item(k)
+	_seed_random()
 
 func _on_OptionButton_item_selected(index):
 	var chosen = planets[planets.keys()[index]]
@@ -62,7 +65,7 @@ func _create_new_planet(type):
 	
 	var new_p = type.instance()
 	seed(sd)
-	new_p.set_seed(randi())
+	new_p.set_seed(sd)
 	new_p.set_pixels(pixels)
 	new_p.rect_position = Vector2(0,0)
 	viewport_planet.add_child(new_p)
@@ -79,21 +82,19 @@ func _on_Button_pressed():
 
 
 func _on_ExportPNG_pressed():
-	if OS.get_name() != "HTML5" or !OS.has_feature('JavaScript'):
-		var err = viewport.get_texture().get_data().save_png("res://%s.png"%String(sd))
-		prints(err)
-	else:
-		var planet = viewport_planet.get_child(0)
-		var tex = viewport.get_texture().get_data()
-		var image = Image.new()
-		image.create(pixels * planet.relative_scale, pixels * planet.relative_scale, false, Image.FORMAT_RGBA8)
-		var source_xy = 100 - (pixels*(planet.relative_scale-1)*0.5)
-		var source_size = 100*planet.relative_scale
-		var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
-		image.blit_rect(tex, source_rect, Vector2(0,0))
-		
-		var filesaver = get_tree().root.get_node("/root/HTML5File")
-		filesaver.save_image(image, String(sd))
+#	if OS.get_name() != "HTML5" or !OS.has_feature('JavaScript'):
+#		var err = viewport.get_texture().get_data().save_png("res://%s.png"%String(sd))
+#	else:
+	var planet = viewport_planet.get_child(0)
+	var tex = viewport.get_texture().get_data()
+	var image = Image.new()
+	image.create(pixels * planet.relative_scale, pixels * planet.relative_scale, false, Image.FORMAT_RGBA8)
+	var source_xy = 100 - (pixels*(planet.relative_scale-1)*0.5)
+	var source_size = 100*planet.relative_scale
+	var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
+	image.blit_rect(tex, source_rect, Vector2(0,0))
+	
+	save_image(image)
 
 func export_spritesheet(sheet_size, progressbar):
 	var planet = viewport_planet.get_child(0)
@@ -122,10 +123,15 @@ func export_spritesheet(sheet_size, progressbar):
 	
 	
 	planet.override_time = false
-	var filesaver = get_tree().root.get_node("/root/HTML5File")
-	filesaver.save_image(sheet, String(sd))
+	save_image(sheet)
 	$Popup.visible = false
 
+func save_image(img):
+	if OS.get_name() == "HTML5" and OS.has_feature('JavaScript'):
+		var filesaver = get_tree().root.get_node("/root/HTML5File")
+		filesaver.save_image(img, String(sd))
+	else:
+		img.save_png("res://%s.png"%String(sd))
 
 func _on_ExportSpriteSheet_pressed():
 	$Popup.visible = true
