@@ -22,7 +22,7 @@ float rand(vec2 coord) {
 	// it would probably be better to only allow integer sizes
 	// multiply by vec2(2,1) to simulate planet having another side
 	coord = mod(coord, vec2(2.0,1.0)*round(size));
-	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
 
 float noise(vec2 coord){
@@ -75,14 +75,18 @@ void fragment() {
 	
 	bool dith = dither(uv, UV);
 	
-	uv = spherify(uv);
-	uv = rotate(uv, rotation);
-	// check distance from center & distance to light
-	float d_circle = distance(uv, vec2(0.5));
+	// check distance distance to light
 	float d_light = distance(uv , vec2(light_origin));
 	
 	// cut out a circle
+	float d_circle = distance(uv, vec2(0.5));
 	float a = step(d_circle, 0.5);
+	
+	uv = spherify(uv);
+	uv = rotate(uv, rotation);
+	
+	
+	
 	
 	// get a noise value with light distance added
 	d_light += fbm(uv*size+vec2(time*time_speed, 0.0))*0.3; // change the magic 0.3 here for different light strengths

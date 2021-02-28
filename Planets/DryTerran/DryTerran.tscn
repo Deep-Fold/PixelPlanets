@@ -78,16 +78,16 @@ void fragment() {
 	vec2 uv = floor(UV*pixels)/pixels;
 	bool dith = dither(uv, UV);
 	
+	// cut out a circle
+	float d_circle = distance(uv, vec2(0.5));
+	float a = step(d_circle, 0.5);
+	
 	uv = spherify(uv);
 	
-	// check distance from center & distance to light
-	float d_circle = distance(uv, vec2(0.5));
+	// check distance distance to light
 	float d_light = distance(uv , vec2(light_origin));
 	
 	uv = rotate(uv, rotation);
-	
-	// cut out a circle
-	float a = step(d_circle, 0.5);
 	
 	// noise
 	float f = fbm(uv*size+vec2(time*time_speed, 0.0));

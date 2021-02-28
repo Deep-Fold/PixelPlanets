@@ -14,7 +14,7 @@ uniform float time = 0.0;
 
 float rand(vec2 coord) {
 	coord = mod(coord, vec2(1.0,1.0)*round(size));
-	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
 
 // by Leukbaars from https://www.shadertoy.com/view/4tK3zR
@@ -56,6 +56,8 @@ void fragment() {
 	// check distance from center & distance to light
 	float d_circle = distance(uv, vec2(0.5));
 	float d_light = distance(uv , vec2(light_origin));
+	// cut out a circle
+	float a = step(d_circle, 0.5);
 	
 	uv = rotate(uv, rotation);
 	uv = spherify(uv);
@@ -64,7 +66,7 @@ void fragment() {
 	float c2 = crater(uv +(light_origin-0.5)*0.03);
 	vec3 col = color1.rgb;
 	
-	float a = step(0.5, c1);
+	a *= step(0.5, c1);
 	if (c2<c1-(0.5-d_light)*2.0) {
 		col = color2.rgb;
 	}

@@ -22,7 +22,7 @@ uniform float time = 0.0;
 
 float rand(vec2 coord) {
 	coord = mod(coord, vec2(2.0,1.0)*round(size));
-	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
 
 float noise(vec2 coord){

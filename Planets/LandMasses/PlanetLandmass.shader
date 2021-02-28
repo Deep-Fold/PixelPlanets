@@ -27,7 +27,7 @@ float rand(vec2 coord) {
 	// it would probably be better to only allow integer sizes
 	// multiply by vec2(2,1) to simulate planet having another side
 	coord = mod(coord, vec2(2.0,1.0)*round(size));
-	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
 
 
@@ -75,6 +75,9 @@ void fragment() {
 	vec2 uv = floor(UV*pixels)/pixels;
 	
 	float d_light = distance(uv , light_origin);
+	// cut out a circle
+	float d_circle = distance(uv, vec2(0.5));
+	float a = step(d_circle, 0.5);
 	
 	// give planet a tilt
 	uv = rotate(uv, rotation);
@@ -122,5 +125,5 @@ void fragment() {
 		col = col1.rgb;
 	}
 	
-	COLOR = vec4(col, step(land_cutoff, fbm1));
+	COLOR = vec4(col, step(land_cutoff, fbm1) * a);
 }

@@ -2,8 +2,9 @@ shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float pixels : hint_range(10,100);
-uniform vec4 color : hint_color;
-uniform float time_scale : hint_range(0.0, 1.0) = 0.05;
+uniform float time_speed : hint_range(0.0, 1.0) = 0.05;
+uniform float time;
+uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform sampler2D colorramp;
 
 uniform float seed: hint_range(1, 10);
@@ -12,10 +13,10 @@ uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float TILES : hint_range(0, 20, 1);
 
 
-float rand(vec2 co){
+float rand(vec2 co) {
+	co = mod(co, vec2(1.0,1.0)*round(size));
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
 }
-
 
 vec2 rotate(vec2 vec, float angle) {
 	vec -=vec2(0.5);
@@ -23,7 +24,6 @@ vec2 rotate(vec2 vec, float angle) {
 	vec += vec2(0.5);
 	return vec;
 }
-
 
 float noise(vec2 coord){
 	vec2 i = floor(coord);
@@ -39,26 +39,14 @@ float noise(vec2 coord){
 	return mix(a, b, cubic.x) + (c - a) * cubic.y * (1.0 - cubic.x) + (d - b) * cubic.x * cubic.y;
 }
 
-float fbm(vec2 coord){
-	float value = 0.0;
-	float scl = 0.5;
-
-	for(int i = 0; i < OCTAVES ; i++){
-		value += noise(coord) * scl;
-		coord *= 2.0;
-		scl *= 0.5;
-	}
-	return value;
+vec2 Hash2(vec2 p) {
+	float t = (time+10.0)*.3;
+	//p = mod(p, vec2(1.0,1.0)*round(size));
+	return vec2(noise(p), noise(p*vec2(.3135+sin(t), .5813-cos(t))));
 }
 
-
-vec2 Hash2(vec2 p, in float time) {
-	float t = time*.3;
-	return vec2(noise(p*vec2(.135+t, .2325-t)), noise(p*vec2(.3135+t, .5813-t)));
-}
-
-//------------------------------------------------------------------------
-float Cells(in vec2 p, in float numCells, in float time) {
+// Tileable cell noise by Dave_Hoskins from shadertoy: https://www.shadertoy.com/view/4djGRh
+float Cells(in vec2 p, in float numCells) {
 	p *= numCells;
 	float d = 1.0e10;
 	for (int xo = -1; xo <= 1; xo++)
@@ -66,12 +54,11 @@ float Cells(in vec2 p, in float numCells, in float time) {
 		for (int yo = -1; yo <= 1; yo++)
 		{
 			vec2 tp = floor(p) + vec2(float(xo), float(yo));
-			tp = p - tp - Hash2(mod(tp, numCells / TILES), time);
+			tp = p - tp - Hash2(mod(tp, numCells / TILES));
 			d = min(d, dot(tp, tp));
 		}
 	}
 	return sqrt(d);
-	//return 1.0 - d;// ...Bubbles.
 }
 
 bool dither(vec2 uv1, vec2 uv2) {
@@ -86,30 +73,35 @@ vec2 spherify(vec2 uv) {
 }
 
 void fragment() {
-	float time = TIME * time_scale;
+	// pixelize uv
 	vec2 pixelized = floor(UV*pixels)/pixels;
+	
+	// use dither val later to mix between colors
 	bool dith = dither(UV, pixelized);
 	
+	pixelized = rotate(pixelized, rotation);
+	
+	// spherify has to go after dither
 	pixelized = spherify(pixelized);
-	float n1 = fbm(pixelized * size + time);
-//	n = fbm(pixelized + n * 5.0 + time);
-//	n = pow(n + 0.2, 3.0);
 	
+	// use two different sized cells for some variation
+	float n = Cells(pixelized - vec2(time * time_speed * 2.0, 0), 10);
+	n *= Cells(pixelized - vec2(time * time_speed * 2.0, 0), 20);
+	//n *= Cells(pixelized - vec2(time * time_speed * 2.0, 0), 30);
 	
-	float n = Cells(pixelized - vec2(TIME * time_scale * 0.2, 0), 10, TIME * time_scale);
-	n *= Cells(pixelized - vec2(TIME * time_scale * 0.2, 0), 15, TIME * time_scale);
-	n*= 3.5;
+	// adjust cell value to get better looking stuff
+	n*= 2.;
 	n = clamp(n, 0.0, 1.0);
-	
-	float a = step(distance(pixelized, vec2(0.5)), .5);
-	
-	if (dith) {
+	if (dith) { // here we dither
 		n *= 1.3;
 	}
 	
-	//n += distance(pixelized, vec2(0.5)) * 0.7;
+	// constrain values 4 possibilities and then choose color based on those
 	float interpolate = floor(n * 3.0) / 3.0;
 	vec3 c = texture(colorramp, vec2(interpolate, 0.0)).rgb;
 	
-	COLOR = vec4(c, a * color.a);
+	// cut out a circle
+	float a = step(distance(pixelized, vec2(0.5)), .5);
+	
+	COLOR = vec4(c, a);
 }

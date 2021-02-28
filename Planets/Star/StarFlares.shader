@@ -2,9 +2,10 @@ shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float pixels : hint_range(10,300);
-uniform vec4 color : hint_color;
 uniform sampler2D colorramp;
-uniform float time_scale : hint_range(0.0, 1.0) = 0.05;
+uniform float time_speed : hint_range(0.0, 1.0) = 0.05;
+uniform float time;
+uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 
 uniform float storm_width : hint_range(0.0, 0.5) = 0.3;
 uniform float storm_dither_width : hint_range(0.0, 0.5) = 0.07;
@@ -19,7 +20,8 @@ uniform int OCTAVES : hint_range(0, 20, 1);
 
 
 float rand(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+	co = mod(co, vec2(1.0,1.0)*round(size));
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
 
 
@@ -83,56 +85,51 @@ vec2 spherify(vec2 uv) {
 	return sphere * 0.5+0.5;
 }
 
+
 void fragment() {
-	float time = TIME * time_scale;
+	// pixelize uv
 	vec2 pixelized = floor(UV*pixels)/pixels;
+	
+	// use dither val later to interpolate between alpha
 	bool dith = dither(UV, pixelized);
 	
-//	pixelized = spherify(pixelized);
-	vec2 uv = rotate(pixelized, -time );
-
+	pixelized = rotate(pixelized, rotation);
+	
+	// counter rotation against rotation caused by the way uv's are made later
+	vec2 uv = pixelized;//rotate(pixelized, -time  * time_speed);
+	
 	// angle from centered uv's
 	float angle = atan(uv.x - 0.5, uv.y - 0.5) * 0.4;
-
+	// distance from center
 	float d = distance(pixelized, vec2(0.5));
+	
+	// we make uv circular here to have eternally outward moving stuff
 	vec2 circleUV = vec2(d, angle);
 	
-	float n = fbm(circleUV*size -time);
-	float nc = circle(circleUV*scale -time + n);
+	// two types of noise values
+	float n = fbm(circleUV*size -time * time_speed);
+	float nc = circle(circleUV*scale -time * time_speed + n);
 	
-	
-	//c -= pow(d + 0.6, 4.);
-	//c += 0.0;
-	
-//	c += 0.3;
 	nc *= 1.5;
-	
-	//c = pow(c, d);
-	
 	float n2 = fbm(circleUV*size -time + vec2(100, 100));
 	nc -= n2 * 0.1;
-//	c *= d + n2;
 	
+	// our alpha, default 0
 	float a = 0.0;
 	if (1.0 - d > nc) {
+		// now we generate very thin strips of positive alpha if our noise has certain values and is close enough to center
 		if (nc > storm_width - storm_dither_width + d && dith) {
 			a = 1.0;
-		} else if (nc > storm_width + d) {
+		} else if (nc > storm_width + d) { // could use an or statement instead, but this looks more clear to me
 			a = 1.0;
 		}
 	}
 	
+	// use our two noise values to assign colors
 	float interpolate = floor(n2 + nc);
-	vec3 c = texture(colorramp, vec2(interpolate, 0.0)).rgb;
+	vec3 c = texture(colorramp, vec2(interpolate, 0.0)).rgb;	
 	
-	
-//	float a = step(c, 1.0 - d);
-//	a *= step(0.3 + d, c);
-	
-	//c = step(d*2.0, c);
-	
-	
-	
+	// final step to not have everything appear from the center
 	a *= step(n2 * 0.25, d);
 	COLOR = vec4(c, a);
 }

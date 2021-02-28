@@ -4,16 +4,12 @@ func set_pixels(amount):
 	$StarBackground.material.set_shader_param("pixels", amount*relative_scale)
 	$Star.material.set_shader_param("pixels", amount)
 	$StarFlares.material.set_shader_param("pixels", amount*relative_scale)
-	$StarFlares2.material.set_shader_param("pixels", amount*relative_scale)
-	
+
 	$Star.rect_size = Vector2(amount, amount)
 	$StarFlares.rect_size = Vector2(amount, amount)*relative_scale
-	$StarFlares2.rect_size = Vector2(amount, amount)*relative_scale
 	$StarBackground.rect_size = Vector2(amount, amount)*relative_scale
 
-
 	$StarFlares.rect_position = Vector2(-amount, -amount) * 0.5
-	$StarFlares2.rect_position = Vector2(-amount, -amount) * 0.5
 	$StarBackground.rect_position = Vector2(-amount, -amount) * 0.5
 
 func set_light(_pos):
@@ -24,8 +20,7 @@ func set_seed(sd):
 	$StarBackground.material.set_shader_param("seed", converted_seed)
 	$Star.material.set_shader_param("seed", converted_seed)
 	$StarFlares.material.set_shader_param("seed", converted_seed)
-	$StarFlares2.material.set_shader_param("seed", converted_seed * 0.5)
-	
+
 	_set_colors(sd)
 
 var starcolor1 = Gradient.new()
@@ -48,26 +43,22 @@ func _ready():
 func _set_colors(sd): # this is just a little extra function to show some different possible stars
 	if (sd % 2 == 0):
 		$Star.material.get_shader_param("colorramp").gradient = starcolor1
-		$StarFlares2.material.get_shader_param("colorramp").gradient = starflarecolor1
+		$StarFlares.material.get_shader_param("colorramp").gradient = starflarecolor1
 	else:
 		$Star.material.get_shader_param("colorramp").gradient = starcolor2
-		$StarFlares2.material.get_shader_param("colorramp").gradient = starflarecolor2
+		$StarFlares.material.get_shader_param("colorramp").gradient = starflarecolor2
 
 func set_rotate(r):
 	$StarBackground.material.set_shader_param("rotation", r)
 	$Star.material.set_shader_param("rotation", r)
 	$StarFlares.material.set_shader_param("rotation", r)
-	$StarFlares2.material.set_shader_param("rotation", r)
 
 func update_time(t):
 	$StarBackground.material.set_shader_param("time", t * get_multiplier($StarBackground.material) * 0.01)
 	$Star.material.set_shader_param("time", t * get_multiplier($Star.material) * 0.001)
 	$StarFlares.material.set_shader_param("time", t * get_multiplier($StarFlares.material) * 0.015)
-	$StarFlares2.material.set_shader_param("time", t * get_multiplier($StarFlares2.material) * 0.015)
 
 func set_custom_time(t):
 	$StarBackground.material.set_shader_param("time", t * get_multiplier($StarBackground.material))
 	$Star.material.set_shader_param("time", t * get_multiplier($Star.material) * (1.0/6.0))
 	$StarFlares.material.set_shader_param("time", t * get_multiplier($StarFlares.material))
-	$StarFlares2.material.set_shader_param("time", t * get_multiplier($StarFlares2.material))
-

@@ -21,7 +21,7 @@ uniform float time = 0.0;
 
 float rand(vec2 coord) {
 	coord = mod(coord, vec2(2.0,1.0)*round(size));
-	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
 
 float noise(vec2 coord){
@@ -73,10 +73,14 @@ void fragment() {
 	
 	float d_light = distance(uv , light_origin);
 	
+	// cut out a circle
+	float d_circle = distance(uv, vec2(0.5));
+	float a = step(d_circle, 0.5);
+	
 	// give planet a tilt
 	uv = rotate(uv, rotation);
-
-//	// map to sphere
+	
+	// map to sphere
 	uv = spherify(uv);
 	
 	// some scrolling noise for landmasses
@@ -98,7 +102,6 @@ void fragment() {
 		col = color3.rgb;
 	}
 	
-	float a = step(river_cutoff, river_fbm);
-	a*= step(distance(vec2(0.5), uv), 0.5);
+	a *= step(river_cutoff, river_fbm);
 	COLOR = vec4(col, a);
 }

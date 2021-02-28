@@ -30,7 +30,7 @@ float rand(vec2 coord) {
 	// it would probably be better to only allow integer sizes
 	// multiply by vec2(2,1) to simulate planet having another side
 	coord = mod(coord, vec2(2.0,1.0)*round(size));
-	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
 
 float noise(vec2 coord){
@@ -60,9 +60,11 @@ float fbm(vec2 coord){
 }
 
 vec2 spherify(vec2 uv) {
-	vec2 centered= uv *2.0-1.0;
+	vec2 centered = uv *2.0-1.0;
 	float z = sqrt(1.0 - dot(centered.xy, centered.xy));
+//	float z = pow(1.0 - dot(centered.xy, centered.xy), 0.5);
 	vec2 sphere = centered/(z + 1.0);
+	
 	return sphere * 0.5+0.5;
 }
 
@@ -82,11 +84,12 @@ void fragment() {
 	
 	float d_light = distance(uv , light_origin);
 	bool dith = dither(uv, UV);
+	float a = step(distance(vec2(0.5), uv), 0.5);
 	
 	// give planet a tilt
 	uv = rotate(uv, rotation);
-//
-//	// map to sphere
+	
+	// map to sphere
 	uv = spherify(uv);
 	
 	// some scrolling noise for landmasses
@@ -141,5 +144,5 @@ void fragment() {
 		}
 	}
 	
-	COLOR = vec4(col, step(distance(vec2(0.5), uv), 0.5));
+	COLOR = vec4(col, a);
 }

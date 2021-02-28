@@ -23,7 +23,7 @@ uniform float time = 0.0;
 
 float rand(vec2 coord) {
 	coord = mod(coord, vec2(1.0,1.0)*round(size));
-	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
 
 float noise(vec2 coord){
@@ -96,13 +96,18 @@ void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
-	// distance to light source
-	float d_light = distance(uv , light_origin);
+	// cut out a circle
+	float d_circle = distance(uv, vec2(0.5));
+	float a = step(d_circle, 0.5);
 	
 	uv = rotate(uv, rotation);
 	
 	// map to sphere
 	uv = spherify(uv);
+	
+	// distance to light source
+	float d_light = distance(uv , light_origin);
+	
 	// slightly make uv go down on the right, and up in the left
 	uv.y += smoothstep(0.0, cloud_curve, abs(uv.x-0.4));
 	
@@ -124,5 +129,5 @@ void fragment() {
 	
 
 	
-	COLOR = vec4(col, step(cloud_cover, c));
+	COLOR = vec4(col, step(cloud_cover, c) * a);
 }

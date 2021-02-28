@@ -102,6 +102,8 @@ void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
+	
+	
 	// distance to light source
 	float d_light = distance(uv , light_origin);
 	
@@ -127,8 +129,6 @@ void fragment() {
 	if (d_light + c*0.2 > light_border_2) {
 		col = shadow_outline_color.rgb;
 	}
-	
-
 	
 	COLOR = vec4(col, step(cloud_cover, c));
 }

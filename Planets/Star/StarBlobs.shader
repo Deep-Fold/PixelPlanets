@@ -6,21 +6,20 @@ uniform vec4 color : hint_color;
 uniform sampler2D colorramp;
 uniform float time_speed : hint_range(0.0, 1.0) = 0.05;
 uniform float time = 0.0;
+uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 
-uniform float storm_width : hint_range(0.0, 0.5) = 0.3;
-uniform float storm_dither_width : hint_range(0.0, 0.5) = 0.07;
 
-uniform float scale = 1.0;
 uniform float seed: hint_range(1, 10);
 uniform float circle_amount : hint_range(2.0, 30.0) = 5.0;
-uniform float circle_scale : hint_range(0.0, 1.0) = 1.0;
+uniform float circle_size : hint_range(0.0, 1.0) = 1.0;
 
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 
 
 float rand(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+	co = mod(co, vec2(1.0,1.0)*round(size));
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
 
 
@@ -43,7 +42,7 @@ float circle(vec2 uv) {
 	float r = rand(rand_co);
 	r = clamp(r, invert, 1.0 - invert);
 	float circle = distance(uv, vec2(r));
-	return smoothstep(circle, circle+0.5, invert * circle_scale * rand(rand_co*1.5));
+	return smoothstep(circle, circle+0.5, invert * circle_size * rand(rand_co*1.5));
 }
 
 
@@ -88,7 +87,7 @@ void fragment() {
 	vec2 pixelized = floor(UV*pixels)/pixels;
 	bool dith = dither(UV, pixelized);
 	
-	vec2 uv = rotate(pixelized, -TIME * time_speed * (1.0/3.1415));
+	vec2 uv = rotate(pixelized, rotation);
 
 	// angle from centered uv's
 	float angle = atan(uv.x - 0.5, uv.y - 0.5);
@@ -97,14 +96,13 @@ void fragment() {
 	
 	float c = 0.0;
 	for(int i = 0; i < 15; i++) {
-		float r = rand(vec2(float(i)))*30.0;
+		float r = rand(vec2(float(i)));
 		vec2 circleUV = vec2(d, angle);
-		c += circle(circleUV*scale -TIME * time_speed - (1.0/d) * 0.2 + r);
+		c += circle(circleUV*size -time * time_speed - (1.0/d) * 0.1 + r);
 	}
-	//c = clamp(c, 0.0, 1.0);
-	c *= 0.5 - d;
-	c = step(0.05, c - d);
+	
+	c *= 0.37 - d;
+	c = step(0.07, c - d);
 	
 	COLOR = vec4(vec3(color.rgb), c);
 }
-
