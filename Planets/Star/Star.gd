@@ -21,7 +21,8 @@ func set_seed(sd):
 	$Star.material.set_shader_param("seed", converted_seed)
 	$StarFlares.material.set_shader_param("seed", converted_seed)
 
-	_set_colors(sd)
+#	removed now with color setting functionality
+#	_set_colors(sd)
 
 var starcolor1 = Gradient.new()
 var starcolor2 = Gradient.new()
@@ -62,3 +63,18 @@ func set_custom_time(t):
 	$StarBackground.material.set_shader_param("time", t * get_multiplier($StarBackground.material))
 	$Star.material.set_shader_param("time", t * get_multiplier($Star.material) * (1.0/6.0))
 	$StarFlares.material.set_shader_param("time", t * get_multiplier($StarFlares.material))
+
+
+func get_colors():
+	return (PoolColorArray(_get_colors_from_vars($StarBackground.material, ["color"]))
+	+ _get_colors_from_gradient($Star.material, "colorramp")
+	+ _get_colors_from_gradient($StarFlares.material, "colorramp"))
+
+func set_colors(colors):
+	# poolcolorarray doesnt have slice function, convert to generic array first then back to poolcolorarray
+	var cols1 = PoolColorArray(Array(colors).slice(1, 4, 1))
+	var cols2 = PoolColorArray(Array(colors).slice(5, 6, 1))
+	
+	$StarBackground.material.set_shader_param("color", colors[0])
+	_set_colors_from_gradient($Star.material, "colorramp", cols1)
+	_set_colors_from_gradient($StarFlares.material, "colorramp", cols2)

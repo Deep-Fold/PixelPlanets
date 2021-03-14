@@ -31,3 +31,19 @@ func update_time(t):
 func set_custom_time(t):
 	$GasLayers.material.set_shader_param("time", t * get_multiplier($GasLayers.material))
 	$Ring.material.set_shader_param("time", t * 314.15 * $Ring.material.get_shader_param("time_speed") * 0.5)
+
+func get_colors():
+	return (_get_colors_from_gradient($GasLayers.material, "colorscheme")
+	 + _get_colors_from_gradient($Ring.material, "dark_colorscheme"))
+	
+
+func set_colors(colors):
+	# poolcolorarray doesnt have slice function, convert to generic array first then back to poolcolorarray
+	var cols1 = PoolColorArray(Array(colors).slice(0, 2, 1))
+	var cols2 = PoolColorArray(Array(colors).slice(3, 5, 1))
+	
+	_set_colors_from_gradient($GasLayers.material, "colorscheme", cols1)
+	_set_colors_from_gradient($Ring.material, "colorscheme", cols1)
+	
+	_set_colors_from_gradient($GasLayers.material, "dark_colorscheme", cols2)
+	_set_colors_from_gradient($Ring.material, "dark_colorscheme", cols2)

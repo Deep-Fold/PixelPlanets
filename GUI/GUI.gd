@@ -5,6 +5,9 @@ onready var viewport_planet = $PlanetViewport/PlanetHolder
 onready var viewport_holder = $PlanetHolder
 onready var seedtext = $Settings/VBoxContainer/Seed/SeedText
 onready var optionbutton = $Settings/VBoxContainer/OptionButton
+onready var colorholder = $Settings/VBoxContainer/ColorButtonHolder
+onready var picker = $Panel/ColorPicker
+onready var colorbutton_scene = preload("res://GUI/ColorPickerButton.tscn")
 
 onready var planets = {
 	"Terran Wet": preload("res://Planets/Rivers/Rivers.tscn"),
@@ -22,15 +25,19 @@ const max_pixel_size = 100.0;
 var pixels = 100.0
 var scale = 1.0
 var sd = 0
+var colors = []
 
 func _ready():
 	for k in planets.keys():
 		optionbutton.add_item(k)
 	_seed_random()
+	_create_new_planet(planets["Terran Wet"])
+
 
 func _on_OptionButton_item_selected(index):
 	var chosen = planets[planets.keys()[index]]
 	_create_new_planet(chosen)
+	_close_picker()
 
 func _on_SliderPixels_value_changed(value):
 	pixels = value
@@ -69,6 +76,35 @@ func _create_new_planet(type):
 	new_p.set_pixels(pixels)
 	new_p.rect_position = Vector2(0,0)
 	viewport_planet.add_child(new_p)
+	
+	colors = new_p.get_colors()
+	_make_color_buttons()
+
+func _make_color_buttons():
+	for b in colorholder.get_children():
+		b.queue_free()
+	
+	for i in colors.size():
+		var b = colorbutton_scene.instance()
+		b.set_color(colors[i])
+		b.set_index(i)
+		b.connect("color_picked", self, "_on_colorbutton_color_picked")
+		b.connect("button_pressed", self, "_on_colorbutton_pressed")
+		picker.connect("color_changed", b, "_on_picker_color_changed")
+		
+		colorholder.add_child(b)
+
+func _on_colorbutton_pressed(button):
+	for b in colorholder.get_children():
+		b.is_active = false
+	button.is_active = true
+	$Panel.visible = true
+	picker.color = button.own_color
+
+func _on_colorbutton_color_picked(color, index):
+	colors[index] = color
+	viewport_planet.get_child(0).set_colors(colors)
+#	_make_color_buttons()
 
 func _seed_random():
 	randomize()
@@ -79,7 +115,6 @@ func _seed_random():
 
 func _on_Button_pressed():
 	_seed_random()
-
 
 func _on_ExportPNG_pressed():
 #	if OS.get_name() != "HTML5" or !OS.has_feature('JavaScript'):
@@ -134,5 +169,14 @@ func save_image(img):
 		img.save_png("res://%s.png"%String(sd))
 
 func _on_ExportSpriteSheet_pressed():
+	$Panel.visible = false
 	$Popup.visible = true
 	$Popup.set_pixels(pixels * viewport_planet.get_child(0).relative_scale)
+
+func _on_PickerExit_pressed():
+	_close_picker()
+
+func _close_picker():
+	$Panel.visible = false
+	for b in colorholder.get_children():
+		b.is_active = false

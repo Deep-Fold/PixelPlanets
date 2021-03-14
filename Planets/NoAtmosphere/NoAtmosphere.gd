@@ -27,3 +27,15 @@ func update_time(t):
 func set_custom_time(t):
 	$PlanetUnder.material.set_shader_param("time", t * get_multiplier($PlanetUnder.material))
 	$Craters.material.set_shader_param("time", t * get_multiplier($Craters.material))
+
+var color_vars1 = ["color1","color2","color3"]
+var color_vars2 = ["color1","color2"]
+
+func get_colors():
+	return (_get_colors_from_vars($PlanetUnder.material, color_vars1)
+	+ _get_colors_from_vars($Craters.material, color_vars2)
+	)
+
+func set_colors(colors):
+	_set_colors_from_vars($PlanetUnder.material, color_vars1, colors.slice(0, 2, 1))
+	_set_colors_from_vars($Craters.material, color_vars2, colors.slice(3, 4, 1))

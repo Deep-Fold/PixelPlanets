@@ -4,12 +4,6 @@
 [ext_resource path="res://Planets/Star/StarBlobs.shader" type="Shader" id=2]
 [ext_resource path="res://Planets/Star/StarFlares.shader" type="Shader" id=3]
 
-[sub_resource type="Gradient" id=1]
-colors = PoolColorArray( 0.466667, 0.839216, 0.756863, 1, 1, 1, 0.894118, 1 )
-
-[sub_resource type="GradientTexture" id=2]
-gradient = SubResource( 1 )
-
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 2 )
 shader_param/pixels = 200.0
@@ -22,7 +16,6 @@ shader_param/circle_amount = 2.0
 shader_param/circle_size = 1.0
 shader_param/size = 4.93
 shader_param/OCTAVES = 4
-shader_param/colorramp = SubResource( 2 )
 
 [sub_resource type="Shader" id=4]
 code = "shader_type canvas_item;
@@ -150,6 +143,12 @@ shader_param/size = 4.463
 shader_param/OCTAVES = 4
 shader_param/TILES = 1.0
 shader_param/colorramp = SubResource( 6 )
+
+[sub_resource type="Gradient" id=1]
+colors = PoolColorArray( 0.466667, 0.839216, 0.756863, 1, 1, 1, 0.894118, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
 
 [sub_resource type="ShaderMaterial" id=8]
 shader = ExtResource( 3 )

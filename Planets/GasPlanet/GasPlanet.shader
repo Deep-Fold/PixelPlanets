@@ -96,6 +96,9 @@ void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
+	// distance to light source
+	float d_light = distance(uv , light_origin);
+	
 	// cut out a circle
 	float d_circle = distance(uv, vec2(0.5));
 	float a = step(d_circle, 0.5);
@@ -105,8 +108,7 @@ void fragment() {
 	// map to sphere
 	uv = spherify(uv);
 	
-	// distance to light source
-	float d_light = distance(uv , light_origin);
+	
 	
 	// slightly make uv go down on the right, and up in the left
 	uv.y += smoothstep(0.0, cloud_curve, abs(uv.x-0.4));

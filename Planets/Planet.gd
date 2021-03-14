@@ -26,3 +26,26 @@ func _process(delta):
 	if !override_time:
 		update_time(time)
 
+func get_colors():
+	return []
+
+func set_colors(_colors):
+	pass
+
+func _get_colors_from_gradient(mat, grad_var):
+	return mat.get_shader_param(grad_var).gradient.colors
+
+func _set_colors_from_gradient(mat, grad_var, new_gradient):
+	mat.get_shader_param(grad_var).gradient.colors = new_gradient
+
+func _get_colors_from_vars(mat, vars):
+	var colors = []
+	for v in vars:
+		colors.append(Color(mat.get_shader_param(v)))
+	return colors
+
+func _set_colors_from_vars(mat, vars, colors):
+	var index = 0
+	for v in vars:
+		mat.set_shader_param(v, colors[index])
+		index += 1

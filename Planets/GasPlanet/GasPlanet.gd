@@ -27,3 +27,13 @@ func update_time(t):
 func set_custom_time(t):
 	$Cloud.material.set_shader_param("time", t * get_multiplier($Cloud.material))
 	$Cloud2.material.set_shader_param("time", t * get_multiplier($Cloud2.material))
+
+
+var color_vars1 = ["base_color", "outline_color", "shadow_base_color", "shadow_outline_color"]
+var color_vars2 = ["base_color", "outline_color", "shadow_base_color", "shadow_outline_color"]
+func get_colors():	
+	return (_get_colors_from_vars($Cloud.material, color_vars1) + _get_colors_from_vars($Cloud2.material, color_vars2))
+
+func set_colors(colors):
+	_set_colors_from_vars($Cloud.material, color_vars1, colors.slice(0, 3, 1))
+	_set_colors_from_vars($Cloud2.material, color_vars2, colors.slice(4, 7, 1))
