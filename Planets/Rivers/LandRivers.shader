@@ -82,7 +82,7 @@ void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
-	float d_light = distance(uv , light_origin);
+	
 	bool dith = dither(uv, UV);
 	float a = step(distance(vec2(0.5), uv), 0.5);
 	
@@ -91,7 +91,7 @@ void fragment() {
 	
 	// map to sphere
 	uv = spherify(uv);
-	
+	float d_light = distance(uv , light_origin);
 	// some scrolling noise for landmasses
 	vec2 base_fbm_uv = (uv)*size+vec2(time*time_speed,0.0);
 	
@@ -143,6 +143,6 @@ void fragment() {
 			col = river_col.rgb;
 		}
 	}
-	
+
 	COLOR = vec4(col, a);
 }

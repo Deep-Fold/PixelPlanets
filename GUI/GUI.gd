@@ -19,6 +19,7 @@ onready var planets = {
 	"Ice World": preload("res://Planets/IceWorld/IceWorld.tscn"),
 	"Lava World": preload("res://Planets/LavaWorld/LavaWorld.tscn"),
 	"Asteroid": preload("res://Planets/Asteroids/Asteroid.tscn"),
+	"Black Hole": preload("res://Planets/BlackHole/BlackHole.tscn"),
 	"Star": preload("res://Planets/Star/Star.tscn"),
 }
 const max_pixel_size = 100.0;
@@ -57,6 +58,9 @@ func _on_Control_gui_input(event):
 	if (event is InputEventMouseMotion || event is InputEventScreenTouch) && Input.is_action_pressed("mouse"):
 		var normal = event.position / Vector2(300, 300)
 		viewport_planet.get_child(0).set_light(normal)
+		
+		if $Panel.visible:
+			_close_picker()
 
 func _on_LineEdit_text_changed(new_text):
 	call_deferred("_make_from_seed", int(new_text))
