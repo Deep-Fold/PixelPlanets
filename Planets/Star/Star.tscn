@@ -96,6 +96,9 @@ void fragment() {
 	// pixelize uv
 	vec2 pixelized = floor(UV*pixels)/pixels;
 	
+	// cut out a circle
+	float a = step(distance(pixelized, vec2(0.5)), .5);
+	
 	// use dither val later to mix between colors
 	bool dith = dither(UV, pixelized);
 	
@@ -118,9 +121,6 @@ void fragment() {
 	// constrain values 4 possibilities and then choose color based on those
 	float interpolate = floor(n * 3.0) / 3.0;
 	vec3 c = texture(colorramp, vec2(interpolate, 0.0)).rgb;
-	
-	// cut out a circle
-	float a = step(distance(pixelized, vec2(0.5)), .5);
 	
 	COLOR = vec4(c, a);
 }"
