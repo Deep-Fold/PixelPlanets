@@ -170,7 +170,7 @@ func save_image(img):
 		var filesaver = get_tree().root.get_node("/root/HTML5File")
 		filesaver.save_image(img, String(sd))
 	else:
-		img.save_png("res://%s.png"%String(sd))
+		img.save_png("user://%s.png"%String(sd))
 
 func _on_ExportSpriteSheet_pressed():
 	$Panel.visible = false
