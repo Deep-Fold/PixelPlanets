@@ -30,14 +30,22 @@ func set_custom_time(t):
 func get_colors():
 	return (PoolColorArray([$BlackHole.material.get_shader_param("black_color")]) + _get_colors_from_gradient($BlackHole.material, "colorscheme") + _get_colors_from_gradient($Disk.material, "colorscheme"))
 	
-
 func set_colors(colors):
 	# poolcolorarray doesnt have slice function, convert to generic array first then back to poolcolorarray
 	var cols1 = PoolColorArray(Array(colors).slice(1, 2))
 	var cols2 = PoolColorArray(Array(colors).slice(3, 7))
 	
-	
-	
 	$BlackHole.material.set_shader_param("black_color", colors[0])
 	_set_colors_from_gradient($BlackHole.material, "colorscheme", cols1)
 	_set_colors_from_gradient($Disk.material, "colorscheme", cols2)
+
+func randomize_colors():
+	var seed_colors = _generate_new_colorscheme(5 + randi()%2, rand_range(0.3, 0.5), 2.0)
+	var cols= []
+	for i in 5:
+		var new_col = seed_colors[i].darkened((i/5.0) * 0.7)
+		new_col = new_col.lightened((1.0 - (i/5.0)) * 0.9)
+
+		cols.append(new_col)
+
+	set_colors([Color("272736")] + [cols[0], cols[3]] + cols)

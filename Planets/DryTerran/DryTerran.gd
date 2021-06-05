@@ -22,3 +22,14 @@ func get_colors():
 
 func set_colors(colors):
 	_set_colors_from_gradient($Land.material, "colors", colors)
+
+func randomize_colors():
+	var seed_colors = _generate_new_colorscheme(5 + randi()%3, rand_range(0.3, 0.65), 1.0)
+	var cols=[]
+	for i in 5:
+		var new_col = seed_colors[i].darkened(i/5.0)
+		new_col = new_col.lightened((1.0 - (i/5.0)) * 0.2)
+
+		cols.append(new_col)
+
+	set_colors(cols)

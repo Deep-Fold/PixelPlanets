@@ -50,3 +50,22 @@ func set_colors(colors):
 	_set_colors_from_vars($Water.material, color_vars1, colors.slice(0, 2, 1))
 	_set_colors_from_vars($Land.material, color_vars2, colors.slice(3, 6, 1))
 	_set_colors_from_vars($Cloud.material, color_vars3, colors.slice(7, 10, 1))
+
+func randomize_colors():
+	var seed_colors = _generate_new_colorscheme(randi()%2+3, rand_range(0.7, 1.0), rand_range(0.45, 0.55))
+	var land_colors = []
+	var water_colors = []
+	var cloud_colors = []
+	for i in 4:
+		var new_col = seed_colors[0].darkened(i/4.0)
+		land_colors.append(Color.from_hsv(new_col.h + (0.2 * (i/4.0)), new_col.s, new_col.v))
+	
+	for i in 3:
+		var new_col = seed_colors[1].darkened(i/5.0)
+		water_colors.append(Color.from_hsv(new_col.h + (0.1 * (i/2.0)), new_col.s, new_col.v))
+	
+	for i in 4:
+		var new_col = seed_colors[2].lightened((1.0 - (i/4.0)) * 0.8)
+		cloud_colors.append(Color.from_hsv(new_col.h + (0.2 * (i/4.0)), new_col.s, new_col.v))
+
+	set_colors(water_colors + land_colors + cloud_colors)

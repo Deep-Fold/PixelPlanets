@@ -7,7 +7,9 @@ onready var seedtext = $Settings/VBoxContainer/Seed/SeedText
 onready var optionbutton = $Settings/VBoxContainer/OptionButton
 onready var colorholder = $Settings/VBoxContainer/ColorButtonHolder
 onready var picker = $Panel/ColorPicker
+onready var random_colors = $Settings/VBoxContainer/HBoxContainer/RandomizeColors
 onready var colorbutton_scene = preload("res://GUI/ColorPickerButton.tscn")
+
 
 onready var planets = {
 	"Terran Wet": preload("res://Planets/Rivers/Rivers.tscn"),
@@ -184,3 +186,17 @@ func _close_picker():
 	$Panel.visible = false
 	for b in colorholder.get_children():
 		b.is_active = false
+
+
+func _on_RandomizeColors_pressed():
+	viewport_planet.get_child(0).randomize_colors()
+	colors = viewport_planet.get_child(0).get_colors()
+	for i in colorholder.get_child_count():
+		colorholder.get_child(i).set_color(colors[i])
+
+
+func _on_ResetColors_pressed():
+	viewport_planet.get_child(0).set_colors(viewport_planet.get_child(0).original_colors)
+	colors = viewport_planet.get_child(0).get_colors()
+	for i in colorholder.get_child_count():
+		colorholder.get_child(i).set_color(colors[i])

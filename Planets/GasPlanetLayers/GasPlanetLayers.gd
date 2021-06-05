@@ -47,3 +47,13 @@ func set_colors(colors):
 	
 	_set_colors_from_gradient($GasLayers.material, "dark_colorscheme", cols2)
 	_set_colors_from_gradient($Ring.material, "dark_colorscheme", cols2)
+
+func randomize_colors():
+	var seed_colors = _generate_new_colorscheme(6 + randi() % 4, rand_range(0.3,0.55), 1.4)
+	var cols = []
+	for i in 6:
+		var new_col = seed_colors[i].darkened(i/7.0)
+		new_col = new_col.lightened((1.0 - (i/6.0)) * 0.3)
+		cols.append(new_col)
+
+	set_colors(cols)

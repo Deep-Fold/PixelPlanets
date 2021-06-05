@@ -26,3 +26,14 @@ func get_colors():
 
 func set_colors(colors):
 	_set_colors_from_vars($Asteroid.material, color_vars, colors)
+
+func randomize_colors():
+	var seed_colors = _generate_new_colorscheme(3 + randi()%2, rand_range(0.3, 0.6), 0.7)
+	var cols= []
+	for i in 3:
+		var new_col = seed_colors[i].darkened(i/3.0)
+		new_col = new_col.lightened((1.0 - (i/3.0)) * 0.2)
+
+		cols.append(new_col)
+
+	set_colors(cols)
