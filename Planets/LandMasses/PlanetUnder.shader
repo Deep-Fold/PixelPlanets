@@ -15,6 +15,7 @@ uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
 uniform float time = 0.0;
+uniform bool should_dither = true;
 
 float rand(vec2 coord) {
 	// land has to be tiled
@@ -98,13 +99,13 @@ void fragment() {
 	vec3 col = color1.rgb;
 	if (d_light > light_border_1) {
 		col = color2.rgb;
-		if (d_light < light_border_1 + dither_border && dith) {
+		if (d_light < light_border_1 + dither_border && (dith || !should_dither)) {
 			col = color1.rgb;
 		}
 	}
 	if (d_light > light_border_2) {
 		col = color3.rgb;
-		if (d_light < light_border_2 + dither_border && dith) {
+		if (d_light < light_border_2 + dither_border && (dith || !should_dither)) {
 			col = color2.rgb;
 		}
 	}

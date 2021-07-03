@@ -28,6 +28,7 @@ border_width_bottom = 14
 border_color = Color( 0, 0, 0, 1 )
 
 [sub_resource type="DynamicFont" id=7]
+extra_spacing_bottom = -1
 font_data = ExtResource( 1 )
 
 [sub_resource type="StyleBoxFlat" id=8]

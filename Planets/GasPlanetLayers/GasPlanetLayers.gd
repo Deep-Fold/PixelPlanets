@@ -32,6 +32,12 @@ func set_custom_time(t):
 	$GasLayers.material.set_shader_param("time", t * get_multiplier($GasLayers.material))
 	$Ring.material.set_shader_param("time", t * 314.15 * $Ring.material.get_shader_param("time_speed") * 0.5)
 
+func set_dither(d):
+	$GasLayers.material.set_shader_param("should_dither", d)
+
+func get_dither():
+	return $GasLayers.material.get_shader_param("should_dither")
+
 func get_colors():
 	return (_get_colors_from_gradient($GasLayers.material, "colorscheme")
 	 + _get_colors_from_gradient($Ring.material, "dark_colorscheme"))

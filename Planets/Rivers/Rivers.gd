@@ -28,6 +28,11 @@ func set_custom_time(t):
 	$Cloud.material.set_shader_param("time", t * get_multiplier($Cloud.material) * 0.5)
 	$Land.material.set_shader_param("time", t * get_multiplier($Land.material))
 
+func set_dither(d):
+	$Land.material.set_shader_param("should_dither", d)
+
+func get_dither():
+	return $Land.material.get_shader_param("should_dither")
 
 var color_vars1 = ["col1","col2","col3", "col4", "river_col", "river_col_dark"]
 var color_vars2 = ["base_color", "outline_color", "shadow_base_color", "shadow_outline_color"]

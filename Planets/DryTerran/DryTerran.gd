@@ -16,6 +16,11 @@ func update_time(t):
 func set_custom_time(t):
 	$Land.material.set_shader_param("time", t * get_multiplier($Land.material))
 
+func set_dither(d):
+	$Land.material.set_shader_param("should_dither", d)
+
+func get_dither():
+	return $Land.material.get_shader_param("should_dither")
 
 func get_colors():
 	return _get_colors_from_gradient($Land.material, "colors")

@@ -22,6 +22,7 @@ shader_param/size = 10.0
 shader_param/OCTAVES = 3
 shader_param/seed = 1.551
 shader_param/time = 0.0
+shader_param/should_dither = true
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 3 )

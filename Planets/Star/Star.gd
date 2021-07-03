@@ -64,7 +64,13 @@ func set_custom_time(t):
 	$Star.material.set_shader_param("time", t * get_multiplier($Star.material) * (1.0/6.0))
 	$StarFlares.material.set_shader_param("time", t * get_multiplier($StarFlares.material))
 
+func set_dither(d):
+	$Star.material.set_shader_param("should_dither", d)
+	$StarFlares.material.set_shader_param("should_dither", d)
 
+func get_dither():
+	return $Star.material.get_shader_param("should_dither")
+	
 func get_colors():
 	return (PoolColorArray(_get_colors_from_vars($StarBackground.material, ["color"]))
 	+ _get_colors_from_gradient($Star.material, "colorramp")

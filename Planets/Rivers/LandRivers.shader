@@ -6,6 +6,7 @@ uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform vec2 light_origin = vec2(0.39, 0.39);
 uniform float time_speed : hint_range(0.0, 1.0) = 0.2;
 uniform float dither_size : hint_range(0.0, 10.0) = 2.0;
+uniform bool should_dither = true;
 uniform float light_border_1 : hint_range(0.0, 1.0) = 0.4;
 uniform float light_border_2 : hint_range(0.0, 1.0) = 0.5;
 uniform float river_cutoff : hint_range(0.0, 1.0);
@@ -82,16 +83,16 @@ void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
-	
 	bool dith = dither(uv, UV);
 	float a = step(distance(vec2(0.5), uv), 0.5);
-	
-	// give planet a tilt
-	uv = rotate(uv, rotation);
 	
 	// map to sphere
 	uv = spherify(uv);
 	float d_light = distance(uv , light_origin);
+	
+	// give planet a tilt
+	uv = rotate(uv, rotation);
+	
 	// some scrolling noise for landmasses
 	vec2 base_fbm_uv = (uv)*size+vec2(time*time_speed,0.0);
 	
@@ -120,9 +121,13 @@ void fragment() {
 		fbm2 *= 1.3;
 		fbm3 *= 1.4;
 		fbm4 *= 1.8;
-		if (d_light < light_border_2 + dither_border && dith) {
-			fbm4 *= 0.5;
+		
+		if (d_light < light_border_2 + dither_border) {
+			if (dith || !should_dither) {
+				fbm4 *= 0.5;
+			}
 		}
+		
 	} 
 	
 	// increase contrast on d_light

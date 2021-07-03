@@ -7,9 +7,8 @@ uniform vec2 light_origin = vec2(0.39, 0.39);
 uniform float time_speed : hint_range(-1.0, 1.0) = 0.2;
 uniform float disk_width : hint_range(0.0, 0.15) = 0.1;
 uniform float ring_perspective = 4.0;
-
+uniform bool should_dither = true;
 uniform sampler2D colorscheme;
-
 
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
@@ -142,7 +141,7 @@ void fragment() {
 	disk *= pow(fbm(uv_center*size), 0.5);
 	
 	// apply dithering
-	if (dith) {
+	if (dith || !should_dither) {
 		disk *= 1.2;
 	}
 	

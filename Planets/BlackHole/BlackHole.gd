@@ -27,6 +27,12 @@ func update_time(t):
 func set_custom_time(t):
 	$Disk.material.set_shader_param("time", t * 314.15 * $Disk.material.get_shader_param("time_speed") * 0.5)
 
+func set_dither(d):
+	$Disk.material.set_shader_param("should_dither", d)
+
+func get_dither():
+	return $Disk.material.get_shader_param("should_dither")
+
 func get_colors():
 	return (PoolColorArray([$BlackHole.material.get_shader_param("black_color")]) + _get_colors_from_gradient($BlackHole.material, "colorscheme") + _get_colors_from_gradient($Disk.material, "colorscheme"))
 	

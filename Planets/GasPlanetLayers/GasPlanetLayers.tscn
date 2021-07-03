@@ -31,6 +31,7 @@ shader_param/cloud_curve = 1.376
 shader_param/light_border_1 = 0.52
 shader_param/light_border_2 = 0.62
 shader_param/bands = 0.892
+shader_param/should_dither = true
 shader_param/size = 10.107
 shader_param/OCTAVES = 3
 shader_param/seed = 6.314

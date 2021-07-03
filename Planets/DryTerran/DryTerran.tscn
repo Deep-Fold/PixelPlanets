@@ -19,6 +19,7 @@ uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
 uniform float time = 0.0;
+uniform bool should_dither = true;
 
 float rand(vec2 coord) {
 	// land has to be tiled
@@ -106,7 +107,7 @@ void fragment() {
 	float c = d_light*pow(f,0.8)*3.5; // change the magic nums here for different light strengths
 	
 	// apply dithering
-	if (dith) {
+	if (dith || !should_dither) {
 		c += 0.02;
 		c *= 1.05;
 	}
@@ -140,6 +141,7 @@ shader_param/size = 8.0
 shader_param/OCTAVES = 3
 shader_param/seed = 1.175
 shader_param/time = 0.0
+shader_param/should_dither = true
 shader_param/colors = SubResource( 3 )
 
 [node name="DryTerran" instance=ExtResource( 1 )]

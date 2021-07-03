@@ -26,6 +26,7 @@ uniform float time_speed : hint_range(0.0, 1.0) = 0.05;
 uniform float time;
 uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform sampler2D colorramp;
+uniform bool should_dither = true;
 
 uniform float seed: hint_range(1, 10);
 uniform float size = 50.0;
@@ -114,7 +115,7 @@ void fragment() {
 	// adjust cell value to get better looking stuff
 	n*= 2.;
 	n = clamp(n, 0.0, 1.0);
-	if (dith) { // here we dither
+	if (dith || !should_dither) { // here we dither
 		n *= 1.3;
 	}
 	
@@ -138,6 +139,7 @@ shader_param/pixels = 100.0
 shader_param/time_speed = 0.05
 shader_param/time = 51.877
 shader_param/rotation = 0.0
+shader_param/should_dither = true
 shader_param/seed = 4.837
 shader_param/size = 4.463
 shader_param/OCTAVES = 4
@@ -156,6 +158,7 @@ shader_param/pixels = 200.0
 shader_param/time_speed = 0.05
 shader_param/time = null
 shader_param/rotation = 0.0
+shader_param/should_dither = true
 shader_param/storm_width = 0.3
 shader_param/storm_dither_width = 0.0
 shader_param/scale = 1.0

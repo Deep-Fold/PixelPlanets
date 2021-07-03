@@ -63,10 +63,6 @@ vec2 rotate(vec2 coord, float angle){
 	return coord + 0.5;
 }
 
-bool dither(vec2 uv1, vec2 uv2) {
-	return mod(uv1.x+uv2.y,2.0/pixels) <= 1.0 / pixels;
-}
-
 void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;

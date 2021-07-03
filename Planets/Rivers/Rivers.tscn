@@ -11,6 +11,7 @@ shader_param/rotation = 0.2
 shader_param/light_origin = Vector2( 0.39, 0.39 )
 shader_param/time_speed = 0.1
 shader_param/dither_size = 3.951
+shader_param/should_dither = true
 shader_param/light_border_1 = 0.287
 shader_param/light_border_2 = 0.476
 shader_param/river_cutoff = 0.368

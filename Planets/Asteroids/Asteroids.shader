@@ -11,6 +11,7 @@ uniform vec4 color3 : hint_color;
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
+uniform bool should_dither = true;
 
 float rand(vec2 coord) {
 	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
@@ -105,10 +106,10 @@ void fragment() {
 	vec3 col = color2.rgb;
 	
 	// noise
-	if (noise_rel < -0.06 || (noise_rel < -0.04 && dith)) {
+	if (noise_rel < -0.06 || (noise_rel < -0.04 && (dith || !should_dither))) {
 		col = color1.rgb;
 	}
-	if (noise_rel > 0.05 || (noise_rel > 0.03 && dith)) {
+	if (noise_rel > 0.05 || (noise_rel > 0.03 && (dith || !should_dither))) {
 		col = color3.rgb;
 	}
 	

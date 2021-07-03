@@ -11,6 +11,7 @@ uniform float cloud_curve : hint_range(1.0, 2.0) = 1.3;
 uniform float light_border_1 : hint_range(0.0, 1.0) = 0.52;
 uniform float light_border_2 : hint_range(0.0, 1.0) = 0.62;
 uniform float bands = 1.0;
+uniform bool should_dither = true;
 
 uniform sampler2D colorscheme;
 uniform sampler2D dark_colorscheme;
@@ -98,10 +99,11 @@ void fragment() {
 	// we use this value later to dither between colors
 	bool dith = dither(uv, UV);
 	
-	float a = step(length(uv-vec2(0.5)), 0.5);
+	// for some reason stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
+	float a = step(length(uv-vec2(0.5)), 0.49999);
 	
+	// rotate planet
 	uv = rotate(uv, rotation);
-
 	
 	// map to sphere
 	uv = spherify(uv);
@@ -116,16 +118,15 @@ void fragment() {
 	// we get some dynamic looking shape	
 	float fbm1 = fbm(uv*size);
 	float fbm2 = fbm(uv*vec2(1.0, 2.0)*size+fbm1+vec2(-time*time_speed,0.0)+turb);
-
 	
 	// all of this is just increasing some contrast & applying light
 	fbm2 *= pow(band,2.0)*7.0;
 	float light = fbm2 + light_d*1.8;
-	fbm2 += pow(light_d, 1.0)-0.3;	
+	fbm2 += pow(light_d, 1.0)-0.3;
 	fbm2 = smoothstep(-0.2, 4.0-fbm2, light);
 	
-	// here apply the dither value
-	if (dith ) {
+	// apply the dither value
+	if (dith && should_dither) {
 		fbm2 *= 1.1;
 	}
 	
@@ -137,7 +138,6 @@ void fragment() {
 	} else {
 		col = texture(dark_colorscheme, vec2(posterized-1.0, uv.y)).rgb;
 	}
-	
-	
+		
 	COLOR = vec4(col, a);
 }

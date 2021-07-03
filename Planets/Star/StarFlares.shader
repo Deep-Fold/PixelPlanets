@@ -6,6 +6,7 @@ uniform sampler2D colorramp;
 uniform float time_speed : hint_range(0.0, 1.0) = 0.05;
 uniform float time;
 uniform float rotation : hint_range(0.0, 6.28) = 0.0;
+uniform bool should_dither = true;
 
 uniform float storm_width : hint_range(0.0, 0.5) = 0.3;
 uniform float storm_dither_width : hint_range(0.0, 0.5) = 0.07;
@@ -118,7 +119,7 @@ void fragment() {
 	float a = 0.0;
 	if (1.0 - d > nc) {
 		// now we generate very thin strips of positive alpha if our noise has certain values and is close enough to center
-		if (nc > storm_width - storm_dither_width + d && dith) {
+		if (nc > storm_width - storm_dither_width + d && (dith || !should_dither)) {
 			a = 1.0;
 		} else if (nc > storm_width + d) { // could use an or statement instead, but this looks more clear to me
 			a = 1.0;

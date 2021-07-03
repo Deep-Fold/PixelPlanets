@@ -71,10 +71,6 @@ float fbm(vec2 coord){
 	return value;
 }
 
-bool dither(vec2 uv1, vec2 uv2) {
-	return mod(uv1.x+uv2.y,2.0/pixels) <= 1.0 / pixels;
-}
-
 vec2 spherify(vec2 uv) {
 	vec2 centered= uv *2.0-1.0;
 	float z = sqrt(1.0 - dot(centered.xy, centered.xy));
@@ -84,8 +80,7 @@ vec2 spherify(vec2 uv) {
 
 void fragment() {
 	vec2 pixelized = floor(UV*pixels)/pixels;
-	bool dith = dither(UV, pixelized);
-	
+
 	vec2 uv = rotate(pixelized, rotation);
 
 	// angle from centered uv's

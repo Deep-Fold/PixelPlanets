@@ -8,6 +8,7 @@ onready var optionbutton = $Settings/VBoxContainer/OptionButton
 onready var colorholder = $Settings/VBoxContainer/ColorButtonHolder
 onready var picker = $Panel/ColorPicker
 onready var random_colors = $Settings/VBoxContainer/HBoxContainer/RandomizeColors
+onready var dither_button = $Settings/VBoxContainer/HBoxContainer2/ShouldDither
 onready var colorbutton_scene = preload("res://GUI/ColorPickerButton.tscn")
 
 
@@ -29,6 +30,7 @@ var pixels = 100.0
 var scale = 1.0
 var sd = 0
 var colors = []
+var should_dither = true
 
 func _ready():
 	for k in planets.keys():
@@ -82,6 +84,7 @@ func _create_new_planet(type):
 	new_p.set_pixels(pixels)
 	new_p.rect_position = Vector2(0,0)
 	viewport_planet.add_child(new_p)
+	new_p.set_dither(should_dither)
 	
 	colors = new_p.get_colors()
 	_make_color_buttons()
@@ -203,3 +206,11 @@ func _on_ResetColors_pressed():
 	colors = viewport_planet.get_child(0).get_colors()
 	for i in colorholder.get_child_count():
 		colorholder.get_child(i).set_color(colors[i])
+
+func _on_ShouldDither_pressed():
+	should_dither = !should_dither
+	if should_dither:
+		dither_button.text = "On"
+	else:
+		dither_button.text = "Off"
+	viewport_planet.get_child(0).set_dither(should_dither)

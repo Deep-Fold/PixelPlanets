@@ -34,6 +34,7 @@ shader_param/light_origin = Vector2( 0.607, 0.444 )
 shader_param/time_speed = 0.2
 shader_param/disk_width = 0.065
 shader_param/ring_perspective = 14.0
+shader_param/should_dither = true
 shader_param/size = 6.598
 shader_param/OCTAVES = 3
 shader_param/seed = 8.175

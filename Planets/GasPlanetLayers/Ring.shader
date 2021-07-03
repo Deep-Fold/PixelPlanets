@@ -61,10 +61,6 @@ float circleNoise(vec2 uv) {
     return smoothstep(0.0, r, m*0.75);
 }
 
-bool dither(vec2 uv_pixel, vec2 uv_real) {
-	return mod(uv_pixel.x+uv_real.y,2.0/pixels) <= 1.0 / pixels;
-}
-
 vec2 spherify(vec2 uv) {
 	vec2 centered= uv *2.0-1.0;
 	float z = sqrt(1.0 - dot(centered.xy, centered.xy));
@@ -81,9 +77,6 @@ vec2 rotate(vec2 coord, float angle){
 void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
-	
-	// we use this value later to dither between colors
-	bool dith = dither(UV, uv);
 	
 	float light_d = distance(uv, light_origin);
 	uv = rotate(uv, rotation);

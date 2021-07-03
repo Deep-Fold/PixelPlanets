@@ -29,6 +29,12 @@ func _process(delta):
 	if !override_time:
 		update_time(time)
 
+func set_dither(d):
+	pass
+
+func get_dither():
+	pass
+
 func get_colors():
 	return []
 

@@ -20,6 +20,12 @@ func update_time(_t):
 func set_custom_time(t):
 	$Asteroid.material.set_shader_param("rotation", t * PI * 2.0)
 
+func set_dither(d):
+	$Asteroid.material.set_shader_param("should_dither", d)
+
+func get_dither():
+	return $Asteroid.material.get_shader_param("should_dither")
+
 var color_vars = ["color1", "color2", "color3"]
 func get_colors():
 	return _get_colors_from_vars($Asteroid.material, color_vars)

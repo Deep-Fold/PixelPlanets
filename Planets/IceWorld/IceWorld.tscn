@@ -21,6 +21,7 @@ shader_param/size = 8.0
 shader_param/OCTAVES = 2
 shader_param/seed = 1.036
 shader_param/time = 0.0
+shader_param/should_dither = true
 
 [sub_resource type="Shader" id=2]
 code = "shader_type canvas_item;
@@ -86,10 +87,6 @@ vec2 rotate(vec2 coord, float angle){
 	coord -= 0.5;
 	coord *= mat2(vec2(cos(angle),-sin(angle)),vec2(sin(angle),cos(angle)));
 	return coord + 0.5;
-}
-
-bool dither(vec2 uv1, vec2 uv2) {
-	return mod(uv1.x+uv2.y,2.0/pixels) <= 1.0 / pixels;
 }
 
 void fragment() {

@@ -35,6 +35,12 @@ func set_custom_time(t):
 	$Craters.material.set_shader_param("time", t * get_multiplier($Craters.material))
 	$LavaRivers.material.set_shader_param("time", t * get_multiplier($LavaRivers.material))
 
+func set_dither(d):
+	$PlanetUnder.material.set_shader_param("should_dither", d)
+
+func get_dither():
+	return $PlanetUnder.material.get_shader_param("should_dither")
+
 var color_vars1 = ["color1","color2","color3"]
 var color_vars2 = ["color1","color2"]
 var color_vars3 = ["color1","color2","color3"]
