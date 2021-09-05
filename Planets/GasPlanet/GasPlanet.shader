@@ -101,7 +101,8 @@ void fragment() {
 	
 	// cut out a circle
 	float d_circle = distance(uv, vec2(0.5));
-	float a = step(d_circle, 0.5);
+	// stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
+	float a = step(d_circle, 0.49999);
 	
 	uv = rotate(uv, rotation);
 	

@@ -66,7 +66,8 @@ void fragment() {
 	float d_circle = distance(uv, vec2(0.5));
 	float d_light = distance(uv , vec2(light_origin));
 	// cut out a circle
-	float a = step(d_circle, 0.5);
+	// stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
+	float a = step(d_circle, 0.49999);
 	
 	bool dith = dither(uv ,UV);
 	uv = rotate(uv, rotation);

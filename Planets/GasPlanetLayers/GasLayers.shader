@@ -99,7 +99,7 @@ void fragment() {
 	// we use this value later to dither between colors
 	bool dith = dither(uv, UV);
 	
-	// for some reason stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
+	// stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
 	float a = step(length(uv-vec2(0.5)), 0.49999);
 	
 	// rotate planet

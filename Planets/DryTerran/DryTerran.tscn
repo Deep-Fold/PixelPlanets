@@ -81,7 +81,7 @@ void fragment() {
 	
 	// cut out a circle
 	float d_circle = distance(uv, vec2(0.5));
-	float a = step(d_circle, 0.5);
+	float a = step(d_circle, 0.49999);
 	
 	uv = spherify(uv);
 	

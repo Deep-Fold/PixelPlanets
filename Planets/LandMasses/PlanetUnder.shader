@@ -81,13 +81,11 @@ void fragment() {
 	
 	// cut out a circle
 	float d_circle = distance(uv, vec2(0.5));
-	float a = step(d_circle, 0.5);
+	// stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
+	float a = step(d_circle, 0.49999);
 	
 	uv = spherify(uv);
 	uv = rotate(uv, rotation);
-	
-	
-	
 	
 	// get a noise value with light distance added
 	d_light += fbm(uv*size+vec2(time*time_speed, 0.0))*0.3; // change the magic 0.3 here for different light strengths

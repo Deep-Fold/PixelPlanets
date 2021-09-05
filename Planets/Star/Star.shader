@@ -6,6 +6,7 @@ uniform float time_speed : hint_range(0.0, 1.0) = 0.05;
 uniform float time;
 uniform float rotation : hint_range(0.0, 6.28) = 0.0;
 uniform sampler2D colorramp;
+uniform bool should_dither = true;
 
 uniform float seed: hint_range(1, 10);
 uniform float size = 50.0;
@@ -15,7 +16,7 @@ uniform float TILES : hint_range(0, 20, 1);
 
 float rand(vec2 co) {
 	co = mod(co, vec2(1.0,1.0)*round(size));
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * seed);
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
 
 vec2 rotate(vec2 vec, float angle) {
@@ -76,6 +77,10 @@ void fragment() {
 	// pixelize uv
 	vec2 pixelized = floor(UV*pixels)/pixels;
 	
+	// cut out a circle
+	// stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
+	float a = step(distance(pixelized, vec2(0.5)), .49999);
+	
 	// use dither val later to mix between colors
 	bool dith = dither(UV, pixelized);
 	
@@ -87,21 +92,17 @@ void fragment() {
 	// use two different sized cells for some variation
 	float n = Cells(pixelized - vec2(time * time_speed * 2.0, 0), 10);
 	n *= Cells(pixelized - vec2(time * time_speed * 2.0, 0), 20);
-	//n *= Cells(pixelized - vec2(time * time_speed * 2.0, 0), 30);
 	
 	// adjust cell value to get better looking stuff
 	n*= 2.;
 	n = clamp(n, 0.0, 1.0);
-	if (dith) { // here we dither
+	if (dith || !should_dither) { // here we dither
 		n *= 1.3;
 	}
 	
 	// constrain values 4 possibilities and then choose color based on those
 	float interpolate = floor(n * 3.0) / 3.0;
 	vec3 c = texture(colorramp, vec2(interpolate, 0.0)).rgb;
-	
-	// cut out a circle
-	float a = step(distance(pixelized, vec2(0.5)), .5);
 	
 	COLOR = vec4(c, a);
 }

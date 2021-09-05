@@ -84,7 +84,8 @@ void fragment() {
 	vec2 uv = floor(UV*pixels)/pixels;
 	
 	bool dith = dither(uv, UV);
-	float a = step(distance(vec2(0.5), uv), 0.5);
+	// stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
+	float a = step(length(uv-vec2(0.5)), 0.49999);
 	
 	// map to sphere
 	uv = spherify(uv);
