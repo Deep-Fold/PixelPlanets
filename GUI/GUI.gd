@@ -251,15 +251,22 @@ func export_gif(frames, frame_delay, progressbar):
 		
 		progressbar.value = i
 	
-	var file: File = File.new()
-	if OS.get_name() == "OSX":
-		file.open("user://%s.gif"%String(sd), File.WRITE)
-	else:
-		file.open("res://%s.gif"%String(sd), File.WRITE)
-	file.store_buffer(exporter.export_file_data())
-	file.close()
 	
-
+	if OS.get_name() != "HTML5" or !OS.has_feature('JavaScript'):
+		var file: File = File.new()
+		if OS.get_name() == "OSX":
+			file.open("user://%s.gif"%String(sd), File.WRITE)
+		else:
+			file.open("res://%s.gif"%String(sd), File.WRITE)
+		file.store_buffer(exporter.export_file_data())
+		file.close()
+	else:
+		var fileName = String(sd)
+		var data = Array(exporter.export_file_data())
+		JavaScript.eval("downloadGif('%s', %s);" % [fileName, str(data)], true)
+	
+	
+	
 	
 	planet.override_time = false
 	$GifPopup.visible = false

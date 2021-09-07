@@ -47,6 +47,14 @@ func _define_js()->void:
 		link.download = fileName;
 		link.click();
 	};
+	function downloadGif(fileName, byte) {
+		var buffer = Uint8Array.from(byte);
+		var blob = new Blob([buffer], { type: 'image/gif'});
+		var link = document.createElement('a');
+		link.href = window.URL.createObjectURL(blob);
+		link.download = fileName;
+		link.click();
+	};
 	""", true)
 	
 	
