@@ -236,7 +236,7 @@ func export_gif(frames, frame_delay, progressbar):
 	
 	for i in range(frames):
 		planet.set_custom_time(lerp(0.0, 1.0, float(i)/float(frames)))
-		prints(float(i)/float(frames))
+
 		yield(get_tree(), "idle_frame")
 		
 		var tex = viewport.get_texture().get_data()
@@ -252,9 +252,14 @@ func export_gif(frames, frame_delay, progressbar):
 		progressbar.value = i
 	
 	var file: File = File.new()
-	file.open("res://%s.gif"%String(sd), File.WRITE)
+	if OS.get_name() == "OSX":
+		file.open("user://%s.gif"%String(sd), File.WRITE)
+	else:
+		file.open("res://%s.gif"%String(sd), File.WRITE)
 	file.store_buffer(exporter.export_file_data())
 	file.close()
+	
+
 	
 	planet.override_time = false
 	$GifPopup.visible = false

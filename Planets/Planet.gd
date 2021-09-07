@@ -29,7 +29,7 @@ func _process(delta):
 	if !override_time:
 		update_time(time)
 
-func set_dither(d):
+func set_dither(_d):
 	pass
 
 func get_dither():
