@@ -62,7 +62,7 @@ func update_time(t):
 func set_custom_time(t):
 	$StarBackground.material.set_shader_param("time", t * get_multiplier($StarBackground.material))
 	$Star.material.set_shader_param("time", t * (1.0 / $Star.material.get_shader_param("time_speed")))
-	$StarFlares.material.set_shader_param("time", t * get_multiplier($StarFlares.material) * 0.5)
+	$StarFlares.material.set_shader_param("time", t * get_multiplier($StarFlares.material))
 
 func set_dither(d):
 	$Star.material.set_shader_param("should_dither", d)
