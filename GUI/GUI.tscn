@@ -747,6 +747,7 @@ theme = ExtResource( 2 )
 text = "export"
 
 [node name="Panel" type="ColorRect" parent="."]
+visible = false
 anchor_bottom = 1.0
 margin_left = 297.0
 margin_right = 512.0
