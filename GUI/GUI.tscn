@@ -747,7 +747,6 @@ theme = ExtResource( 2 )
 text = "export"
 
 [node name="Panel" type="ColorRect" parent="."]
-visible = false
 anchor_bottom = 1.0
 margin_left = 297.0
 margin_right = 512.0
@@ -767,10 +766,10 @@ __meta__ = {
 }
 
 [node name="ColorPicker" type="ColorPicker" parent="Panel"]
-margin_left = 15.2354
-margin_top = -1.94466
-margin_right = 395.236
-margin_bottom = 398.446
+margin_left = 15.1902
+margin_top = -0.208113
+margin_right = 395.191
+margin_bottom = 400.183
 rect_scale = Vector2( 0.5, 0.5 )
 theme = ExtResource( 2 )
 edit_alpha = false
@@ -797,6 +796,7 @@ __meta__ = {
 [connection signal="value_changed" from="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/HeightFrames" to="Popup" method="_on_HeightFrames_value_changed"]
 [connection signal="pressed" from="Popup/PopupFront/VBoxContainer/HBoxContainer/CancelButton" to="Popup" method="_on_CancelButton_pressed"]
 [connection signal="pressed" from="Popup/PopupFront/VBoxContainer/HBoxContainer/ExportButton" to="Popup" method="_on_ExportButton_pressed"]
+[connection signal="cancel_gif" from="GifPopup" to="." method="_on_GifPopup_cancel_gif"]
 [connection signal="value_changed" from="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/GifFrameCount" to="GifPopup" method="_on_GifFrameCount_value_changed"]
 [connection signal="value_changed" from="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/GifTime" to="GifPopup" method="_on_GifTime_value_changed"]
 [connection signal="value_changed" from="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/FrameDelay" to="GifPopup" method="_on_FrameDelay_value_changed"]

@@ -56,13 +56,13 @@ func set_rotate(r):
 
 func update_time(t):
 	$StarBackground.material.set_shader_param("time", t * get_multiplier($StarBackground.material) * 0.01)
-	$Star.material.set_shader_param("time", t * get_multiplier($Star.material) * 0.001)
+	$Star.material.set_shader_param("time", t * get_multiplier($Star.material) * 0.005)
 	$StarFlares.material.set_shader_param("time", t * get_multiplier($StarFlares.material) * 0.015)
 
 func set_custom_time(t):
 	$StarBackground.material.set_shader_param("time", t * get_multiplier($StarBackground.material))
-	$Star.material.set_shader_param("time", t * get_multiplier($Star.material) * (1.0/6.0))
-	$StarFlares.material.set_shader_param("time", t * get_multiplier($StarFlares.material))
+	$Star.material.set_shader_param("time", t * (1.0 / $Star.material.get_shader_param("time_speed")))
+	$StarFlares.material.set_shader_param("time", t * get_multiplier($StarFlares.material) * 0.5)
 
 func set_dither(d):
 	$Star.material.set_shader_param("should_dither", d)

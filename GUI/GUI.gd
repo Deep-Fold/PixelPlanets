@@ -223,8 +223,9 @@ func _on_ShouldDither_pressed():
 
 func _on_ExportGIF_pressed():
 	$GifPopup.visible = true
+	cancel_gif = false
 
-
+var cancel_gif = false
 func export_gif(frames, frame_delay, progressbar):
 	var planet = viewport_planet.get_child(0)
 	var exporter = GIFExporter.new(100*planet.relative_scale, 100*planet.relative_scale)
@@ -235,6 +236,12 @@ func export_gif(frames, frame_delay, progressbar):
 	yield(get_tree(), "idle_frame")
 	
 	for i in range(frames):
+		if cancel_gif:
+			progressbar.value = 0
+			planet.override_time = false
+			break;
+			return;
+		
 		planet.set_custom_time(lerp(0.0, 1.0, float(i)/float(frames)))
 
 		yield(get_tree(), "idle_frame")
@@ -251,7 +258,8 @@ func export_gif(frames, frame_delay, progressbar):
 		
 		progressbar.value = i
 	
-	
+	if cancel_gif:
+		return
 	if OS.get_name() != "HTML5" or !OS.has_feature('JavaScript'):
 		var file: File = File.new()
 		if OS.get_name() == "OSX":
@@ -271,3 +279,7 @@ func export_gif(frames, frame_delay, progressbar):
 	planet.override_time = false
 	$GifPopup.visible = false
 	progressbar.visible = false
+
+
+func _on_GifPopup_cancel_gif():
+	cancel_gif = true

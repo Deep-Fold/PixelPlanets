@@ -18,14 +18,14 @@ shader_param/circle_size = 1.0
 shader_param/size = 4.93
 shader_param/OCTAVES = 4
 
-[sub_resource type="Gradient" id=3]
+[sub_resource type="Gradient" id=2]
 offsets = PoolRealArray( 0, 0.33, 0.66, 1 )
 colors = PoolColorArray( 0.960784, 1, 0.909804, 1, 0.466667, 0.839216, 0.756863, 1, 0.109804, 0.572549, 0.654902, 1, 0.0117647, 0.243137, 0.368627, 1 )
 
-[sub_resource type="GradientTexture" id=4]
-gradient = SubResource( 3 )
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 4 )
 shader_param/pixels = 100.0
 shader_param/time_speed = 0.05
@@ -36,15 +36,15 @@ shader_param/seed = 4.837
 shader_param/size = 4.463
 shader_param/OCTAVES = 4
 shader_param/TILES = 1.0
-shader_param/colorramp = SubResource( 4 )
+shader_param/colorramp = SubResource( 3 )
 
-[sub_resource type="Gradient" id=6]
+[sub_resource type="Gradient" id=5]
 colors = PoolColorArray( 0.466667, 0.839216, 0.756863, 1, 1, 1, 0.894118, 1 )
 
-[sub_resource type="GradientTexture" id=7]
-gradient = SubResource( 6 )
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
 
-[sub_resource type="ShaderMaterial" id=8]
+[sub_resource type="ShaderMaterial" id=7]
 shader = ExtResource( 3 )
 shader_param/pixels = 200.0
 shader_param/time_speed = 0.05
@@ -59,7 +59,7 @@ shader_param/circle_amount = 2.0
 shader_param/circle_scale = 1.0
 shader_param/size = 1.6
 shader_param/OCTAVES = 4
-shader_param/colorramp = SubResource( 7 )
+shader_param/colorramp = SubResource( 6 )
 
 [node name="Star" type="Control"]
 anchor_right = 1.0
@@ -86,7 +86,7 @@ __meta__ = {
 }
 
 [node name="Star" type="ColorRect" parent="."]
-material = SubResource( 5 )
+material = SubResource( 4 )
 margin_right = 100.0
 margin_bottom = 100.0
 __meta__ = {
@@ -94,7 +94,7 @@ __meta__ = {
 }
 
 [node name="StarFlares" type="ColorRect" parent="."]
-material = SubResource( 8 )
+material = SubResource( 7 )
 margin_left = -50.0
 margin_top = -50.0
 margin_right = 150.0

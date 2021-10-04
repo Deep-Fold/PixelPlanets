@@ -1,4 +1,5 @@
 extends ColorRect
+signal cancel_gif
 
 
 onready var export_button = $PopupFront/VBoxContainer/HBoxContainer/ExportButton
@@ -14,6 +15,7 @@ onready var frame_delay = 0.167
 
 func _on_CancelButton_pressed():
 	visible = false
+	emit_signal("cancel_gif")
 
 func _on_ExportButton_pressed():
 	progressbar.visible = true

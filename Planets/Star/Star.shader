@@ -41,9 +41,9 @@ float noise(vec2 coord){
 }
 
 vec2 Hash2(vec2 p) {
-	float t = (time+10.0)*.3;
-	//p = mod(p, vec2(1.0,1.0)*round(size));
-	return vec2(noise(p), noise(p*vec2(.3135+sin(t), .5813-cos(t))));
+	float r = 523.0*sin(dot(p, vec2(53.3158, 43.6143)));
+	return vec2(fract(15.32354 * r), fract(17.25865 * r));
+	
 }
 
 // Tileable cell noise by Dave_Hoskins from shadertoy: https://www.shadertoy.com/view/4djGRh
@@ -91,7 +91,8 @@ void fragment() {
 	
 	// use two different sized cells for some variation
 	float n = Cells(pixelized - vec2(time * time_speed * 2.0, 0), 10);
-	n *= Cells(pixelized - vec2(time * time_speed * 2.0, 0), 20);
+	n *= Cells(pixelized - vec2(time * time_speed * 1.0, 0), 20);
+
 	
 	// adjust cell value to get better looking stuff
 	n*= 2.;
