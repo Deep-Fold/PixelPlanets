@@ -3,6 +3,7 @@ extends Control
 onready var viewport = $PlanetViewport
 onready var viewport_planet = $PlanetViewport/PlanetHolder
 onready var viewport_holder = $PlanetHolder
+onready var viewport_tex = $PlanetHolder/ViewportTexture
 onready var seedtext = $Settings/VBoxContainer/Seed/SeedText
 onready var optionbutton = $Settings/VBoxContainer/OptionButton
 onready var colorholder = $Settings/VBoxContainer/ColorButtonHolder
@@ -27,9 +28,9 @@ onready var planets = {
 	"Lava World": preload("res://Planets/LavaWorld/LavaWorld.tscn"),
 	"Asteroid": preload("res://Planets/Asteroids/Asteroid.tscn"),
 	"Black Hole": preload("res://Planets/BlackHole/BlackHole.tscn"),
+	"Galaxy": preload("res://Planets/Galaxy/Galaxy.tscn"),
 	"Star": preload("res://Planets/Star/Star.tscn"),
 }
-const max_pixel_size = 100.0;
 var pixels = 100.0
 var scale = 1.0
 var sd = 0
@@ -42,23 +43,14 @@ func _ready():
 
 	_seed_random()
 	_create_new_planet(planets["Terran Wet"])
+#	yield(get_tree(), "idle_frame")
+#	viewport.size = Vector2(pixels, pixels)
 
 
 func _on_OptionButton_item_selected(index):
 	var chosen = planets[planets.keys()[index]]
 	_create_new_planet(chosen)
 	_close_picker()
-
-func _on_SliderPixels_value_changed(value):
-	pixels = value
-	viewport_planet.get_child(0).set_pixels(value)
-	viewport_holder.rect_scale = Vector2(2,2) * max_pixel_size/pixels
-	#viewport_holder.rect_position = Vector2(1,1) * max_pixel_size/pixels - Vector2(200,200)
-	$Settings/VBoxContainer/Label3.text = "Pixels: " + String(pixels) + "x" + String(pixels)
-
-func _on_SliderScale_value_changed(value):
-	scale = value
-	viewport_holder.rect_scale = Vector2(1,1)*value
 
 func _on_SliderRotation_value_changed(value):
 	viewport_planet.get_child(0).set_rotate(value)
@@ -84,15 +76,33 @@ func _create_new_planet(type):
 		c.queue_free()
 	
 	var new_p = type.instance()
+	viewport_planet.add_child(new_p)
+	
 	seed(sd)
 	new_p.set_seed(sd)
 	new_p.set_pixels(pixels)
-	new_p.rect_position = Vector2(0,0)
-	viewport_planet.add_child(new_p)
+	new_p.rect_position = pixels * 0.5 * (new_p.relative_scale -1) * Vector2(1,1)
 	new_p.set_dither(should_dither)
 	
 	colors = new_p.get_colors()
 	_make_color_buttons()
+
+	yield(get_tree(), "idle_frame")
+	viewport.size = Vector2(pixels, pixels) * new_p.relative_scale
+	
+	# some hardcoded values that look good in the GUI
+	match new_p.relative_scale:
+		1.0:
+			viewport_tex.rect_position = Vector2(50,50)
+			viewport_tex.rect_size = Vector2(200,200)
+##			viewport_tex.rect_scale = Vector2(2.0,2.0)
+		2.0:
+			viewport_tex.rect_position = Vector2(25,25)
+			viewport_tex.rect_size = Vector2(250,250)
+		2.5:
+			viewport_tex.rect_position = Vector2(0,0)
+			viewport_tex.rect_size = Vector2(300,300)
+
 
 func _make_color_buttons():
 	for b in colorholder.get_children():
@@ -118,7 +128,6 @@ func _on_colorbutton_pressed(button):
 func _on_colorbutton_color_picked(color, index):
 	colors[index] = color
 	viewport_planet.get_child(0).set_colors(colors)
-#	_make_color_buttons()
 
 func _seed_random():
 	randomize()
@@ -131,15 +140,12 @@ func _on_Button_pressed():
 	_seed_random()
 
 func _on_ExportPNG_pressed():
-#	if OS.get_name() != "HTML5" or !OS.has_feature('JavaScript'):
-#		var err = viewport.get_texture().get_data().save_png("res://%s.png"%String(sd))
-#	else:
 	var planet = viewport_planet.get_child(0)
 	var tex = viewport.get_texture().get_data()
 	var image = Image.new()
 	image.create(pixels * planet.relative_scale, pixels * planet.relative_scale, false, Image.FORMAT_RGBA8)
-	var source_xy = 100 - (pixels*(planet.relative_scale-1)*0.5)
-	var source_size = 100*planet.relative_scale
+	var source_xy = 0
+	var source_size = pixels*planet.relative_scale
 	var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
 	image.blit_rect(tex, source_rect, Vector2(0,0))
 	
@@ -161,8 +167,8 @@ func export_spritesheet(sheet_size, progressbar):
 			
 			if index != 0:
 				var image = viewport.get_texture().get_data()
-				var source_xy = 100 - (pixels*(planet.relative_scale-1)*0.5)
-				var source_size = 100*planet.relative_scale
+				var source_xy = 0
+				var source_size = pixels*planet.relative_scale
 				var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
 				var destination = Vector2(x - 1,y) * pixels * planet.relative_scale
 				sheet.blit_rect(image, source_rect, destination)
@@ -228,7 +234,7 @@ func _on_ExportGIF_pressed():
 var cancel_gif = false
 func export_gif(frames, frame_delay, progressbar):
 	var planet = viewport_planet.get_child(0)
-	var exporter = GIFExporter.new(100*planet.relative_scale, 100*planet.relative_scale)
+	var exporter = GIFExporter.new(pixels*planet.relative_scale, pixels*planet.relative_scale)
 	progressbar.max_value = frames
 	
 	planet.override_time = true
@@ -250,8 +256,8 @@ func export_gif(frames, frame_delay, progressbar):
 		var image = Image.new()
 		image.create(pixels * planet.relative_scale, pixels * planet.relative_scale, false, Image.FORMAT_RGBA8)
 		
-		var source_xy = 100 - (pixels*(planet.relative_scale-1)*0.5)
-		var source_size = 100*planet.relative_scale
+		var source_xy = 0
+		var source_size = pixels*planet.relative_scale
 		var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
 		image.blit_rect(tex, source_rect, Vector2(0,0))
 		exporter.add_frame(image, frame_delay, MedianCutQuantization)
@@ -272,10 +278,7 @@ func export_gif(frames, frame_delay, progressbar):
 		var fileName = String(sd)
 		var data = Array(exporter.export_file_data())
 		JavaScript.eval("downloadGif('%s', %s);" % [fileName, str(data)], true)
-	
-	
-	
-	
+
 	planet.override_time = false
 	$GifPopup.visible = false
 	progressbar.visible = false
@@ -283,3 +286,17 @@ func export_gif(frames, frame_delay, progressbar):
 
 func _on_GifPopup_cancel_gif():
 	cancel_gif = true
+
+func _on_InputPixels_text_changed(text):
+	pixels = int(text)
+	pixels = clamp(pixels, 12, 5000)
+	if (int(text) > 5000):
+		$Settings/VBoxContainer/InputPixels.text = String(pixels)
+	
+	var p = viewport_planet.get_child(0)
+	p.set_pixels(pixels)
+	
+	p.rect_position = pixels * 0.5 * (p.relative_scale -1) * Vector2(1,1)
+
+	yield(get_tree(), "idle_frame")
+	viewport.size = Vector2(pixels, pixels) * p.relative_scale

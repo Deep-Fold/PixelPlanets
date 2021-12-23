@@ -1,7 +1,5 @@
 extends "res://Planets/Planet.gd"
 
-
-
 func set_pixels(amount):
 	$GasLayers.material.set_shader_param("pixels", amount)
 	 # times 3 here because in this case ring is 3 times larger than planet

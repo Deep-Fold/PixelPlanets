@@ -51,7 +51,7 @@ particles_anim_h_frames = 11
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
-[sub_resource type="ViewportTexture" id=4]
+[sub_resource type="ViewportTexture" id=7]
 viewport_path = NodePath("PlanetViewport")
 
 [sub_resource type="Shader" id=5]
@@ -112,22 +112,18 @@ process_material = ExtResource( 9 )
 texture = ExtResource( 4 )
 
 [node name="PlanetViewport" type="Viewport" parent="."]
-size = Vector2( 300, 300 )
+size = Vector2( 200, 200 )
 transparent_bg = true
 usage = 1
 render_target_v_flip = true
 
 [node name="PlanetHolder" type="Control" parent="PlanetViewport"]
-margin_left = 100.0
-margin_top = 100.0
-margin_right = 140.0
-margin_bottom = 140.0
 
 [node name="Control" parent="PlanetViewport/PlanetHolder" instance=ExtResource( 3 )]
 
-[node name="PlanetHolder" type="CenterContainer" parent="."]
-margin_left = -50.0
-margin_top = -50.0
+[node name="PlanetHolder2" type="CenterContainer" parent="."]
+margin_left = 100.0
+margin_top = 100.0
 margin_right = 250.0
 margin_bottom = 250.0
 rect_scale = Vector2( 2, 2 )
@@ -136,11 +132,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="PlanetHolder" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -212.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="ViewportTexture" type="TextureRect" parent="PlanetHolder"]
 margin_right = 300.0
 margin_bottom = 300.0
-texture = SubResource( 4 )
-stretch_mode = 3
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 7 )
+expand = true
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Settings" type="Control" parent="."]
 margin_left = 300.0
@@ -223,36 +233,6 @@ margin_bottom = 17.0
 theme = ExtResource( 2 )
 text = "rand"
 
-[node name="Control4" type="Control" parent="Settings/VBoxContainer"]
-visible = false
-margin_top = 74.0
-margin_right = 210.0
-margin_bottom = 84.0
-rect_min_size = Vector2( 0, 5 )
-
-[node name="Label2" type="Label" parent="Settings/VBoxContainer"]
-visible = false
-margin_top = 74.0
-margin_right = 210.0
-margin_bottom = 89.0
-theme = ExtResource( 2 )
-custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
-text = "sprite scale:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SliderScale" type="HSlider" parent="Settings/VBoxContainer"]
-visible = false
-margin_top = 74.0
-margin_right = 210.0
-margin_bottom = 90.0
-theme = ExtResource( 2 )
-min_value = 0.2
-max_value = 1.0
-step = 0.01
-value = 1.0
-
 [node name="Control" type="Control" parent="Settings/VBoxContainer"]
 margin_top = 75.0
 margin_right = 210.0
@@ -265,12 +245,13 @@ margin_right = 210.0
 margin_bottom = 97.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
-text = "pixels: 100x100"
+text = "pixels: "
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="SliderPixels" type="HSlider" parent="Settings/VBoxContainer"]
+visible = false
 margin_top = 98.0
 margin_right = 210.0
 margin_bottom = 114.0
@@ -278,10 +259,28 @@ theme = ExtResource( 2 )
 min_value = 16.0
 value = 100.0
 
-[node name="Label4" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 115.0
+[node name="InputPixels" type="LineEdit" parent="Settings/VBoxContainer"]
+margin_top = 98.0
 margin_right = 210.0
-margin_bottom = 131.0
+margin_bottom = 115.0
+size_flags_horizontal = 3
+theme = ExtResource( 2 )
+text = "100"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control4" type="Control" parent="Settings/VBoxContainer"]
+margin_top = 116.0
+margin_right = 210.0
+margin_bottom = 121.0
+rect_min_size = Vector2( 0, 5 )
+
+[node name="Label4" type="Label" parent="Settings/VBoxContainer"]
+margin_top = 122.0
+margin_right = 210.0
+margin_bottom = 138.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 text = "Rotation:"
@@ -290,24 +289,24 @@ __meta__ = {
 }
 
 [node name="SliderRotation" type="HSlider" parent="Settings/VBoxContainer"]
-margin_top = 132.0
+margin_top = 139.0
 margin_right = 210.0
-margin_bottom = 148.0
+margin_bottom = 155.0
 theme = ExtResource( 2 )
 max_value = 6.28
 step = 0.01
 value = 6.28
 
 [node name="Control6" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 149.0
+margin_top = 156.0
 margin_right = 210.0
-margin_bottom = 154.0
+margin_bottom = 161.0
 rect_min_size = Vector2( 0, 5 )
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 155.0
+margin_top = 162.0
 margin_right = 210.0
-margin_bottom = 171.0
+margin_bottom = 178.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -332,15 +331,15 @@ theme = ExtResource( 2 )
 text = "on"
 
 [node name="Control3" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 172.0
+margin_top = 179.0
 margin_right = 210.0
-margin_bottom = 177.0
+margin_bottom = 184.0
 rect_min_size = Vector2( 0, 5 )
 
 [node name="Label7" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 178.0
+margin_top = 185.0
 margin_right = 210.0
-margin_bottom = 194.0
+margin_bottom = 201.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 text = "Colors:"
@@ -349,9 +348,9 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 195.0
+margin_top = 202.0
 margin_right = 210.0
-margin_bottom = 211.0
+margin_bottom = 218.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -373,9 +372,9 @@ theme = ExtResource( 2 )
 text = "reset"
 
 [node name="ColorButtonHolder" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 212.0
+margin_top = 219.0
 margin_right = 210.0
-margin_bottom = 230.0
+margin_bottom = 237.0
 size_flags_horizontal = 3
 custom_constants/separation = 2
 __meta__ = {
@@ -388,15 +387,15 @@ margin_bottom = 18.0
 rect_scale = Vector2( 1, 1 )
 
 [node name="Control5" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 231.0
+margin_top = 238.0
 margin_right = 210.0
-margin_bottom = 236.0
+margin_bottom = 243.0
 rect_min_size = Vector2( 0, 5 )
 
 [node name="Label6" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 237.0
+margin_top = 244.0
 margin_right = 210.0
-margin_bottom = 253.0
+margin_bottom = 260.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 text = "Export:"
@@ -405,23 +404,23 @@ __meta__ = {
 }
 
 [node name="ExportPNG" type="Button" parent="Settings/VBoxContainer"]
-margin_top = 254.0
+margin_top = 261.0
 margin_right = 210.0
-margin_bottom = 270.0
+margin_bottom = 277.0
 theme = ExtResource( 2 )
 text = "png"
 
 [node name="ExportGIF" type="Button" parent="Settings/VBoxContainer"]
-margin_top = 271.0
+margin_top = 278.0
 margin_right = 210.0
-margin_bottom = 287.0
+margin_bottom = 294.0
 theme = ExtResource( 2 )
 text = "GIF"
 
 [node name="ExportSpriteSheet" type="Button" parent="Settings/VBoxContainer"]
-margin_top = 288.0
+margin_top = 295.0
 margin_right = 210.0
-margin_bottom = 304.0
+margin_bottom = 311.0
 theme = ExtResource( 2 )
 text = "spritesheet"
 
@@ -767,10 +766,10 @@ __meta__ = {
 }
 
 [node name="ColorPicker" type="ColorPicker" parent="Panel"]
-margin_left = 15.1902
-margin_top = -0.208113
-margin_right = 395.191
-margin_bottom = 400.183
+margin_left = 16.2202
+margin_top = -0.788704
+margin_right = 396.22
+margin_bottom = 374.211
 rect_scale = Vector2( 0.5, 0.5 )
 theme = ExtResource( 2 )
 edit_alpha = false
@@ -783,8 +782,8 @@ __meta__ = {
 [connection signal="item_selected" from="Settings/VBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="text_changed" from="Settings/VBoxContainer/Seed/SeedText" to="." method="_on_LineEdit_text_changed"]
 [connection signal="pressed" from="Settings/VBoxContainer/Seed/Button" to="." method="_on_Button_pressed"]
-[connection signal="value_changed" from="Settings/VBoxContainer/SliderScale" to="." method="_on_SliderScale_value_changed"]
 [connection signal="value_changed" from="Settings/VBoxContainer/SliderPixels" to="." method="_on_SliderPixels_value_changed"]
+[connection signal="text_changed" from="Settings/VBoxContainer/InputPixels" to="." method="_on_InputPixels_text_changed"]
 [connection signal="value_changed" from="Settings/VBoxContainer/SliderRotation" to="." method="_on_SliderRotation_value_changed"]
 [connection signal="pressed" from="Settings/VBoxContainer/HBoxContainer2/ShouldDither" to="." method="_on_ShouldDither_pressed"]
 [connection signal="pressed" from="Settings/VBoxContainer/HBoxContainer/RandomizeColors" to="." method="_on_RandomizeColors_pressed"]

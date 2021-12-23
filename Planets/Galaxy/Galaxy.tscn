@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Planets/Planet.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Planets/Galaxy/Galaxy.shader" type="Shader" id=2]
+[ext_resource path="res://Planets/Galaxy/Galaxy.gd" type="Script" id=3]
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 )
+colors = PoolColorArray( 1, 1, 0.921569, 1, 1, 0.894118, 0.470588, 1, 0.560784, 0.870588, 0.364706, 1, 0.239216, 0.431373, 0.439216, 1, 0.196078, 0.243137, 0.309804, 1, 0.196078, 0.160784, 0.278431, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 2 )
+shader_param/pixels = 1000.0
+shader_param/rotation = 0.674
+shader_param/time_speed = 1.0
+shader_param/dither_size = 2.0
+shader_param/should_dither = true
+shader_param/size = 7.0
+shader_param/OCTAVES = 1
+shader_param/seed = 5.881
+shader_param/time = 0.0
+shader_param/tilt = 3.0
+shader_param/n_layers = 4.0
+shader_param/layer_height = 0.4
+shader_param/zoom = 1.176
+shader_param/n_colors = 6.0
+shader_param/swirl = -9.0
+shader_param/colorscheme = SubResource( 3 )
+
+[node name="Galaxy" instance=ExtResource( 1 )]
+margin_right = -412.0
+margin_bottom = -200.0
+rect_min_size = Vector2( 0, 0 )
+script = ExtResource( 3 )
+
+[node name="Galaxy" type="ColorRect" parent="." index="0"]
+material = SubResource( 4 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
