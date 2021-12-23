@@ -104,7 +104,7 @@ void fragment() {
 	
 	// some final steps to choose a nice color
 	f2 *= 2.3;
-	if(dith) { // dithering
+	if(should_dither && dith) { // dithering
 		f2 *= 0.94;
 	}
 	f2 = floor(f2 * (n_colors + 1.0)) / n_colors;
