@@ -91,11 +91,10 @@ func _create_new_planet(type):
 	viewport.size = Vector2(pixels, pixels) * new_p.relative_scale
 	
 	# some hardcoded values that look good in the GUI
-	match new_p.relative_scale:
+	match new_p.gui_zoom:
 		1.0:
 			viewport_tex.rect_position = Vector2(50,50)
 			viewport_tex.rect_size = Vector2(200,200)
-##			viewport_tex.rect_scale = Vector2(2.0,2.0)
 		2.0:
 			viewport_tex.rect_position = Vector2(25,25)
 			viewport_tex.rect_size = Vector2(250,250)

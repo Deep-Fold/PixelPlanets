@@ -62,7 +62,8 @@ margin_right = -412.0
 margin_bottom = -200.0
 rect_min_size = Vector2( 0, 0 )
 script = ExtResource( 2 )
-relative_scale = 2.5
+relative_scale = 3.0
+gui_zoom = 2.5
 
 [node name="GasLayers" type="ColorRect" parent="." index="0"]
 material = SubResource( 5 )

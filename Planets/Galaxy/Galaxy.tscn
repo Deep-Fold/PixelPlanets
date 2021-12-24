@@ -25,7 +25,7 @@ shader_param/time = 0.0
 shader_param/tilt = 3.0
 shader_param/n_layers = 4.0
 shader_param/layer_height = 0.4
-shader_param/zoom = 1.176
+shader_param/zoom = 1.375
 shader_param/n_colors = 6.0
 shader_param/swirl = -9.0
 shader_param/colorscheme = SubResource( 3 )
@@ -35,6 +35,7 @@ margin_right = -412.0
 margin_bottom = -200.0
 rect_min_size = Vector2( 0, 0 )
 script = ExtResource( 3 )
+gui_zoom = 2.5
 
 [node name="Galaxy" type="ColorRect" parent="." index="0"]
 material = SubResource( 4 )

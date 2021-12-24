@@ -4,6 +4,7 @@ var time = 1000.0
 var override_time = false
 var original_colors = []
 export (float) var relative_scale = 1.0
+export (float) var gui_zoom = 1.0
 
 func _ready():
 	original_colors = get_colors()

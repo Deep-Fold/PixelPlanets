@@ -74,6 +74,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 relative_scale = 2.0
+gui_zoom = 2.0
 
 [node name="StarBackground" type="ColorRect" parent="."]
 material = SubResource( 1 )
