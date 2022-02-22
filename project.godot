@@ -18,10 +18,6 @@ config/name="PixelPlanets"
 run/main_scene="res://GUI/GUI.tscn"
 config/icon="res://icon.png"
 
-[autoload]
-
-HTML5File="*res://addons/HTML5FileExchange/HTML5FileExchange.gd"
-
 [display]
 
 window/size/width=512

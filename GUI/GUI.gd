@@ -182,8 +182,7 @@ func export_spritesheet(sheet_size, progressbar):
 
 func save_image(img):
 	if OS.get_name() == "HTML5" and OS.has_feature('JavaScript'):
-		var filesaver = get_tree().root.get_node("/root/HTML5File")
-		filesaver.save_image(img, String(sd))
+		JavaScript.download_buffer(img.save_png_to_buffer(), String(sd)+".png", "image/png")
 	else:
 		if OS.get_name() == "OSX":
 			img.save_png("user://%s.png"%String(sd))
@@ -274,9 +273,8 @@ func export_gif(frames, frame_delay, progressbar):
 		file.store_buffer(exporter.export_file_data())
 		file.close()
 	else:
-		var fileName = String(sd)
 		var data = Array(exporter.export_file_data())
-		JavaScript.eval("downloadGif('%s', %s);" % [fileName, str(data)], true)
+		JavaScript.download_buffer(data, String(sd)+".gif", "image/gif")
 
 	planet.override_time = false
 	$GifPopup.visible = false
