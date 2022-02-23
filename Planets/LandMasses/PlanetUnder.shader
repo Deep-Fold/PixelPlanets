@@ -94,19 +94,19 @@ void fragment() {
 	float dither_border = (1.0/pixels)*dither_size;
 
 	// now we can assign colors based on distance to light origin
-	vec3 col = color1.rgb;
+	vec4 col = color1;
 	if (d_light > light_border_1) {
-		col = color2.rgb;
+		col = color2;
 		if (d_light < light_border_1 + dither_border && (dith || !should_dither)) {
-			col = color1.rgb;
+			col = color1;
 		}
 	}
 	if (d_light > light_border_2) {
-		col = color3.rgb;
+		col = color3;
 		if (d_light < light_border_2 + dither_border && (dith || !should_dither)) {
-			col = color2.rgb;
+			col = color2;
 		}
 	}
 	
-	COLOR = vec4(col, a);
+	COLOR = vec4(col.rgb, a * col.a);
 }

@@ -128,9 +128,9 @@ void fragment() {
 	
 	// use our two noise values to assign colors
 	float interpolate = floor(n2 + nc);
-	vec3 c = texture(colorramp, vec2(interpolate, 0.0)).rgb;	
+	vec4 col = texture(colorramp, vec2(interpolate, 0.0));
 	
 	// final step to not have everything appear from the center
 	a *= step(n2 * 0.25, d);
-	COLOR = vec4(c, a);
+	COLOR = vec4(col.rgb, a * col.a);
 }

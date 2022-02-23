@@ -109,28 +109,23 @@ void fragment() {
 	// map to sphere
 	uv = spherify(uv);
 	
-	
-	
 	// slightly make uv go down on the right, and up in the left
 	uv.y += smoothstep(0.0, cloud_curve, abs(uv.x-0.4));
-	
 	
 	float c = cloud_alpha(uv*vec2(1.0, stretch));
 	
 	// assign some colors based on cloud depth & distance from light
-	vec3 col = base_color.rgb;
+	vec4 col = base_color;
 	if (c < cloud_cover + 0.03) {
-		col = outline_color.rgb;
+		col = outline_color;
 	}
 	if (d_light + c*0.2 > light_border_1) {
-		col = shadow_base_color.rgb;
+		col = shadow_base_color;
 
 	}
 	if (d_light + c*0.2 > light_border_2) {
-		col = shadow_outline_color.rgb;
+		col = shadow_outline_color;
 	}
 	
-
-	
-	COLOR = vec4(col, step(cloud_cover, c) * a);
+	COLOR = vec4(col.rgb, step(cloud_cover, c) * a * col.a);
 }

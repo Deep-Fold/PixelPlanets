@@ -105,12 +105,12 @@ void fragment() {
 	
 	// apply some colors based on final value
 	float posterized = floor((ring+pow(light_d, 2.0)*2.0)*4.0)/4.0;
-	vec3 col;
+	vec4 col;
 	if (posterized <= 1.0) {
-		col = texture(colorscheme, vec2(posterized, uv.y)).rgb;
+		col = texture(colorscheme, vec2(posterized, uv.y));
 	} else {
-		col = texture(dark_colorscheme, vec2(posterized-1.0, uv.y)).rgb;
+		col = texture(dark_colorscheme, vec2(posterized-1.0, uv.y));
 	}
 	float ring_a = step(0.28, ring);
-	COLOR = vec4(col, ring_a);
+	COLOR = vec4(col.rgb, ring_a * col.a);
 }

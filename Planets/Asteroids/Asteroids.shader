@@ -103,23 +103,23 @@ void fragment() {
 
 	// now we just assign colors depending on noise values and crater values
 	// base
-	vec3 col = color2.rgb;
+	vec4 col = color2;
 	
 	// noise
 	if (noise_rel < -0.06 || (noise_rel < -0.04 && (dith || !should_dither))) {
-		col = color1.rgb;
+		col = color1;
 	}
 	if (noise_rel > 0.05 || (noise_rel > 0.03 && (dith || !should_dither))) {
-		col = color3.rgb;
+		col = color3;
 	}
 	
 	// crater
 	if (c1 > 0.4)  {
-		col = color2.rgb;
+		col = color2;
 	}
 	if (c2<c1) {
-		col = color3.rgb;
+		col = color3;
 	}
 	
-	COLOR = vec4(col, n_step);
+	COLOR = vec4(col.rgb, n_step * col.a);
 }

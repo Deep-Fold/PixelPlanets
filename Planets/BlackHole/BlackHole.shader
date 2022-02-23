@@ -17,14 +17,14 @@ void fragment() {
 	// distance from center
 	float d_to_center = distance(uv, vec2(0.5));
 	
-	vec3 col = black_color.rgb;
+	vec4 col = black_color;
 	
 	if (d_to_center > radius - light_width) {
 		float col_val = ceil(d_to_center-(radius - (light_width * 0.5))) * (1.0/(light_width * 0.5));
-		col = texture(colorscheme, vec2(col_val, 0.0)).rgb;
+		col = texture(colorscheme, vec2(col_val, 0.0));
 	}
 	
 	float a = step(d_to_center, radius);
 	
-	COLOR = vec4(col, a);
+	COLOR = vec4(col.rgb, a * col.a);
 }

@@ -132,12 +132,12 @@ void fragment() {
 	
 	// finally add colors
 	float posterized = floor(fbm2*4.0)/2.0;
-	vec3 col;
+	vec4 col;
 	if (fbm2 < 0.625) {
-		col = texture(colorscheme, vec2(posterized, uv.y)).rgb;
+		col = texture(colorscheme, vec2(posterized, uv.y));
 	} else {
-		col = texture(dark_colorscheme, vec2(posterized-1.0, uv.y)).rgb;
+		col = texture(dark_colorscheme, vec2(posterized-1.0, uv.y));
 	}
 		
-	COLOR = vec4(col, a);
+	COLOR = vec4(col.rgb, a * col.a);
 }

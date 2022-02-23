@@ -91,14 +91,14 @@ void fragment() {
 	river_fbm = step(river_cutoff, river_fbm);
 	
 	// apply colors
-	vec3 col = color1.rgb;
+	vec4 col = color1;
 	if (d_light > light_border_1) {
-		col = color2.rgb;
+		col = color2;
 	}
 	if (d_light > light_border_2) {
-		col = color3.rgb;
+		col = color3;
 	}
 	
 	a *= step(river_cutoff, river_fbm);
-	COLOR = vec4(col, a);
+	COLOR = vec4(col.rgb, a * col.a);
 }

@@ -98,5 +98,5 @@ void fragment() {
 	c *= 0.37 - d;
 	c = step(0.07, c - d);
 	
-	COLOR = vec4(vec3(color.rgb), c);
+	COLOR = vec4(color.rgb, c * color.a);
 }

@@ -114,10 +114,9 @@ void fragment() {
 	
 	// now we can assign colors based on distance to light origin
 	float posterize = floor(c*4.0)/4.0;
-	vec3 col = texture(colors, vec2(posterize, 0.0)).rgb;
+	vec4 col = texture(colors, vec2(posterize, 0.0));
 	
-	
-	COLOR = vec4(col, a);
+	COLOR = vec4(col.rgb, a * col.a);
 }
 "
 

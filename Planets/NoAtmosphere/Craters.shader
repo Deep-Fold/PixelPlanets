@@ -65,17 +65,17 @@ void fragment() {
 		
 	float c1 = crater(uv );
 	float c2 = crater(uv +(light_origin-0.5)*0.03);
-	vec3 col = color1.rgb;
+	vec4 col = color1;
 	
 	a *= step(0.5, c1);
 	if (c2<c1-(0.5-d_light)*2.0) {
-		col = color2.rgb;
+		col = color2;
 	}
 	if (d_light > light_border) {
-		col = color2.rgb;
+		col = color2;
 	} 
 
 	// cut out a circle
 	a*= step(d_circle, 0.5);
-	COLOR = vec4(col, a);
+	COLOR = vec4(col.rgb, a * col.a);
 }

@@ -147,8 +147,7 @@ void fragment() {
 	
 	// apply some colors based on final value
 	float posterized = floor((disk+light_d)*4.0)/4.0;
-	vec3 col;
-	col = texture(colorscheme, vec2(posterized, uv.y)).rgb;
+	vec4 col = texture(colorscheme, vec2(posterized, uv.y));
 	
 	// this can be toggled on to achieve a more "realistic" blacak hole, with red and blue shifting. This was just me messing around so can probably be more optimized and done cleaner
 //	col.rgb *= 1.0 - pow(uv.x, 1.0);
@@ -158,5 +157,5 @@ void fragment() {
 //	col.rgb *= pow(uv.x, 0.15);
 	
 	float disk_a = step(0.15, disk);
-	COLOR = vec4(col, disk_a);
+	COLOR = vec4(col.rgb, disk_a * col.a);
 }

@@ -103,7 +103,7 @@ void fragment() {
 	
 	// constrain values 4 possibilities and then choose color based on those
 	float interpolate = floor(n * 3.0) / 3.0;
-	vec3 c = texture(colorramp, vec2(interpolate, 0.0)).rgb;
+	vec4 col = texture(colorramp, vec2(interpolate, 0.0));
 	
-	COLOR = vec4(c, a);
+	COLOR = vec4(col.rgb, a * col.a);
 }

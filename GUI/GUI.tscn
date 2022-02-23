@@ -792,7 +792,6 @@ margin_right = 396.31
 margin_bottom = 373.948
 rect_scale = Vector2( 0.5, 0.5 )
 theme = ExtResource( 2 )
-edit_alpha = false
 presets_enabled = false
 presets_visible = false
 __meta__ = {

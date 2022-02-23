@@ -113,18 +113,18 @@ void fragment() {
 	
 	// increase contrast on d_light
 	d_light = pow(d_light, 2.0)*0.1;
-	vec3 col = col4.rgb;
+	vec4 col = col4;
 	// assign colors based on if there is noise to the top-left of noise
 	// and also based on how far noise is from light
 	if (fbm4 + d_light < fbm1) {
-		col = col3.rgb;
+		col = col3;
 	}
 	if (fbm3 + d_light < fbm1) {
-		col = col2.rgb;
+		col = col2;
 	}
 	if (fbm2 + d_light < fbm1) {
-		col = col1.rgb;
+		col = col1;
 	}
 	
-	COLOR = vec4(col, step(land_cutoff, fbm1) * a);
+	COLOR = vec4(col.rgb, step(land_cutoff, fbm1) * a * col.a);
 }
