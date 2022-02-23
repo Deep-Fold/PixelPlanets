@@ -9,13 +9,14 @@ onready var warning = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContaine
 onready var progressbar = $PopupFront/VBoxContainer/TextureProgress
 var pixels = 100
 var sheet_size = Vector2(50,1)
+var pixel_margin = 0.0
 
 func _on_CancelButton_pressed():
 	visible = false
 
 func _on_ExportButton_pressed():
 	progressbar.visible = true
-	get_parent().export_spritesheet(sheet_size, progressbar)
+	get_parent().export_spritesheet(sheet_size, progressbar, pixel_margin)
 
 func _on_HeightFrames_value_changed(value):
 	var val = int(value)
@@ -44,11 +45,20 @@ func set_pixels(p):
 	_update_info()
 
 func _update_info():
+	var x_size = sheet_size.x * (pixels + pixel_margin) + pixel_margin
+	var y_size = sheet_size.y * (pixels + pixel_margin) + pixel_margin
+	
 	f_info.text = "Total Frames: %s" % (sheet_size.x*sheet_size.y)
-	r_info.text = "Image resolution: \n%sx%s" % [sheet_size.x*pixels,sheet_size.y*pixels]
+	r_info.text = "Image resolution: \n%sx%s" % [x_size, y_size]
 	
 	warning.visible = false
+	export_button.disabled = false
 	
-	if sheet_size.x * pixels > 16384 || sheet_size.y * pixels > 16384: # max godot image resolution
+	if x_size > 16384 || y_size > 16384: # max godot image resolution
 		warning.visible = true
 		export_button.disabled = true
+
+
+func _on_PixelMargin_value_changed(value):
+	pixel_margin = value
+	_update_info()

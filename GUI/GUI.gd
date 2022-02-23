@@ -150,12 +150,14 @@ func _on_ExportPNG_pressed():
 	
 	save_image(image)
 
-func export_spritesheet(sheet_size, progressbar):
+func export_spritesheet(sheet_size, progressbar, pixel_margin = 0.0):
 	var planet = viewport_planet.get_child(0)
 	var sheet = Image.new()
 	progressbar.max_value = sheet_size.x * sheet_size.y
 	
-	sheet.create(pixels * sheet_size.x * planet.relative_scale, pixels * sheet_size.y * planet.relative_scale, false, Image.FORMAT_RGBA8)
+	sheet.create(pixels * sheet_size.x * planet.relative_scale + sheet_size.x*pixel_margin + pixel_margin,
+				pixels * sheet_size.y * planet.relative_scale + sheet_size.y*pixel_margin + pixel_margin,
+				false, Image.FORMAT_RGBA8)
 	planet.override_time = true
 	
 	var index = 0
@@ -169,7 +171,7 @@ func export_spritesheet(sheet_size, progressbar):
 				var source_xy = 0
 				var source_size = pixels*planet.relative_scale
 				var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
-				var destination = Vector2(x - 1,y) * pixels * planet.relative_scale
+				var destination = Vector2(x - 1,y) * pixels * planet.relative_scale + Vector2(x * pixel_margin, (y+1) * pixel_margin)
 				sheet.blit_rect(image, source_rect, destination)
 
 			index +=1

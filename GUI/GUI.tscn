@@ -514,10 +514,30 @@ theme = ExtResource( 2 )
 max_value = 1000.0
 value = 1.0
 
-[node name="Control" type="Control" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
+[node name="Control2" type="Control" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
 margin_top = 82.0
 margin_right = 214.0
+margin_bottom = 92.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="Label3" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
+margin_top = 96.0
+margin_right = 214.0
 margin_bottom = 112.0
+theme = ExtResource( 2 )
+text = "Pixel Margin"
+
+[node name="PixelMargin" type="SpinBox" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
+margin_top = 116.0
+margin_right = 214.0
+margin_bottom = 133.0
+theme = ExtResource( 2 )
+max_value = 1000.0
+
+[node name="Control" type="Control" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
+margin_top = 137.0
+margin_right = 214.0
+margin_bottom = 167.0
 rect_min_size = Vector2( 0, 30 )
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings"]
@@ -766,10 +786,10 @@ __meta__ = {
 }
 
 [node name="ColorPicker" type="ColorPicker" parent="Panel"]
-margin_left = 16.2202
-margin_top = -0.788704
-margin_right = 396.22
-margin_bottom = 374.211
+margin_left = 16.3103
+margin_top = -1.05216
+margin_right = 396.31
+margin_bottom = 373.948
 rect_scale = Vector2( 0.5, 0.5 )
 theme = ExtResource( 2 )
 edit_alpha = false
@@ -794,6 +814,7 @@ __meta__ = {
 [connection signal="gui_input" from="Control" to="." method="_on_Control_gui_input"]
 [connection signal="value_changed" from="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/WidthFrames" to="Popup" method="_on_WidthFrames_value_changed"]
 [connection signal="value_changed" from="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/HeightFrames" to="Popup" method="_on_HeightFrames_value_changed"]
+[connection signal="value_changed" from="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/PixelMargin" to="Popup" method="_on_PixelMargin_value_changed"]
 [connection signal="pressed" from="Popup/PopupFront/VBoxContainer/HBoxContainer/CancelButton" to="Popup" method="_on_CancelButton_pressed"]
 [connection signal="pressed" from="Popup/PopupFront/VBoxContainer/HBoxContainer/ExportButton" to="Popup" method="_on_ExportButton_pressed"]
 [connection signal="cancel_gif" from="GifPopup" to="." method="_on_GifPopup_cancel_gif"]
