@@ -9,4 +9,4 @@ Ports to other engines:
  * Unity port by Hmc: https://github.com/hmcGit/UniPixelPlanet
  * Unity port by Marcus-garvey (based on port by Hmc): https://github.com/marcus-garvey/UniPixelPlanet
  * Defold port by Selimanac: https://github.com/selimanac/defold-pixel-planets
- * Javascript port by 99BitGames: https://github.com/Timur310/PixelPlanets
+ * Javascript port by Timur310: https://github.com/Timur310/PixelPlanets
