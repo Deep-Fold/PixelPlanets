@@ -76,7 +76,7 @@ __meta__ = {
 relative_scale = 2.0
 gui_zoom = 2.0
 
-[node name="StarBackground" type="ColorRect" parent="."]
+[node name="Blobs" type="ColorRect" parent="."]
 material = SubResource( 1 )
 margin_left = -50.0
 margin_top = -50.0

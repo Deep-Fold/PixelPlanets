@@ -1,8 +1,10 @@
-[gd_resource type="Theme" load_steps=18 format=2]
+[gd_resource type="Theme" load_steps=20 format=2]
 
 [ext_resource path="res://slkscre.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://GUI/grabber-highlight.png" type="Texture" id=2]
 [ext_resource path="res://GUI/grabber.png" type="Texture" id=3]
+[ext_resource path="res://GUI/uncheck.png" type="Texture" id=4]
+[ext_resource path="res://GUI/check.png" type="Texture" id=5]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.811765, 0.811765, 0.811765, 1 )
@@ -24,6 +26,7 @@ border_width_top = 16
 border_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 
 [sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.596078, 0.596078, 0.596078, 1 )
 border_width_bottom = 14
 border_color = Color( 0, 0, 0, 1 )
 
@@ -115,11 +118,11 @@ PopupMenu/colors/font_color_hover = Color( 0, 0, 0, 1 )
 PopupMenu/constants/hseparation = 4
 PopupMenu/constants/vseparation = 4
 PopupMenu/fonts/font = null
-PopupMenu/icons/checked = null
-PopupMenu/icons/radio_checked = null
-PopupMenu/icons/radio_unchecked = null
+PopupMenu/icons/checked = ExtResource( 5 )
+PopupMenu/icons/radio_checked = ExtResource( 5 )
+PopupMenu/icons/radio_unchecked = ExtResource( 4 )
 PopupMenu/icons/submenu = null
-PopupMenu/icons/unchecked = null
+PopupMenu/icons/unchecked = ExtResource( 4 )
 PopupMenu/styles/hover = SubResource( 12 )
 PopupMenu/styles/labeled_separator_left = null
 PopupMenu/styles/labeled_separator_right = null

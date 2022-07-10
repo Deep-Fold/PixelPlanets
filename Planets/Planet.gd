@@ -84,3 +84,12 @@ func _generate_new_colorscheme(n_colors, hue_diff = 0.9, saturation = 0.5):
 		cols.append(Color(vec3.x, vec3.y, vec3.z))
 	
 	return cols
+
+func get_layers():
+	var layers = []
+	for c in get_children():
+		layers.append({"name": c.get_name(), "visible": c.visible})
+	return layers
+
+func toggle_layer(num):
+	get_children()[num].visible = !get_children()[num].visible

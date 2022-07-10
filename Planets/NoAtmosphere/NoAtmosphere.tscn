@@ -42,7 +42,7 @@ margin_bottom = -200.0
 rect_min_size = Vector2( 100, 100 )
 script = ExtResource( 4 )
 
-[node name="PlanetUnder" type="ColorRect" parent="." index="0"]
+[node name="Ground" type="ColorRect" parent="." index="0"]
 material = SubResource( 1 )
 margin_right = 100.0
 margin_bottom = 100.0

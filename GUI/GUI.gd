@@ -10,10 +10,9 @@ onready var colorholder = $Settings/VBoxContainer/ColorButtonHolder
 onready var picker = $Panel/ColorPicker
 onready var random_colors = $Settings/VBoxContainer/HBoxContainer/RandomizeColors
 onready var dither_button = $Settings/VBoxContainer/HBoxContainer2/ShouldDither
+onready var layeroptions = $Settings/VBoxContainer/LayerOptions
 
 onready var colorbutton_scene = preload("res://GUI/ColorPickerButton.tscn")
-
-
 const GIFExporter = preload("res://addons/gdgifexporter/exporter.gd")
 const MedianCutQuantization = preload("res://addons/gdgifexporter/quantization/median_cut.gd")
 
@@ -40,6 +39,7 @@ var should_dither = true
 func _ready():
 	for k in planets.keys():
 		optionbutton.add_item(k)
+	layeroptions.get_popup().connect("id_pressed", self, "_on_layer_selected")
 
 	_seed_random()
 	_create_new_planet(planets["Terran Wet"])
@@ -87,6 +87,8 @@ func _create_new_planet(type):
 	colors = new_p.get_colors()
 	_make_color_buttons()
 
+	_make_layer_selection(new_p)
+
 	yield(get_tree(), "idle_frame")
 	viewport.size = Vector2(pixels, pixels) * new_p.relative_scale
 	
@@ -102,6 +104,18 @@ func _create_new_planet(type):
 			viewport_tex.rect_position = Vector2(0,0)
 			viewport_tex.rect_size = Vector2(300,300)
 
+func _on_layer_selected(id):
+	viewport_planet.get_child(0).toggle_layer(id)
+	_make_layer_selection(viewport_planet.get_child(0))
+
+func _make_layer_selection(planet):
+	var layers = planet.get_layers()
+	layeroptions.get_popup().clear()
+	var i = 0
+	for l in layers:
+		layeroptions.get_popup().add_check_item(l.name)
+		layeroptions.get_popup().set_item_checked(i, l.visible)
+		i+=1
 
 func _make_color_buttons():
 	for b in colorholder.get_children():
