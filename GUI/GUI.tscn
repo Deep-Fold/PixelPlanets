@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://GUI/GUI.gd" type="Script" id=1]
 [ext_resource path="res://GUI/Theme.tres" type="Theme" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://GUI/ColorPickerButton.tscn" type="PackedScene" id=8]
 [ext_resource path="res://GUI/StarParticles.tres" type="Material" id=9]
 [ext_resource path="res://GUI/GifPopup.gd" type="Script" id=10]
+[ext_resource path="res://GUI/ImportExportPopup.gd" type="Script" id=11]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -93,7 +94,7 @@ __meta__ = {
 [node name="Dark" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.878431 )
+color = Color( 0, 0, 0, 0.831373 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -132,10 +133,9 @@ __meta__ = {
 [node name="PlanetHolder" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 12.5
 margin_right = -212.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_bottom = 12.5
 
 [node name="ViewportTexture" type="TextureRect" parent="PlanetHolder"]
 margin_right = 300.0
@@ -152,7 +152,7 @@ __meta__ = {
 [node name="Settings" type="Control" parent="."]
 margin_left = 300.0
 margin_right = 512.0
-margin_bottom = 300.0
+margin_bottom = 350.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -186,13 +186,13 @@ text = "Terran Wet"
 [node name="Control2" type="Control" parent="Settings/VBoxContainer"]
 margin_top = 32.0
 margin_right = 210.0
-margin_bottom = 37.0
-rect_min_size = Vector2( 0, 5 )
+margin_bottom = 39.0
+rect_min_size = Vector2( 0, 7 )
 
 [node name="Label" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 37.0
+margin_top = 39.0
 margin_right = 210.0
-margin_bottom = 53.0
+margin_bottom = 55.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 text = "seed:"
@@ -201,9 +201,9 @@ __meta__ = {
 }
 
 [node name="Seed" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 53.0
+margin_top = 55.0
 margin_right = 210.0
-margin_bottom = 70.0
+margin_bottom = 72.0
 custom_constants/separation = 0
 
 [node name="SeedText" type="LineEdit" parent="Settings/VBoxContainer/Seed"]
@@ -225,15 +225,15 @@ theme = ExtResource( 2 )
 text = "rand"
 
 [node name="Control" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 70.0
+margin_top = 72.0
 margin_right = 210.0
-margin_bottom = 75.0
-rect_min_size = Vector2( 0, 5 )
+margin_bottom = 79.0
+rect_min_size = Vector2( 0, 7 )
 
 [node name="Label3" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 75.0
+margin_top = 79.0
 margin_right = 210.0
-margin_bottom = 91.0
+margin_bottom = 95.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 text = "pixels: "
@@ -251,9 +251,9 @@ min_value = 16.0
 value = 100.0
 
 [node name="InputPixels" type="LineEdit" parent="Settings/VBoxContainer"]
-margin_top = 91.0
+margin_top = 95.0
 margin_right = 210.0
-margin_bottom = 108.0
+margin_bottom = 112.0
 size_flags_horizontal = 3
 theme = ExtResource( 2 )
 text = "100"
@@ -263,15 +263,15 @@ __meta__ = {
 }
 
 [node name="Control4" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 108.0
+margin_top = 112.0
 margin_right = 210.0
-margin_bottom = 113.0
-rect_min_size = Vector2( 0, 5 )
+margin_bottom = 119.0
+rect_min_size = Vector2( 0, 7 )
 
 [node name="Label4" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 113.0
+margin_top = 119.0
 margin_right = 210.0
-margin_bottom = 129.0
+margin_bottom = 135.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 text = "Rotation:"
@@ -280,24 +280,24 @@ __meta__ = {
 }
 
 [node name="SliderRotation" type="HSlider" parent="Settings/VBoxContainer"]
-margin_top = 129.0
+margin_top = 135.0
 margin_right = 210.0
-margin_bottom = 145.0
+margin_bottom = 151.0
 theme = ExtResource( 2 )
 max_value = 6.28
 step = 0.01
 value = 6.28
 
 [node name="Control6" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 145.0
+margin_top = 151.0
 margin_right = 210.0
-margin_bottom = 150.0
-rect_min_size = Vector2( 0, 5 )
+margin_bottom = 152.0
+rect_min_size = Vector2( 0, 1 )
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 150.0
+margin_top = 152.0
 margin_right = 210.0
-margin_bottom = 166.0
+margin_bottom = 168.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -322,15 +322,15 @@ theme = ExtResource( 2 )
 text = "on"
 
 [node name="Control3" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 166.0
+margin_top = 168.0
 margin_right = 210.0
-margin_bottom = 171.0
-rect_min_size = Vector2( 0, 5 )
+margin_bottom = 175.0
+rect_min_size = Vector2( 0, 7 )
 
 [node name="Label7" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 171.0
+margin_top = 175.0
 margin_right = 210.0
-margin_bottom = 187.0
+margin_bottom = 191.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 text = "Colors:"
@@ -338,10 +338,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 187.0
+[node name="ColorButtonHolder" type="HBoxContainer" parent="Settings/VBoxContainer"]
+margin_top = 191.0
 margin_right = 210.0
-margin_bottom = 203.0
+margin_bottom = 209.0
+size_flags_horizontal = 3
+custom_constants/separation = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorPickerButton" parent="Settings/VBoxContainer/ColorButtonHolder" instance=ExtResource( 8 )]
+margin_right = 210.0
+margin_bottom = 18.0
+rect_scale = Vector2( 1, 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Settings/VBoxContainer"]
+margin_top = 209.0
+margin_right = 210.0
+margin_bottom = 225.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -362,45 +377,45 @@ size_flags_horizontal = 3
 theme = ExtResource( 2 )
 text = "reset"
 
-[node name="ColorButtonHolder" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 203.0
+[node name="HBoxContainer3" type="HBoxContainer" parent="Settings/VBoxContainer"]
+margin_top = 225.0
 margin_right = 210.0
-margin_bottom = 221.0
-size_flags_horizontal = 3
-custom_constants/separation = 2
+margin_bottom = 241.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorPickerButton" parent="Settings/VBoxContainer/ColorButtonHolder" instance=ExtResource( 8 )]
+[node name="ImportExportColors" type="Button" parent="Settings/VBoxContainer/HBoxContainer3"]
 margin_right = 210.0
-margin_bottom = 18.0
-rect_scale = Vector2( 1, 1 )
+margin_bottom = 16.0
+size_flags_horizontal = 3
+theme = ExtResource( 2 )
+text = "import / export"
 
 [node name="Control7" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 221.0
+margin_top = 241.0
 margin_right = 210.0
-margin_bottom = 226.0
-rect_min_size = Vector2( 0, 5 )
+margin_bottom = 248.0
+rect_min_size = Vector2( 0, 7 )
 
 [node name="LayerOptions" type="MenuButton" parent="Settings/VBoxContainer"]
-margin_top = 226.0
+margin_top = 248.0
 margin_right = 210.0
-margin_bottom = 242.0
+margin_bottom = 264.0
 theme = ExtResource( 2 )
 text = "Layers"
 flat = false
 
 [node name="Control5" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 242.0
+margin_top = 264.0
 margin_right = 210.0
-margin_bottom = 247.0
-rect_min_size = Vector2( 0, 5 )
+margin_bottom = 271.0
+rect_min_size = Vector2( 0, 7 )
 
 [node name="Label6" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 247.0
+margin_top = 271.0
 margin_right = 210.0
-margin_bottom = 263.0
+margin_bottom = 287.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 text = "Export:"
@@ -409,23 +424,23 @@ __meta__ = {
 }
 
 [node name="ExportPNG" type="Button" parent="Settings/VBoxContainer"]
-margin_top = 263.0
+margin_top = 287.0
 margin_right = 210.0
-margin_bottom = 279.0
+margin_bottom = 303.0
 theme = ExtResource( 2 )
 text = "png"
 
 [node name="ExportGIF" type="Button" parent="Settings/VBoxContainer"]
-margin_top = 279.0
+margin_top = 303.0
 margin_right = 210.0
-margin_bottom = 295.0
+margin_bottom = 319.0
 theme = ExtResource( 2 )
 text = "GIF"
 
 [node name="ExportSpriteSheet" type="Button" parent="Settings/VBoxContainer"]
-margin_top = 295.0
+margin_top = 319.0
 margin_right = 210.0
-margin_bottom = 311.0
+margin_bottom = 335.0
 theme = ExtResource( 2 )
 text = "spritesheet"
 
@@ -434,9 +449,6 @@ material = SubResource( 6 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Control" type="Control" parent="."]
 margin_right = 300.0
@@ -451,9 +463,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.172549, 0.207843, 0.301961, 0.596078 )
 script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="PopupFront" type="ColorRect" parent="Popup"]
 anchor_right = 1.0
@@ -608,6 +617,117 @@ margin_bottom = 16.0
 size_flags_horizontal = 3
 theme = ExtResource( 2 )
 text = "export"
+
+[node name="ImportExportPopup" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.172549, 0.207843, 0.301961, 0.596078 )
+script = ExtResource( 11 )
+
+[node name="PopupFront" type="ColorRect" parent="ImportExportPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 30.0
+margin_top = 30.0
+margin_right = -30.0
+margin_bottom = -30.0
+color = Color( 0.172549, 0.207843, 0.301961, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ImportExportPopup/PopupFront"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ImportExportPopup/PopupFront/HBoxContainer"]
+margin_right = 214.0
+margin_bottom = 220.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextEdit" type="TextEdit" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer"]
+margin_right = 214.0
+margin_bottom = 220.0
+size_flags_vertical = 3
+theme = ExtResource( 2 )
+caret_blink = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="ImportExportPopup/PopupFront/HBoxContainer"]
+margin_left = 218.0
+margin_right = 432.0
+margin_bottom = 220.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
+margin_right = 214.0
+margin_bottom = 16.0
+
+[node name="Control" type="Control" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2/HBoxContainer"]
+margin_right = 174.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+
+[node name="CloseButton" type="Button" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2/HBoxContainer"]
+margin_left = 178.0
+margin_right = 214.0
+margin_bottom = 16.0
+theme = ExtResource( 2 )
+text = " X "
+
+[node name="Control" type="Control" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
+margin_top = 16.0
+margin_right = 214.0
+margin_bottom = 133.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
+margin_top = 133.0
+margin_right = 214.0
+margin_bottom = 149.0
+theme = ExtResource( 2 )
+text = "clipboard:"
+
+[node name="CopyToClipboard" type="Button" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
+margin_top = 149.0
+margin_right = 214.0
+margin_bottom = 165.0
+theme = ExtResource( 2 )
+text = "Copy to"
+
+[node name="PasteFromClipboard" type="Button" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
+margin_top = 165.0
+margin_right = 214.0
+margin_bottom = 181.0
+theme = ExtResource( 2 )
+text = "Paste from"
+expand_icon = true
+
+[node name="Control2" type="Control" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
+margin_top = 181.0
+margin_right = 214.0
+margin_bottom = 188.0
+rect_min_size = Vector2( 0, 7 )
+
+[node name="Label2" type="Label" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
+margin_top = 188.0
+margin_right = 214.0
+margin_bottom = 204.0
+theme = ExtResource( 2 )
+text = "colors:"
+
+[node name="ApplyColors" type="Button" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
+margin_top = 204.0
+margin_right = 214.0
+margin_bottom = 220.0
+theme = ExtResource( 2 )
+text = "apply"
 
 [node name="GifPopup" type="ColorRect" parent="."]
 visible = false
@@ -791,17 +911,14 @@ __meta__ = {
 }
 
 [node name="ColorPicker" type="ColorPicker" parent="Panel"]
-margin_left = 20.3103
-margin_top = 2.94784
-margin_right = 400.31
-margin_bottom = 377.948
+margin_left = 14.9122
+margin_top = -0.766645
+margin_right = 394.912
+margin_bottom = 391.233
 rect_scale = Vector2( 0.5, 0.5 )
 theme = ExtResource( 2 )
 presets_enabled = false
 presets_visible = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [connection signal="item_selected" from="Settings/VBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="text_changed" from="Settings/VBoxContainer/Seed/SeedText" to="." method="_on_LineEdit_text_changed"]
@@ -812,6 +929,7 @@ __meta__ = {
 [connection signal="pressed" from="Settings/VBoxContainer/HBoxContainer2/ShouldDither" to="." method="_on_ShouldDither_pressed"]
 [connection signal="pressed" from="Settings/VBoxContainer/HBoxContainer/RandomizeColors" to="." method="_on_RandomizeColors_pressed"]
 [connection signal="pressed" from="Settings/VBoxContainer/HBoxContainer/ResetColors" to="." method="_on_ResetColors_pressed"]
+[connection signal="pressed" from="Settings/VBoxContainer/HBoxContainer3/ImportExportColors" to="." method="_on_ImportExportColors_pressed"]
 [connection signal="pressed" from="Settings/VBoxContainer/ExportPNG" to="." method="_on_ExportPNG_pressed"]
 [connection signal="pressed" from="Settings/VBoxContainer/ExportGIF" to="." method="_on_ExportGIF_pressed"]
 [connection signal="pressed" from="Settings/VBoxContainer/ExportSpriteSheet" to="." method="_on_ExportSpriteSheet_pressed"]
@@ -821,6 +939,10 @@ __meta__ = {
 [connection signal="value_changed" from="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/PixelMargin" to="Popup" method="_on_PixelMargin_value_changed"]
 [connection signal="pressed" from="Popup/PopupFront/VBoxContainer/HBoxContainer/CancelButton" to="Popup" method="_on_CancelButton_pressed"]
 [connection signal="pressed" from="Popup/PopupFront/VBoxContainer/HBoxContainer/ExportButton" to="Popup" method="_on_ExportButton_pressed"]
+[connection signal="pressed" from="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2/HBoxContainer/CloseButton" to="ImportExportPopup" method="_on_CloseButton_pressed"]
+[connection signal="pressed" from="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2/CopyToClipboard" to="ImportExportPopup" method="_on_CopyToClipboard_pressed"]
+[connection signal="pressed" from="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2/PasteFromClipboard" to="ImportExportPopup" method="_on_PasteFromClipboard_pressed"]
+[connection signal="pressed" from="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2/ApplyColors" to="ImportExportPopup" method="_on_ApplyColors_pressed"]
 [connection signal="cancel_gif" from="GifPopup" to="." method="_on_GifPopup_cancel_gif"]
 [connection signal="value_changed" from="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/GifFrameCount" to="GifPopup" method="_on_GifFrameCount_value_changed"]
 [connection signal="value_changed" from="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/GifTime" to="GifPopup" method="_on_GifTime_value_changed"]

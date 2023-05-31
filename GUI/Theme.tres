@@ -6,6 +6,10 @@
 [ext_resource path="res://GUI/uncheck.png" type="Texture" id=4]
 [ext_resource path="res://GUI/check.png" type="Texture" id=5]
 
+[sub_resource type="DynamicFont" id=14]
+extra_spacing_bottom = -1
+font_data = ExtResource( 1 )
+
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 
@@ -52,10 +56,6 @@ bg_color = Color( 0.811765, 0.811765, 0.811765, 1 )
 [sub_resource type="StyleBoxFlat" id=13]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=14]
-extra_spacing_bottom = -1
-font_data = ExtResource( 1 )
-
 [resource]
 default_font = SubResource( 14 )
 Button/colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
@@ -63,7 +63,7 @@ Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
 Button/colors/font_color_hover = Color( 0, 0, 0, 1 )
 Button/colors/font_color_pressed = Color( 0.811765, 0.811765, 0.811765, 1 )
 Button/constants/hseparation = 2
-Button/fonts/font = null
+Button/fonts/font = SubResource( 14 )
 Button/styles/disabled = null
 Button/styles/focus = null
 Button/styles/hover = SubResource( 1 )
@@ -104,7 +104,7 @@ OptionButton/colors/font_color_hover = Color( 0, 0, 0, 1 )
 OptionButton/colors/font_color_pressed = Color( 0.811765, 0.811765, 0.811765, 1 )
 OptionButton/constants/arrow_margin = 2
 OptionButton/constants/hseparation = 2
-OptionButton/fonts/font = null
+OptionButton/fonts/font = SubResource( 14 )
 OptionButton/icons/arrow = null
 OptionButton/styles/disabled = null
 OptionButton/styles/focus = null
@@ -117,7 +117,7 @@ PopupMenu/colors/font_color_disabled = Color( 0.4, 0.4, 0.4, 0.8 )
 PopupMenu/colors/font_color_hover = Color( 0, 0, 0, 1 )
 PopupMenu/constants/hseparation = 4
 PopupMenu/constants/vseparation = 4
-PopupMenu/fonts/font = null
+PopupMenu/fonts/font = SubResource( 14 )
 PopupMenu/icons/checked = ExtResource( 5 )
 PopupMenu/icons/radio_checked = ExtResource( 5 )
 PopupMenu/icons/radio_unchecked = ExtResource( 4 )

@@ -40,6 +40,7 @@ func _ready():
 	for k in planets.keys():
 		optionbutton.add_item(k)
 	layeroptions.get_popup().connect("id_pressed", self, "_on_layer_selected")
+	$ImportExportPopup.connect("set_colors", self, "_on_import_colors_set")
 
 	_seed_random()
 	_create_new_planet(planets["Terran Wet"])
@@ -225,7 +226,6 @@ func _on_RandomizeColors_pressed():
 	for i in colorholder.get_child_count():
 		colorholder.get_child(i).set_color(colors[i])
 
-
 func _on_ResetColors_pressed():
 	viewport_planet.get_child(0).set_colors(viewport_planet.get_child(0).original_colors)
 	colors = viewport_planet.get_child(0).get_colors()
@@ -239,7 +239,6 @@ func _on_ShouldDither_pressed():
 	else:
 		dither_button.text = "Off"
 	viewport_planet.get_child(0).set_dither(should_dither)
-
 
 func _on_ExportGIF_pressed():
 	$GifPopup.visible = true
@@ -313,3 +312,13 @@ func _on_InputPixels_text_changed(text):
 
 	yield(get_tree(), "idle_frame")
 	viewport.size = Vector2(pixels, pixels) * p.relative_scale
+
+func _on_ImportExportColors_pressed():
+	colors = viewport_planet.get_child(0).get_colors()
+	$ImportExportPopup.set_current_colors(colors)
+	$ImportExportPopup.show()
+	
+func _on_import_colors_set(colors):
+	viewport_planet.get_child(0).set_colors(colors)
+	for i in colorholder.get_child_count():
+		colorholder.get_child(i).set_color(colors[i])
