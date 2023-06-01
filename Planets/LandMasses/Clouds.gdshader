@@ -11,10 +11,10 @@ uniform float cloud_curve : hint_range(1.0, 2.0) = 1.3;
 uniform float light_border_1 : hint_range(0.0, 1.0) = 0.52;
 uniform float light_border_2 : hint_range(0.0, 1.0) = 0.62;
 
-uniform vec4 base_color : hint_color;
-uniform vec4 outline_color : hint_color;
-uniform vec4 shadow_base_color : hint_color;
-uniform vec4 shadow_outline_color : hint_color;
+uniform vec4 base_color : source_color;
+uniform vec4 outline_color : source_color;
+uniform vec4 shadow_base_color : source_color;
+uniform vec4 shadow_outline_color : source_color;
 
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);

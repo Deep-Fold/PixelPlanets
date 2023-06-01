@@ -1,12 +1,12 @@
 extends ColorRect
 
-onready var w_frames = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/WidthFrames
-onready var h_frames = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/HeightFrames
-onready var export_button = $PopupFront/VBoxContainer/HBoxContainer/ExportButton
-onready var r_info = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2/ResolutionInfo
-onready var f_info = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2/FrameInfo
-onready var warning = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2/WarningResolution
-onready var progressbar = $PopupFront/VBoxContainer/TextureProgress
+@onready var w_frames = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/WidthFrames
+@onready var h_frames = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer/HeightFrames
+@onready var export_button = $PopupFront/VBoxContainer/HBoxContainer/ExportButton
+@onready var r_info = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2/ResolutionInfo
+@onready var f_info = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2/FrameInfo
+@onready var warning = $PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2/WarningResolution
+@onready var progressbar = $PopupFront/VBoxContainer/TextureProgress
 var pixels = 100
 var sheet_size = Vector2(50,1)
 var pixel_margin = 0.0

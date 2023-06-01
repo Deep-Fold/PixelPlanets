@@ -2,26 +2,22 @@ shader_type canvas_item;
 render_mode blend_mix;
 
 uniform float pixels : hint_range(10,100);
-uniform float rotation : hint_range(0.0, 6.28) = 0.0;
+uniform float rotation : hint_range(0.0, 6.28);
 uniform vec2 light_origin = vec2(0.39, 0.39);
 uniform float time_speed : hint_range(0.0, 1.0) = 0.2;
 uniform float dither_size : hint_range(0.0, 10.0) = 2.0;
-uniform bool should_dither = true;
 uniform float light_border_1 : hint_range(0.0, 1.0) = 0.4;
 uniform float light_border_2 : hint_range(0.0, 1.0) = 0.5;
-uniform float river_cutoff : hint_range(0.0, 1.0);
+uniform float land_cutoff : hint_range(0.0, 1.0);
 
-uniform vec4 col1 : hint_color;
-uniform vec4 col2 : hint_color;
-uniform vec4 col3 : hint_color;
-uniform vec4 col4 : hint_color;
-uniform vec4 river_col : hint_color;
-uniform vec4 river_col_dark : hint_color;
+uniform vec4 col1 : source_color;
+uniform vec4 col2 : source_color;
+uniform vec4 col3 : source_color;
+uniform vec4 col4 : source_color;
 
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
 uniform float seed: hint_range(1, 10);
-
 uniform float time = 0.0;
 
 
@@ -33,6 +29,7 @@ float rand(vec2 coord) {
 	coord = mod(coord, vec2(2.0,1.0)*round(size));
 	return fract(sin(dot(coord.xy ,vec2(12.9898,78.233))) * 15.5453 * seed);
 }
+
 
 float noise(vec2 coord){
 	vec2 i = floor(coord);
@@ -61,11 +58,9 @@ float fbm(vec2 coord){
 }
 
 vec2 spherify(vec2 uv) {
-	vec2 centered = uv *2.0-1.0;
+	vec2 centered= uv *2.0-1.0;
 	float z = sqrt(1.0 - dot(centered.xy, centered.xy));
-//	float z = pow(1.0 - dot(centered.xy, centered.xy), 0.5);
 	vec2 sphere = centered/(z + 1.0);
-	
 	return sphere * 0.5+0.5;
 }
 
@@ -75,24 +70,21 @@ vec2 rotate(vec2 coord, float angle){
 	return coord + 0.5;
 }
 
-bool dither(vec2 uv1, vec2 uv2) {
-	return mod(uv1.x+uv2.y,2.0/pixels) <= 1.0 / pixels;
-}
-
 void fragment() {
 	// pixelize uv
 	vec2 uv = floor(UV*pixels)/pixels;
 	
-	bool dith = dither(uv, UV);
-	// stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
-	float a = step(length(uv-vec2(0.5)), 0.49999);
-	
-	// map to sphere
-	uv = spherify(uv);
 	float d_light = distance(uv , light_origin);
+	// cut out a circle
+	float d_circle = distance(uv, vec2(0.5));
+	// stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
+	float a = step(d_circle, 0.49999);
 	
 	// give planet a tilt
 	uv = rotate(uv, rotation);
+	
+	// map to sphere
+	uv = spherify(uv);
 	
 	// some scrolling noise for landmasses
 	vec2 base_fbm_uv = (uv)*size+vec2(time*time_speed,0.0);
@@ -103,11 +95,6 @@ void fragment() {
 	float fbm3 = fbm(base_fbm_uv - light_origin*1.5*fbm1);
 	float fbm4 = fbm(base_fbm_uv - light_origin*2.0*fbm1);
 	
-	float river_fbm = fbm(base_fbm_uv+fbm1*6.0);
-	river_fbm = step(river_cutoff, river_fbm);
-	
-	// size of edge in which colors should be dithered
-	float dither_border = (1.0/pixels)*dither_size;
 	// lots of magic numbers here
 	// you can mess with them, it changes the color distribution
 	if (d_light < light_border_1) {
@@ -122,33 +109,22 @@ void fragment() {
 		fbm2 *= 1.3;
 		fbm3 *= 1.4;
 		fbm4 *= 1.8;
-		
-		if (d_light < light_border_2 + dither_border) {
-			if (dith || !should_dither) {
-				fbm4 *= 0.5;
-			}
-		}
-		
 	} 
 	
 	// increase contrast on d_light
-	d_light = pow(d_light, 2.0)*0.4;
+	d_light = pow(d_light, 2.0)*0.1;
 	vec4 col = col4;
-	if (fbm4 + d_light < fbm1*1.5) {
+	// assign colors based on if there is noise to the top-left of noise
+	// and also based on how far noise is from light
+	if (fbm4 + d_light < fbm1) {
 		col = col3;
 	}
-	if (fbm3 + d_light < fbm1*1.0) {
+	if (fbm3 + d_light < fbm1) {
 		col = col2;
 	}
 	if (fbm2 + d_light < fbm1) {
 		col = col1;
 	}
-	if (river_fbm < fbm1*0.5) {
-		col = river_col_dark;
-		if (fbm4 + d_light < fbm1*1.5) {
-			col = river_col;
-		}
-	}
-
-	COLOR = vec4(col.rgb, a * col.a);
+	
+	COLOR = vec4(col.rgb, step(land_cutoff, fbm1) * a * col.a);
 }

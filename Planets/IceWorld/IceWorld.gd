@@ -1,45 +1,45 @@
 extends "res://Planets/Planet.gd"
 
 func set_pixels(amount):
-	$Land.material.set_shader_param("pixels", amount)
-	$Lakes.material.set_shader_param("pixels", amount)
-	$Clouds.material.set_shader_param("pixels", amount)
+	$Land.material.set_shader_parameter("pixels", amount)
+	$Lakes.material.set_shader_parameter("pixels", amount)
+	$Clouds.material.set_shader_parameter("pixels", amount)
 	
-	$Land.rect_size = Vector2(amount, amount)
-	$Lakes.rect_size = Vector2(amount, amount)
-	$Clouds.rect_size = Vector2(amount, amount)
+	$Land.size = Vector2(amount, amount)
+	$Lakes.size = Vector2(amount, amount)
+	$Clouds.size = Vector2(amount, amount)
 
 func set_light(pos):
-	$Land.material.set_shader_param("light_origin", pos)
-	$Lakes.material.set_shader_param("light_origin", pos)
-	$Clouds.material.set_shader_param("light_origin", pos)
+	$Land.material.set_shader_parameter("light_origin", pos)
+	$Lakes.material.set_shader_parameter("light_origin", pos)
+	$Clouds.material.set_shader_parameter("light_origin", pos)
 
 func set_seed(sd):
 	var converted_seed = sd%1000/100.0
-	$Land.material.set_shader_param("seed", converted_seed)
-	$Lakes.material.set_shader_param("seed", converted_seed)
-	$Clouds.material.set_shader_param("seed", converted_seed)
+	$Land.material.set_shader_parameter("seed", converted_seed)
+	$Lakes.material.set_shader_parameter("seed", converted_seed)
+	$Clouds.material.set_shader_parameter("seed", converted_seed)
 
 func set_rotate(r):
-	$Land.material.set_shader_param("rotation", r)
-	$Lakes.material.set_shader_param("rotation", r)
-	$Clouds.material.set_shader_param("rotation", r)
+	$Land.material.set_shader_parameter("rotation", r)
+	$Lakes.material.set_shader_parameter("rotation", r)
+	$Clouds.material.set_shader_parameter("rotation", r)
 
 func update_time(t):
-	$Land.material.set_shader_param("time", t * get_multiplier($Land.material) * 0.02)
-	$Lakes.material.set_shader_param("time", t * get_multiplier($Lakes.material) * 0.02)
-	$Clouds.material.set_shader_param("time", t * get_multiplier($Clouds.material) * 0.01)
+	$Land.material.set_shader_parameter("time", t * get_multiplier($Land.material) * 0.02)
+	$Lakes.material.set_shader_parameter("time", t * get_multiplier($Lakes.material) * 0.02)
+	$Clouds.material.set_shader_parameter("time", t * get_multiplier($Clouds.material) * 0.01)
 
 func set_custom_time(t):
-	$Land.material.set_shader_param("time", t * get_multiplier($Land.material))
-	$Lakes.material.set_shader_param("time", t * get_multiplier($Lakes.material))
-	$Clouds.material.set_shader_param("time", t * get_multiplier($Clouds.material))
+	$Land.material.set_shader_parameter("time", t * get_multiplier($Land.material))
+	$Lakes.material.set_shader_parameter("time", t * get_multiplier($Lakes.material))
+	$Clouds.material.set_shader_parameter("time", t * get_multiplier($Clouds.material))
 
 func set_dither(d):
-	$Land.material.set_shader_param("should_dither", d)
+	$Land.material.set_shader_parameter("should_dither", d)
 
 func get_dither():
-	return $Land.material.get_shader_param("should_dither")
+	return $Land.material.get_shader_parameter("should_dither")
 
 var color_vars1 = ["color1","color2","color3"]
 var color_vars2 = ["color1","color2","color3"]
@@ -52,12 +52,12 @@ func get_colors():
 	)
 
 func set_colors(colors):
-	_set_colors_from_vars($Land.material, color_vars1, colors.slice(0, 2, 1))
-	_set_colors_from_vars($Lakes.material, color_vars2, colors.slice(3, 5, 1))
-	_set_colors_from_vars($Clouds.material, color_vars3, colors.slice(6, 9, 1))
+	_set_colors_from_vars($Land.material, color_vars1, colors.slice(0, 3, 1))
+	_set_colors_from_vars($Lakes.material, color_vars2, colors.slice(3, 6, 1))
+	_set_colors_from_vars($Clouds.material, color_vars3, colors.slice(6, 10, 1))
 
 func randomize_colors():
-	var seed_colors = _generate_new_colorscheme(randi()%2+3, rand_range(0.7, 1.0), rand_range(0.45, 0.55))
+	var seed_colors = _generate_new_colorscheme(randi()%2+3, randf_range(0.7, 1.0), randf_range(0.45, 0.55))
 	var land_colors = []
 	var lake_colors = []
 	var cloud_colors = []

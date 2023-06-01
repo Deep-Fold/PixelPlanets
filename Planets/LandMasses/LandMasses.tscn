@@ -1,99 +1,84 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://bosbccdprvw0b"]
 
-[ext_resource path="res://Planets/LandMasses/PlanetUnder.shader" type="Shader" id=1]
-[ext_resource path="res://Planets/LandMasses/Clouds.shader" type="Shader" id=2]
-[ext_resource path="res://Planets/LandMasses/PlanetLandmass.shader" type="Shader" id=3]
-[ext_resource path="res://Planets/LandMasses/LandMasses.gd" type="Script" id=4]
+[ext_resource type="Shader" path="res://Planets/LandMasses/PlanetUnder.gdshader" id="1"]
+[ext_resource type="Shader" path="res://Planets/LandMasses/Clouds.gdshader" id="2"]
+[ext_resource type="Shader" path="res://Planets/LandMasses/PlanetLandmass.gdshader" id="3"]
+[ext_resource type="Script" path="res://Planets/LandMasses/LandMasses.gd" id="4"]
 
-[sub_resource type="ShaderMaterial" id=1]
-shader = ExtResource( 1 )
-shader_param/pixels = 100.0
-shader_param/rotation = 0.0
-shader_param/light_origin = Vector2( 0.39, 0.39 )
-shader_param/time_speed = 0.1
-shader_param/dither_size = 2.0
-shader_param/light_border_1 = 0.4
-shader_param/light_border_2 = 0.6
-shader_param/color1 = Color( 0.572549, 0.909804, 0.752941, 1 )
-shader_param/color2 = Color( 0.309804, 0.643137, 0.721569, 1 )
-shader_param/color3 = Color( 0.172549, 0.207843, 0.301961, 1 )
-shader_param/size = 5.228
-shader_param/OCTAVES = 3
-shader_param/seed = 10.0
-shader_param/time = 0.0
-shader_param/should_dither = true
+[sub_resource type="ShaderMaterial" id="1"]
+shader = ExtResource("1")
+shader_parameter/pixels = 100.0
+shader_parameter/rotation = 0.0
+shader_parameter/light_origin = Vector2(0.39, 0.39)
+shader_parameter/time_speed = 0.1
+shader_parameter/dither_size = 2.0
+shader_parameter/light_border_1 = 0.4
+shader_parameter/light_border_2 = 0.6
+shader_parameter/color1 = Color(0.572549, 0.909804, 0.752941, 1)
+shader_parameter/color2 = Color(0.309804, 0.643137, 0.721569, 1)
+shader_parameter/color3 = Color(0.172549, 0.207843, 0.301961, 1)
+shader_parameter/size = 5.228
+shader_parameter/OCTAVES = 3
+shader_parameter/seed = 10.0
+shader_parameter/time = 0.0
+shader_parameter/should_dither = true
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = ExtResource( 3 )
-shader_param/pixels = 100.0
-shader_param/rotation = 0.2
-shader_param/light_origin = Vector2( 0.39, 0.39 )
-shader_param/time_speed = 0.2
-shader_param/dither_size = 2.0
-shader_param/light_border_1 = 0.32
-shader_param/light_border_2 = 0.534
-shader_param/land_cutoff = 0.633
-shader_param/col1 = Color( 0.784314, 0.831373, 0.364706, 1 )
-shader_param/col2 = Color( 0.388235, 0.670588, 0.247059, 1 )
-shader_param/col3 = Color( 0.184314, 0.341176, 0.32549, 1 )
-shader_param/col4 = Color( 0.156863, 0.207843, 0.25098, 1 )
-shader_param/size = 4.292
-shader_param/OCTAVES = 6
-shader_param/seed = 7.947
-shader_param/time = 0.0
+[sub_resource type="ShaderMaterial" id="2"]
+shader = ExtResource("3")
+shader_parameter/pixels = 100.0
+shader_parameter/rotation = 0.2
+shader_parameter/light_origin = Vector2(0.39, 0.39)
+shader_parameter/time_speed = 0.2
+shader_parameter/dither_size = 2.0
+shader_parameter/light_border_1 = 0.32
+shader_parameter/light_border_2 = 0.534
+shader_parameter/land_cutoff = 0.633
+shader_parameter/col1 = Color(0.784314, 0.831373, 0.364706, 1)
+shader_parameter/col2 = Color(0.388235, 0.670588, 0.247059, 1)
+shader_parameter/col3 = Color(0.184314, 0.341176, 0.32549, 1)
+shader_parameter/col4 = Color(0.156863, 0.207843, 0.25098, 1)
+shader_parameter/size = 4.292
+shader_parameter/OCTAVES = 6
+shader_parameter/seed = 7.947
+shader_parameter/time = 0.0
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = ExtResource( 2 )
-shader_param/pixels = 100.0
-shader_param/rotation = 0.0
-shader_param/cloud_cover = 0.415
-shader_param/light_origin = Vector2( 0.39, 0.39 )
-shader_param/time_speed = 0.47
-shader_param/stretch = 2.0
-shader_param/cloud_curve = 1.3
-shader_param/light_border_1 = 0.52
-shader_param/light_border_2 = 0.62
-shader_param/base_color = Color( 0.87451, 0.878431, 0.909804, 1 )
-shader_param/outline_color = Color( 0.639216, 0.654902, 0.760784, 1 )
-shader_param/shadow_base_color = Color( 0.407843, 0.435294, 0.6, 1 )
-shader_param/shadow_outline_color = Color( 0.25098, 0.286275, 0.45098, 1 )
-shader_param/size = 7.745
-shader_param/OCTAVES = 2
-shader_param/seed = 5.939
-shader_param/time = 0.0
+[sub_resource type="ShaderMaterial" id="3"]
+shader = ExtResource("2")
+shader_parameter/pixels = 100.0
+shader_parameter/rotation = 0.0
+shader_parameter/cloud_cover = 0.415
+shader_parameter/light_origin = Vector2(0.39, 0.39)
+shader_parameter/time_speed = 0.47
+shader_parameter/stretch = 2.0
+shader_parameter/cloud_curve = 1.3
+shader_parameter/light_border_1 = 0.52
+shader_parameter/light_border_2 = 0.62
+shader_parameter/base_color = Color(0.87451, 0.878431, 0.909804, 1)
+shader_parameter/outline_color = Color(0.639216, 0.654902, 0.760784, 1)
+shader_parameter/shadow_base_color = Color(0.407843, 0.435294, 0.6, 1)
+shader_parameter/shadow_outline_color = Color(0.25098, 0.286275, 0.45098, 1)
+shader_parameter/size = 7.745
+shader_parameter/OCTAVES = 2
+shader_parameter/seed = 5.939
+shader_parameter/time = 0.0
 
 [node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -412.0
-margin_bottom = -200.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-script = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("4")
 
 [node name="Water" type="ColorRect" parent="."]
-material = SubResource( 1 )
-margin_right = 100.0
-margin_bottom = 100.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+material = SubResource("1")
+layout_mode = 0
 
 [node name="Land" type="ColorRect" parent="."]
-material = SubResource( 2 )
-margin_right = 100.0
-margin_bottom = 100.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+material = SubResource("2")
+layout_mode = 0
 
 [node name="Cloud" type="ColorRect" parent="."]
-material = SubResource( 3 )
-margin_right = 100.0
-margin_bottom = 100.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+material = SubResource("3")
+layout_mode = 0

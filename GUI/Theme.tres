@@ -1,131 +1,156 @@
-[gd_resource type="Theme" load_steps=20 format=2]
+[gd_resource type="Theme" load_steps=20 format=3 uid="uid://bs3li7lo5h4lm"]
 
-[ext_resource path="res://slkscre.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://GUI/grabber-highlight.png" type="Texture" id=2]
-[ext_resource path="res://GUI/grabber.png" type="Texture" id=3]
-[ext_resource path="res://GUI/uncheck.png" type="Texture" id=4]
-[ext_resource path="res://GUI/check.png" type="Texture" id=5]
+[ext_resource type="FontFile" uid="uid://cni6cje48coyy" path="res://slkscre.ttf" id="1"]
+[ext_resource type="Texture2D" uid="uid://b0wvwkh3rhbi8" path="res://GUI/grabber-highlight.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dr5u7u2ilxn68" path="res://GUI/grabber.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bvnglqks554e6" path="res://GUI/uncheck.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://b2ysaoyrxwm64" path="res://GUI/check.png" id="5"]
 
-[sub_resource type="DynamicFont" id=14]
-extra_spacing_bottom = -1
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="14"]
+fallbacks = Array[Font]([ExtResource("1")])
+face_index = null
+embolden = null
+transform = null
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+[sub_resource type="StyleBoxFlat" id="1"]
+bg_color = Color(0.811765, 0.811765, 0.811765, 1)
 
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0, 0, 0, 1 )
+[sub_resource type="StyleBoxFlat" id="2"]
+bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0, 0, 0, 1 )
+[sub_resource type="StyleBoxFlat" id="3"]
+bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+[sub_resource type="StyleBoxFlat" id="4"]
+bg_color = Color(0.811765, 0.811765, 0.811765, 1)
 border_width_top = 16
-border_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+border_color = Color(0.811765, 0.811765, 0.811765, 1)
 
-[sub_resource type="StyleBoxFlat" id=5]
-bg_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+[sub_resource type="StyleBoxFlat" id="5"]
+bg_color = Color(0.811765, 0.811765, 0.811765, 1)
 border_width_top = 16
-border_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+border_color = Color(0.811765, 0.811765, 0.811765, 1)
 
-[sub_resource type="StyleBoxFlat" id=6]
-bg_color = Color( 0.596078, 0.596078, 0.596078, 1 )
+[sub_resource type="StyleBoxFlat" id="6"]
+bg_color = Color(0.596078, 0.596078, 0.596078, 1)
 border_width_bottom = 14
-border_color = Color( 0, 0, 0, 1 )
+border_color = Color(0, 0, 0, 1)
 
-[sub_resource type="DynamicFont" id=7]
-extra_spacing_bottom = -1
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="7"]
+fallbacks = Array[Font]([ExtResource("1")])
+face_index = null
+embolden = null
+transform = null
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
-[sub_resource type="StyleBoxFlat" id=8]
-bg_color = Color( 0, 0, 0, 1 )
+[sub_resource type="StyleBoxFlat" id="8"]
+bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="DynamicFont" id=9]
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="9"]
+fallbacks = Array[Font]([ExtResource("1")])
+face_index = null
+embolden = null
+transform = null
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
-[sub_resource type="StyleBoxFlat" id=10]
-bg_color = Color( 0, 0, 0, 1 )
+[sub_resource type="StyleBoxFlat" id="10"]
+bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id=11]
-bg_color = Color( 0, 0, 0, 1 )
+[sub_resource type="StyleBoxFlat" id="11"]
+bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id=12]
-bg_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+[sub_resource type="StyleBoxFlat" id="12"]
+bg_color = Color(0.811765, 0.811765, 0.811765, 1)
 
-[sub_resource type="StyleBoxFlat" id=13]
-bg_color = Color( 0, 0, 0, 1 )
+[sub_resource type="StyleBoxFlat" id="13"]
+bg_color = Color(0, 0, 0, 1)
 
 [resource]
-default_font = SubResource( 14 )
-Button/colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
-Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
-Button/colors/font_color_hover = Color( 0, 0, 0, 1 )
-Button/colors/font_color_pressed = Color( 0.811765, 0.811765, 0.811765, 1 )
+default_font = SubResource("14")
+Button/colors/font_color = Color(0.811765, 0.811765, 0.811765, 1)
+Button/colors/font_color_disabled = Color(0.9, 0.9, 0.9, 0.2)
+Button/colors/font_color_hover = Color(0, 0, 0, 1)
+Button/colors/font_color_pressed = Color(0.811765, 0.811765, 0.811765, 1)
 Button/constants/hseparation = 2
-Button/fonts/font = SubResource( 14 )
+Button/fonts/font = SubResource("14")
 Button/styles/disabled = null
 Button/styles/focus = null
-Button/styles/hover = SubResource( 1 )
-Button/styles/normal = SubResource( 2 )
-Button/styles/pressed = SubResource( 3 )
-HSlider/icons/grabber = ExtResource( 3 )
+Button/styles/hover = SubResource("1")
+Button/styles/normal = SubResource("2")
+Button/styles/pressed = SubResource("3")
+HSlider/icons/grabber = ExtResource("3")
 HSlider/icons/grabber_disabled = null
-HSlider/icons/grabber_highlight = ExtResource( 2 )
+HSlider/icons/grabber_highlight = ExtResource("2")
 HSlider/icons/tick = null
-HSlider/styles/grabber_area = SubResource( 4 )
-HSlider/styles/grabber_area_highlight = SubResource( 5 )
-HSlider/styles/slider = SubResource( 6 )
-Label/colors/font_color = Color( 1, 1, 1, 1 )
-Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
-Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+HSlider/styles/grabber_area = SubResource("4")
+HSlider/styles/grabber_area_highlight = SubResource("5")
+HSlider/styles/slider = SubResource("6")
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/colors/font_color_shadow = Color(0, 0, 0, 0)
+Label/colors/font_outline_modulate = Color(1, 1, 1, 1)
 Label/constants/line_spacing = 3
 Label/constants/shadow_as_outline = 0
 Label/constants/shadow_offset_x = 1
 Label/constants/shadow_offset_y = 1
-Label/fonts/font = SubResource( 7 )
-Label/styles/normal = SubResource( 8 )
-LineEdit/colors/clear_button_color = Color( 0.88, 0.88, 0.88, 1 )
-LineEdit/colors/clear_button_color_pressed = Color( 1, 1, 1, 1 )
-LineEdit/colors/cursor_color = Color( 0.94, 0.94, 0.94, 1 )
-LineEdit/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
-LineEdit/colors/font_color_selected = Color( 0, 0, 0, 1 )
-LineEdit/colors/font_color_uneditable = Color( 0.88, 0.88, 0.88, 0.5 )
-LineEdit/colors/selection_color = Color( 0.49, 0.49, 0.49, 1 )
+Label/fonts/font = SubResource("7")
+Label/styles/normal = SubResource("8")
+LineEdit/colors/clear_button_color = Color(0.88, 0.88, 0.88, 1)
+LineEdit/colors/clear_button_color_pressed = Color(1, 1, 1, 1)
+LineEdit/colors/cursor_color = Color(0.94, 0.94, 0.94, 1)
+LineEdit/colors/font_color = Color(0.88, 0.88, 0.88, 1)
+LineEdit/colors/font_color_selected = Color(0, 0, 0, 1)
+LineEdit/colors/font_color_uneditable = Color(0.88, 0.88, 0.88, 0.5)
+LineEdit/colors/selection_color = Color(0.49, 0.49, 0.49, 1)
 LineEdit/constants/minimum_spaces = 12
-LineEdit/fonts/font = SubResource( 9 )
+LineEdit/fonts/font = SubResource("9")
 LineEdit/icons/clear = null
-LineEdit/styles/focus = SubResource( 10 )
-LineEdit/styles/normal = SubResource( 11 )
+LineEdit/styles/focus = SubResource("10")
+LineEdit/styles/normal = SubResource("11")
 LineEdit/styles/read_only = null
-OptionButton/colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
-OptionButton/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
-OptionButton/colors/font_color_hover = Color( 0, 0, 0, 1 )
-OptionButton/colors/font_color_pressed = Color( 0.811765, 0.811765, 0.811765, 1 )
+OptionButton/colors/font_color = Color(0.811765, 0.811765, 0.811765, 1)
+OptionButton/colors/font_color_disabled = Color(0.9, 0.9, 0.9, 0.2)
+OptionButton/colors/font_color_hover = Color(0, 0, 0, 1)
+OptionButton/colors/font_color_pressed = Color(0.811765, 0.811765, 0.811765, 1)
 OptionButton/constants/arrow_margin = 2
 OptionButton/constants/hseparation = 2
-OptionButton/fonts/font = SubResource( 14 )
+OptionButton/fonts/font = SubResource("14")
 OptionButton/icons/arrow = null
 OptionButton/styles/disabled = null
 OptionButton/styles/focus = null
 OptionButton/styles/hover = null
 OptionButton/styles/normal = null
 OptionButton/styles/pressed = null
-PopupMenu/colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
-PopupMenu/colors/font_color_accel = Color( 0.7, 0.7, 0.7, 0.8 )
-PopupMenu/colors/font_color_disabled = Color( 0.4, 0.4, 0.4, 0.8 )
-PopupMenu/colors/font_color_hover = Color( 0, 0, 0, 1 )
+PopupMenu/colors/font_color = Color(0.811765, 0.811765, 0.811765, 1)
+PopupMenu/colors/font_color_accel = Color(0.7, 0.7, 0.7, 0.8)
+PopupMenu/colors/font_color_disabled = Color(0.4, 0.4, 0.4, 0.8)
+PopupMenu/colors/font_color_hover = Color(0, 0, 0, 1)
 PopupMenu/constants/hseparation = 4
 PopupMenu/constants/vseparation = 4
-PopupMenu/fonts/font = SubResource( 14 )
-PopupMenu/icons/checked = ExtResource( 5 )
-PopupMenu/icons/radio_checked = ExtResource( 5 )
-PopupMenu/icons/radio_unchecked = ExtResource( 4 )
+PopupMenu/fonts/font = SubResource("14")
+PopupMenu/icons/checked = ExtResource("5")
+PopupMenu/icons/radio_checked = ExtResource("5")
+PopupMenu/icons/radio_unchecked = ExtResource("4")
 PopupMenu/icons/submenu = null
-PopupMenu/icons/unchecked = ExtResource( 4 )
-PopupMenu/styles/hover = SubResource( 12 )
+PopupMenu/icons/unchecked = ExtResource("4")
+PopupMenu/styles/hover = SubResource("12")
 PopupMenu/styles/labeled_separator_left = null
 PopupMenu/styles/labeled_separator_right = null
-PopupMenu/styles/panel = SubResource( 13 )
+PopupMenu/styles/panel = SubResource("13")
 PopupMenu/styles/panel_disabled = null
 PopupMenu/styles/separator = null

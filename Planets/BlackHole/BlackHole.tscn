@@ -1,68 +1,59 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=11 format=3 uid="uid://do8ntn76qfhrc"]
 
-[ext_resource path="res://Planets/Planet.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Planets/BlackHole/BlackHole.gd" type="Script" id=2]
-[ext_resource path="res://Planets/BlackHole/BlackHoleRing.shader" type="Shader" id=3]
-[ext_resource path="res://Planets/BlackHole/BlackHole.shader" type="Shader" id=4]
+[ext_resource type="PackedScene" path="res://Planets/Planet.tscn" id="1"]
+[ext_resource type="Script" path="res://Planets/BlackHole/BlackHole.gd" id="2"]
+[ext_resource type="Shader" path="res://Planets/BlackHole/BlackHoleRing.gdshader" id="3"]
+[ext_resource type="Shader" path="res://Planets/BlackHole/BlackHole.gdshader" id="4"]
 
-[sub_resource type="Gradient" id=1]
-colors = PoolColorArray( 1, 1, 0.921569, 1, 0.929412, 0.482353, 0.223529, 1 )
+[sub_resource type="Gradient" id="1"]
+colors = PackedColorArray(1, 1, 0.921569, 1, 0.929412, 0.482353, 0.223529, 1)
 
-[sub_resource type="GradientTexture" id=2]
-gradient = SubResource( 1 )
+[sub_resource type="GradientTexture1D" id="2"]
+gradient = SubResource("1")
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = ExtResource( 4 )
-shader_param/pixels = 100.0
-shader_param/black_color = Color( 0.152941, 0.152941, 0.211765, 1 )
-shader_param/radius = 0.247
-shader_param/light_width = 0.028
-shader_param/colorscheme = SubResource( 2 )
+[sub_resource type="ShaderMaterial" id="3"]
+shader = ExtResource("4")
+shader_parameter/pixels = 100.0
+shader_parameter/black_color = Color(0.152941, 0.152941, 0.211765, 1)
+shader_parameter/radius = 0.247
+shader_parameter/light_width = 0.028
+shader_parameter/colorscheme = SubResource("2")
 
-[sub_resource type="Gradient" id=4]
-offsets = PoolRealArray( 0, 0.25, 0.5, 0.75, 1 )
-colors = PoolColorArray( 1, 1, 0.921569, 1, 1, 0.960784, 0.25098, 1, 1, 0.721569, 0.290196, 1, 0.929412, 0.482353, 0.223529, 1, 0.741176, 0.25098, 0.207843, 1 )
+[sub_resource type="Gradient" id="4"]
+offsets = PackedFloat32Array(0, 0.25, 0.5, 0.75, 1)
+colors = PackedColorArray(1, 1, 0.921569, 1, 1, 0.960784, 0.25098, 1, 1, 0.721569, 0.290196, 1, 0.929412, 0.482353, 0.223529, 1, 0.741176, 0.25098, 0.207843, 1)
 
-[sub_resource type="GradientTexture" id=5]
-gradient = SubResource( 4 )
+[sub_resource type="GradientTexture1D" id="5"]
+gradient = SubResource("4")
 
-[sub_resource type="ShaderMaterial" id=6]
-shader = ExtResource( 3 )
-shader_param/pixels = 300.0
-shader_param/rotation = 0.766
-shader_param/light_origin = Vector2( 0.607, 0.444 )
-shader_param/time_speed = 0.2
-shader_param/disk_width = 0.065
-shader_param/ring_perspective = 14.0
-shader_param/should_dither = true
-shader_param/size = 6.598
-shader_param/OCTAVES = 3
-shader_param/seed = 8.175
-shader_param/time = 0.0
-shader_param/colorscheme = SubResource( 5 )
+[sub_resource type="ShaderMaterial" id="6"]
+shader = ExtResource("3")
+shader_parameter/pixels = 300.0
+shader_parameter/rotation = 0.766
+shader_parameter/light_origin = Vector2(0.607, 0.444)
+shader_parameter/time_speed = 0.2
+shader_parameter/disk_width = 0.065
+shader_parameter/ring_perspective = 14.0
+shader_parameter/should_dither = true
+shader_parameter/size = 6.598
+shader_parameter/OCTAVES = 3
+shader_parameter/seed = 8.175
+shader_parameter/time = 0.0
+shader_parameter/colorscheme = SubResource("5")
 
-[node name="Planet" instance=ExtResource( 1 )]
-margin_right = -412.0
-margin_bottom = -200.0
-rect_min_size = Vector2( 0, 0 )
-script = ExtResource( 2 )
+[node name="Planet" instance=ExtResource("1")]
+layout_mode = 3
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2")
 relative_scale = 2.0
 gui_zoom = 2.0
 
 [node name="BlackHole" type="ColorRect" parent="." index="0"]
-material = SubResource( 3 )
-margin_right = 100.0
-margin_bottom = 100.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+material = SubResource("3")
+layout_mode = 0
 
 [node name="Disk" type="ColorRect" parent="." index="1"]
-material = SubResource( 6 )
-margin_left = -100.0
-margin_top = -100.0
-margin_right = 200.0
-margin_bottom = 200.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+material = SubResource("6")
+layout_mode = 0

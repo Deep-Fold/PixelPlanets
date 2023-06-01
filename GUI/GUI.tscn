@@ -1,18 +1,18 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=18 format=3 uid="uid://xtqbie28512d"]
 
-[ext_resource path="res://GUI/GUI.gd" type="Script" id=1]
-[ext_resource path="res://GUI/Theme.tres" type="Theme" id=2]
-[ext_resource path="res://Planets/Rivers/Rivers.tscn" type="PackedScene" id=3]
-[ext_resource path="res://stars.png" type="Texture" id=4]
-[ext_resource path="res://GUI/SpritesheetPopup.gd" type="Script" id=5]
-[ext_resource path="res://GUI/progress-under.png" type="Texture" id=6]
-[ext_resource path="res://GUI/progress-over.png" type="Texture" id=7]
-[ext_resource path="res://GUI/ColorPickerButton.tscn" type="PackedScene" id=8]
-[ext_resource path="res://GUI/StarParticles.tres" type="Material" id=9]
-[ext_resource path="res://GUI/GifPopup.gd" type="Script" id=10]
-[ext_resource path="res://GUI/ImportExportPopup.gd" type="Script" id=11]
+[ext_resource type="Script" path="res://GUI/GUI.gd" id="1"]
+[ext_resource type="Theme" uid="uid://bs3li7lo5h4lm" path="res://GUI/Theme.tres" id="2"]
+[ext_resource type="PackedScene" uid="uid://b6k7tg1vynpk0" path="res://Planets/Rivers/Rivers.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://b3nvchjx6veeg" path="res://stars.png" id="4"]
+[ext_resource type="Script" path="res://GUI/SpritesheetPopup.gd" id="5"]
+[ext_resource type="Texture2D" uid="uid://nf5qxhdss4sb" path="res://GUI/progress-under.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://pj2mm533qpof" path="res://GUI/progress-over.png" id="7"]
+[ext_resource type="PackedScene" uid="uid://n2kqnn12anlo" path="res://GUI/ColorPickerButton.tscn" id="8"]
+[ext_resource type="Material" uid="uid://c4uk5xgr28thd" path="res://GUI/StarParticles.tres" id="9"]
+[ext_resource type="Script" path="res://GUI/GifPopup.gd" id="10"]
+[ext_resource type="Script" path="res://GUI/ImportExportPopup.gd" id="11"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -42,23 +42,24 @@ void fragment() {
 	COLOR = col;
 }"
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
-shader_param/offset = Vector2( 0, 0 )
+[sub_resource type="ShaderMaterial" id="2"]
+shader = SubResource("1")
+shader_parameter/offset = Vector2(0, 0)
 
-[sub_resource type="CanvasItemMaterial" id=3]
+[sub_resource type="CanvasItemMaterial" id="3"]
 particles_animation = true
 particles_anim_h_frames = 11
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
-[sub_resource type="ViewportTexture" id=7]
+[sub_resource type="ViewportTexture" id="7"]
 viewport_path = NodePath("PlanetViewport")
 
-[sub_resource type="Shader" id=5]
+[sub_resource type="Shader" id="5"]
 code = "shader_type canvas_item;
 render_mode unshaded;
 
+uniform sampler2D SCREEN_TEXTURE: hint_screen_texture, filter_linear_mipmap;
 uniform float abberation: hint_range(-0.1, 0.1);
 
 
@@ -74,850 +75,585 @@ void fragment () {
 	COLOR = color;
 }"
 
-[sub_resource type="ShaderMaterial" id=6]
-shader = SubResource( 5 )
-shader_param/abberation = 0.001
+[sub_resource type="ShaderMaterial" id="6"]
+shader = SubResource("5")
+shader_parameter/abberation = 0.001
 
 [node name="GUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
 
 [node name="Light" type="ColorRect" parent="."]
-material = SubResource( 2 )
+material = SubResource("2")
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Dark" type="ColorRect" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.831373 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+color = Color(0, 0, 0, 0.831373)
 
-[node name="Particles2D" type="Particles2D" parent="."]
-modulate = Color( 1, 1, 1, 0.513726 )
-material = SubResource( 3 )
-position = Vector2( 256, 150 )
+[node name="Particles2D" type="GPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0.513726)
+material = SubResource("3")
+position = Vector2(256, 150)
 amount = 50
+process_material = ExtResource("9")
+texture = ExtResource("4")
 lifetime = 50.0
 preprocess = 50.0
-process_material = ExtResource( 9 )
-texture = ExtResource( 4 )
 
-[node name="PlanetViewport" type="Viewport" parent="."]
-size = Vector2( 200, 200 )
+[node name="PlanetViewport" type="SubViewport" parent="."]
 transparent_bg = true
-usage = 1
-render_target_v_flip = true
+size = Vector2i(200, 200)
 
 [node name="PlanetHolder" type="Control" parent="PlanetViewport"]
+layout_mode = 3
+anchors_preset = 0
 
-[node name="Control" parent="PlanetViewport/PlanetHolder" instance=ExtResource( 3 )]
+[node name="Control" parent="PlanetViewport/PlanetHolder" instance=ExtResource("3")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
 
 [node name="PlanetHolder2" type="CenterContainer" parent="."]
-margin_left = 100.0
-margin_top = 100.0
-margin_right = 250.0
-margin_bottom = 250.0
-rect_scale = Vector2( 2, 2 )
-rect_pivot_offset = Vector2( 100, 100 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 0
 
 [node name="PlanetHolder" type="MarginContainer" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 12.5
-margin_right = -212.0
-margin_bottom = 12.5
 
 [node name="ViewportTexture" type="TextureRect" parent="PlanetHolder"]
-margin_right = 300.0
-margin_bottom = 300.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = SubResource( 7 )
-expand = true
-stretch_mode = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+texture = SubResource("7")
+expand_mode = 1
 
-[node name="Settings" type="Control" parent="."]
-margin_left = 300.0
-margin_right = 512.0
-margin_bottom = 350.0
+[node name="Settings" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Settings"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = 5.0
-margin_right = -1.99998
-custom_constants/separation = 0
+layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="Label5" type="Label" parent="Settings/VBoxContainer"]
-margin_right = 210.0
-margin_bottom = 16.0
-theme = ExtResource( 2 )
-custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Planet type:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="OptionButton" type="OptionButton" parent="Settings/VBoxContainer"]
-margin_top = 16.0
-margin_right = 210.0
-margin_bottom = 32.0
+layout_mode = 2
 focus_mode = 0
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 shortcut_in_tooltip = false
-enabled_focus_mode = 0
-text = "Terran Wet"
 
 [node name="Control2" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 32.0
-margin_right = 210.0
-margin_bottom = 39.0
-rect_min_size = Vector2( 0, 7 )
+layout_mode = 2
 
 [node name="Label" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 39.0
-margin_right = 210.0
-margin_bottom = 55.0
-theme = ExtResource( 2 )
-custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "seed:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Seed" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 55.0
-margin_right = 210.0
-margin_bottom = 72.0
-custom_constants/separation = 0
+layout_mode = 2
 
 [node name="SeedText" type="LineEdit" parent="Settings/VBoxContainer/Seed"]
-margin_right = 152.0
-margin_bottom = 17.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "0"
 caret_blink = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Button" type="Button" parent="Settings/VBoxContainer/Seed"]
-margin_left = 152.0
-margin_right = 210.0
-margin_bottom = 17.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "rand"
 
 [node name="Control" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 72.0
-margin_right = 210.0
-margin_bottom = 79.0
-rect_min_size = Vector2( 0, 7 )
+layout_mode = 2
 
 [node name="Label3" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 79.0
-margin_right = 210.0
-margin_bottom = 95.0
-theme = ExtResource( 2 )
-custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "pixels: "
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="SliderPixels" type="HSlider" parent="Settings/VBoxContainer"]
 visible = false
-margin_top = 98.0
-margin_right = 210.0
-margin_bottom = 114.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 min_value = 16.0
 value = 100.0
 
 [node name="InputPixels" type="LineEdit" parent="Settings/VBoxContainer"]
-margin_top = 95.0
-margin_right = 210.0
-margin_bottom = 112.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "100"
 caret_blink = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Control4" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 112.0
-margin_right = 210.0
-margin_bottom = 119.0
-rect_min_size = Vector2( 0, 7 )
+layout_mode = 2
 
 [node name="Label4" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 119.0
-margin_right = 210.0
-margin_bottom = 135.0
-theme = ExtResource( 2 )
-custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Rotation:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="SliderRotation" type="HSlider" parent="Settings/VBoxContainer"]
-margin_top = 135.0
-margin_right = 210.0
-margin_bottom = 151.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 max_value = 6.28
 step = 0.01
 value = 6.28
 
 [node name="Control6" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 151.0
-margin_right = 210.0
-margin_bottom = 152.0
-rect_min_size = Vector2( 0, 1 )
+layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 152.0
-margin_right = 210.0
-margin_bottom = 168.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
 
 [node name="Label8" type="Label" parent="Settings/VBoxContainer/HBoxContainer2"]
-margin_right = 148.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
-custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+theme = ExtResource("2")
 text = "DITHER:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ShouldDither" type="Button" parent="Settings/VBoxContainer/HBoxContainer2"]
-margin_left = 152.0
-margin_right = 210.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 58, 0 )
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "on"
 
 [node name="Control3" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 168.0
-margin_right = 210.0
-margin_bottom = 175.0
-rect_min_size = Vector2( 0, 7 )
+layout_mode = 2
 
 [node name="Label7" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 175.0
-margin_right = 210.0
-margin_bottom = 191.0
-theme = ExtResource( 2 )
-custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Colors:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ColorButtonHolder" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 191.0
-margin_right = 210.0
-margin_bottom = 209.0
+layout_mode = 2
 size_flags_horizontal = 3
-custom_constants/separation = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="ColorPickerButton" parent="Settings/VBoxContainer/ColorButtonHolder" instance=ExtResource( 8 )]
-margin_right = 210.0
-margin_bottom = 18.0
-rect_scale = Vector2( 1, 1 )
+[node name="ColorPickerButton" parent="Settings/VBoxContainer/ColorButtonHolder" instance=ExtResource("8")]
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 209.0
-margin_right = 210.0
-margin_bottom = 225.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
 
 [node name="RandomizeColors" type="Button" parent="Settings/VBoxContainer/HBoxContainer"]
-margin_right = 103.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
-custom_constants/hseparation = 2
+theme = ExtResource("2")
 text = "random"
 
 [node name="ResetColors" type="Button" parent="Settings/VBoxContainer/HBoxContainer"]
-margin_left = 107.0
-margin_right = 210.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "reset"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Settings/VBoxContainer"]
-margin_top = 225.0
-margin_right = 210.0
-margin_bottom = 241.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
 
 [node name="ImportExportColors" type="Button" parent="Settings/VBoxContainer/HBoxContainer3"]
-margin_right = 210.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "import / export"
 
 [node name="Control7" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 241.0
-margin_right = 210.0
-margin_bottom = 248.0
-rect_min_size = Vector2( 0, 7 )
+layout_mode = 2
 
 [node name="LayerOptions" type="MenuButton" parent="Settings/VBoxContainer"]
-margin_top = 248.0
-margin_right = 210.0
-margin_bottom = 264.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Layers"
 flat = false
 
 [node name="Control5" type="Control" parent="Settings/VBoxContainer"]
-margin_top = 264.0
-margin_right = 210.0
-margin_bottom = 271.0
-rect_min_size = Vector2( 0, 7 )
+layout_mode = 2
 
 [node name="Label6" type="Label" parent="Settings/VBoxContainer"]
-margin_top = 271.0
-margin_right = 210.0
-margin_bottom = 287.0
-theme = ExtResource( 2 )
-custom_colors/font_color = Color( 0.811765, 0.811765, 0.811765, 1 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Export:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ExportPNG" type="Button" parent="Settings/VBoxContainer"]
-margin_top = 287.0
-margin_right = 210.0
-margin_bottom = 303.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "png"
 
 [node name="ExportGIF" type="Button" parent="Settings/VBoxContainer"]
-margin_top = 303.0
-margin_right = 210.0
-margin_bottom = 319.0
-theme = ExtResource( 2 )
+visible = false
+layout_mode = 2
+theme = ExtResource("2")
 text = "GIF"
 
 [node name="ExportSpriteSheet" type="Button" parent="Settings/VBoxContainer"]
-margin_top = 319.0
-margin_right = 210.0
-margin_bottom = 335.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "spritesheet"
 
 [node name="Abberation" type="ColorRect" parent="."]
-material = SubResource( 6 )
+material = SubResource("6")
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="Control" type="Control" parent="."]
-margin_right = 300.0
-margin_bottom = 300.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 300.0
 
 [node name="Popup" type="ColorRect" parent="."]
 visible = false
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.172549, 0.207843, 0.301961, 0.596078 )
-script = ExtResource( 5 )
+color = Color(0.172549, 0.207843, 0.301961, 0.596078)
+script = ExtResource("5")
 
 [node name="PopupFront" type="ColorRect" parent="Popup"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 30.0
-margin_top = 30.0
-margin_right = -30.0
-margin_bottom = -30.0
-color = Color( 0.172549, 0.207843, 0.301961, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+color = Color(0.172549, 0.207843, 0.301961, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Popup/PopupFront"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="SpritesheetSettings" type="HBoxContainer" parent="Popup/PopupFront/VBoxContainer"]
-margin_right = 432.0
-margin_bottom = 200.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings"]
-margin_right = 214.0
-margin_bottom = 200.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_right = 214.0
-margin_bottom = 16.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "frames (width)"
 
 [node name="WidthFrames" type="SpinBox" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 20.0
-margin_right = 214.0
-margin_bottom = 37.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 max_value = 1000.0
 value = 50.0
 rounded = true
 
 [node name="Label2" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 41.0
-margin_right = 214.0
-margin_bottom = 57.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "frames (height)"
 
 [node name="HeightFrames" type="SpinBox" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 61.0
-margin_right = 214.0
-margin_bottom = 78.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 max_value = 1000.0
 value = 1.0
 
 [node name="Control2" type="Control" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 82.0
-margin_right = 214.0
-margin_bottom = 92.0
-rect_min_size = Vector2( 0, 10 )
+layout_mode = 2
 
 [node name="Label3" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 96.0
-margin_right = 214.0
-margin_bottom = 112.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Pixel Margin"
 
 [node name="PixelMargin" type="SpinBox" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 116.0
-margin_right = 214.0
-margin_bottom = 133.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 max_value = 1000.0
 
 [node name="Control" type="Control" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 137.0
-margin_right = 214.0
-margin_bottom = 167.0
-rect_min_size = Vector2( 0, 30 )
+layout_mode = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings"]
-margin_left = 218.0
-margin_right = 432.0
-margin_bottom = 200.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="FrameInfo" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2"]
-margin_right = 214.0
-margin_bottom = 16.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Total Frames: 50"
 
 [node name="ResolutionInfo" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2"]
-margin_top = 20.0
-margin_right = 214.0
-margin_bottom = 55.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Image resolution:
 5000x100"
 
 [node name="WarningResolution" type="Label" parent="Popup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2"]
 visible = false
-margin_top = 62.0
-margin_right = 238.0
-margin_bottom = 119.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Image Width/Height cannot exceed 16384 pixels."
-autowrap = true
 
-[node name="TextureProgress" type="TextureProgress" parent="Popup/PopupFront/VBoxContainer"]
+[node name="TextureProgress" type="TextureProgressBar" parent="Popup/PopupFront/VBoxContainer"]
 visible = false
-margin_top = 183.0
-margin_right = 432.0
-margin_bottom = 199.0
-rect_min_size = Vector2( 0, 16 )
+layout_mode = 2
 size_flags_horizontal = 3
-texture_under = ExtResource( 6 )
-texture_progress = ExtResource( 7 )
 nine_patch_stretch = true
 stretch_margin_left = 4
 stretch_margin_top = 4
 stretch_margin_right = 4
 stretch_margin_bottom = 4
+texture_under = ExtResource("6")
+texture_progress = ExtResource("7")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Popup/PopupFront/VBoxContainer"]
-margin_top = 204.0
-margin_right = 432.0
-margin_bottom = 220.0
+layout_mode = 2
 
 [node name="CancelButton" type="Button" parent="Popup/PopupFront/VBoxContainer/HBoxContainer"]
-margin_right = 214.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "cancel"
 
 [node name="ExportButton" type="Button" parent="Popup/PopupFront/VBoxContainer/HBoxContainer"]
-margin_left = 218.0
-margin_right = 432.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "export"
 
 [node name="ImportExportPopup" type="ColorRect" parent="."]
 visible = false
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.172549, 0.207843, 0.301961, 0.596078 )
-script = ExtResource( 11 )
+color = Color(0.172549, 0.207843, 0.301961, 0.596078)
+script = ExtResource("11")
 
 [node name="PopupFront" type="ColorRect" parent="ImportExportPopup"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 30.0
-margin_top = 30.0
-margin_right = -30.0
-margin_bottom = -30.0
-color = Color( 0.172549, 0.207843, 0.301961, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+color = Color(0.172549, 0.207843, 0.301961, 1)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ImportExportPopup/PopupFront"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ImportExportPopup/PopupFront/HBoxContainer"]
-margin_right = 214.0
-margin_bottom = 220.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TextEdit" type="TextEdit" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer"]
-margin_right = 214.0
-margin_bottom = 220.0
+layout_mode = 2
 size_flags_vertical = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 caret_blink = true
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="ImportExportPopup/PopupFront/HBoxContainer"]
-margin_left = 218.0
-margin_right = 432.0
-margin_bottom = 220.0
+layout_mode = 2
 size_flags_horizontal = 3
-custom_constants/separation = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
-margin_right = 214.0
-margin_bottom = 16.0
+layout_mode = 2
 
 [node name="Control" type="Control" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2/HBoxContainer"]
-margin_right = 174.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="CloseButton" type="Button" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2/HBoxContainer"]
-margin_left = 178.0
-margin_right = 214.0
-margin_bottom = 16.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = " X "
 
 [node name="Control" type="Control" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
-margin_top = 16.0
-margin_right = 214.0
-margin_bottom = 133.0
+layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
-margin_top = 133.0
-margin_right = 214.0
-margin_bottom = 149.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "clipboard:"
 
 [node name="CopyToClipboard" type="Button" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
-margin_top = 149.0
-margin_right = 214.0
-margin_bottom = 165.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Copy to"
 
 [node name="PasteFromClipboard" type="Button" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
-margin_top = 165.0
-margin_right = 214.0
-margin_bottom = 181.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "Paste from"
 expand_icon = true
 
 [node name="Control2" type="Control" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
-margin_top = 181.0
-margin_right = 214.0
-margin_bottom = 188.0
-rect_min_size = Vector2( 0, 7 )
+layout_mode = 2
 
 [node name="Label2" type="Label" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
-margin_top = 188.0
-margin_right = 214.0
-margin_bottom = 204.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "colors:"
 
 [node name="ApplyColors" type="Button" parent="ImportExportPopup/PopupFront/HBoxContainer/VBoxContainer2"]
-margin_top = 204.0
-margin_right = 214.0
-margin_bottom = 220.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "apply"
 
 [node name="GifPopup" type="ColorRect" parent="."]
 visible = false
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.172549, 0.207843, 0.301961, 0.596078 )
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+color = Color(0.172549, 0.207843, 0.301961, 0.596078)
+script = ExtResource("10")
 
 [node name="PopupFront" type="ColorRect" parent="GifPopup"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 30.0
-margin_top = 30.0
-margin_right = -30.0
-margin_bottom = -30.0
-color = Color( 0.172549, 0.207843, 0.301961, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+color = Color(0.172549, 0.207843, 0.301961, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GifPopup/PopupFront"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="SpritesheetSettings" type="HBoxContainer" parent="GifPopup/PopupFront/VBoxContainer"]
-margin_right = 432.0
-margin_bottom = 200.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings"]
-margin_right = 432.0
-margin_bottom = 200.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_right = 432.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "frames"
 
 [node name="GifFrameCount" type="SpinBox" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 20.0
-margin_right = 432.0
-margin_bottom = 37.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 max_value = 1000.0
 value = 60.0
 rounded = true
 
 [node name="Label2" type="Label" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 41.0
-margin_right = 432.0
-margin_bottom = 57.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "Length (Seconds)"
 
 [node name="GifTime" type="SpinBox" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 61.0
-margin_right = 432.0
-margin_bottom = 78.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 max_value = 1000.0
 step = 0.1
 value = 10.0
 
 [node name="Label3" type="Label" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 82.0
-margin_right = 432.0
-margin_bottom = 98.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "Frame Delay (Seconds)"
-autowrap = true
 
 [node name="FrameDelay" type="SpinBox" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
-margin_top = 102.0
-margin_right = 432.0
-margin_bottom = 119.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 max_value = 10.0
 step = 0.001
 value = 0.167
 
 [node name="Control" type="Control" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer"]
 visible = false
-margin_top = 102.0
-margin_right = 269.0
-margin_bottom = 132.0
-rect_min_size = Vector2( 0, 30 )
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings"]
 visible = false
-margin_left = 218.0
-margin_right = 432.0
-margin_bottom = 180.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2"]
-margin_right = 214.0
-margin_bottom = 35.0
-theme = ExtResource( 2 )
+layout_mode = 2
+theme = ExtResource("2")
 text = "frames PEr Second"
-autowrap = true
 
 [node name="Control" type="Control" parent="GifPopup/PopupFront/VBoxContainer/SpritesheetSettings/VBoxContainer2"]
-margin_top = 39.0
-margin_right = 214.0
-margin_bottom = 69.0
-rect_min_size = Vector2( 0, 30 )
+layout_mode = 2
 
-[node name="TextureProgress" type="TextureProgress" parent="GifPopup/PopupFront/VBoxContainer"]
+[node name="TextureProgress" type="TextureProgressBar" parent="GifPopup/PopupFront/VBoxContainer"]
 visible = false
-margin_top = 184.0
-margin_right = 432.0
-margin_bottom = 200.0
-rect_min_size = Vector2( 0, 16 )
+layout_mode = 2
 size_flags_horizontal = 3
-texture_under = ExtResource( 6 )
-texture_progress = ExtResource( 7 )
 nine_patch_stretch = true
 stretch_margin_left = 4
 stretch_margin_top = 4
 stretch_margin_right = 4
 stretch_margin_bottom = 4
+texture_under = ExtResource("6")
+texture_progress = ExtResource("7")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GifPopup/PopupFront/VBoxContainer"]
-margin_top = 204.0
-margin_right = 432.0
-margin_bottom = 220.0
+layout_mode = 2
 
 [node name="CancelButton" type="Button" parent="GifPopup/PopupFront/VBoxContainer/HBoxContainer"]
-margin_right = 214.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "cancel"
 
 [node name="ExportButton" type="Button" parent="GifPopup/PopupFront/VBoxContainer/HBoxContainer"]
-margin_left = 218.0
-margin_right = 432.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource( 2 )
+theme = ExtResource("2")
 text = "export"
 
 [node name="Panel" type="ColorRect" parent="."]
 visible = false
-anchor_bottom = 1.0
-margin_left = 297.0
-margin_right = 512.0
-margin_bottom = -100.0
-rect_min_size = Vector2( 200, 0 )
-color = Color( 0.172549, 0.207843, 0.301961, 1 )
+layout_mode = 0
+offset_left = 200.0
+offset_right = 515.0
+offset_bottom = 325.0
+color = Color(0.172549, 0.207843, 0.301961, 1)
 
 [node name="PickerExit" type="Button" parent="Panel"]
-margin_left = 0.945328
-margin_top = 1.64743
-margin_right = 16.9453
-margin_bottom = 18.6474
-theme = ExtResource( 2 )
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 17.0
+theme = ExtResource("2")
 text = "x"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ColorPicker" type="ColorPicker" parent="Panel"]
-margin_left = 14.9122
-margin_top = -0.766645
-margin_right = 394.912
-margin_bottom = 391.233
-rect_scale = Vector2( 0.5, 0.5 )
-theme = ExtResource( 2 )
-presets_enabled = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 12.0
+offset_right = 310.0
+offset_bottom = 441.0
+theme = ExtResource("2")
 presets_visible = false
 
 [connection signal="item_selected" from="Settings/VBoxContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
