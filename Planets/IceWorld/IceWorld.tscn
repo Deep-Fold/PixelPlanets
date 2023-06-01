@@ -95,6 +95,11 @@ void fragment() {
 	
 	float d_light = distance(uv , light_origin);
 	
+	// cut out a circle
+	float d_circle = distance(uv, vec2(0.5));
+	// stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
+	float circle_a = step(d_circle, 0.49999);
+
 	// give planet a tilt
 	uv = rotate(uv, rotation);
 
@@ -120,7 +125,7 @@ void fragment() {
 	
 	float a = step(lake_cutoff, lake);
 	a *= step(distance(vec2(0.5), uv), 0.5);
-	COLOR = vec4(col.rgb, a * col.a);
+	COLOR = vec4(col.rgb, circle_a * a * col.a);
 }
 "
 
