@@ -13,8 +13,8 @@ extends Control
 @onready var layeroptions = $Settings/VBoxContainer/LayerOptions
 
 @onready var colorbutton_scene = preload("res://GUI/ColorPickerButton.tscn")
-#const GIFExporter = preload("res://addons/gdgifexporter/exporter.gd")
-#const MedianCutQuantization = preload("res://addons/gdgifexporter/quantization/median_cut.gd")
+const GIFExporter = preload("res://addons/gdgifexporter/exporter.gd")
+const MedianCutQuantization = preload("res://addons/gdgifexporter/quantization/median_cut.gd")
 
 @onready var planets = {
 	"Terran Wet": preload("res://Planets/Rivers/Rivers.tscn"),
@@ -154,9 +154,8 @@ func _on_Button_pressed():
 
 func _on_ExportPNG_pressed():
 	var planet = viewport_planet.get_child(0)
-	var tex = viewport.get_texture().get_data()
-	var image = Image.new()
-	image.create(pixels * planet.relative_scale, pixels * planet.relative_scale, false, Image.FORMAT_RGBA8)
+	var tex = viewport.get_texture().get_image()
+	var image: Image = Image.create(pixels * planet.relative_scale, pixels * planet.relative_scale, false, Image.FORMAT_RGBA8)
 	var source_xy = 0
 	var source_size = pixels*planet.relative_scale
 	var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
@@ -166,12 +165,11 @@ func _on_ExportPNG_pressed():
 
 func export_spritesheet(sheet_size, progressbar, pixel_margin = 0.0):
 	var planet = viewport_planet.get_child(0)
-	var sheet = Image.new()
+	var sheet = Image.create(pixels * sheet_size.x * planet.relative_scale + sheet_size.x*pixel_margin + pixel_margin,
+					pixels * sheet_size.y * planet.relative_scale + sheet_size.y*pixel_margin + pixel_margin,
+					false, Image.FORMAT_RGBA8)
 	progressbar.max_value = sheet_size.x * sheet_size.y
 	
-	sheet.create(pixels * sheet_size.x * planet.relative_scale + sheet_size.x*pixel_margin + pixel_margin,
-				pixels * sheet_size.y * planet.relative_scale + sheet_size.y*pixel_margin + pixel_margin,
-				false, Image.FORMAT_RGBA8)
 	planet.override_time = true
 	
 	var index = 0
@@ -181,7 +179,7 @@ func export_spritesheet(sheet_size, progressbar, pixel_margin = 0.0):
 			await get_tree().process_frame
 			
 			if index != 0:
-				var image = viewport.get_texture().get_data()
+				var image = viewport.get_texture().get_image()
 				var source_xy = 0
 				var source_size = pixels*planet.relative_scale
 				var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
@@ -197,13 +195,15 @@ func export_spritesheet(sheet_size, progressbar, pixel_margin = 0.0):
 	$Popup.visible = false
 
 func save_image(img):
-	#if OS.get_name() == "HTML5" and OS.has_feature('JavaScript'):
-	#	JavaScript.download_buffer(img.save_png_to_buffer(), String(sd)+".png", "image/png")
-	#else:
+	print("save_image")
+	print(img)
+	if OS.get_name() == "HTML5" and OS.has_feature('JavaScript'):
+		JavaScriptBridge.download_buffer(img.save_png_to_buffer(), String.num_int64(sd)+".png", "image/png")
+	else:
 		if OS.get_name() == "OSX":
-			img.save_png("user://%s.png"%String(sd))
+			img.save_png("user://%s.png"%String.num_int64(sd))
 		else:
-			img.save_png("res://%s.png"%String(sd))
+			img.save_png("res://%s.png"%String.num_int64(sd))
 
 func _on_ExportSpriteSheet_pressed():
 	$Panel.visible = false
@@ -245,56 +245,53 @@ func _on_ExportGIF_pressed():
 
 var cancel_gif = false
 func export_gif(frames, frame_delay, progressbar):
-	return # Disable GIF for now
-#	var planet = viewport_planet.get_child(0)
-#	var exporter = GIFExporter.new(pixels*planet.relative_scale, pixels*planet.relative_scale)
-#	progressbar.max_value = frames
-#
-#	planet.override_time = true
-#	planet.set_custom_time(0.0)
-#	await get_tree().process_frame
-#
-#	for i in range(frames):
-#		if cancel_gif:
-#			progressbar.value = 0
-#			planet.override_time = false
-#			break;
-#			return;
-#
-#		planet.set_custom_time(lerp(0.0, 1.0, float(i)/float(frames)))
-#
-#		await get_tree().process_frame
-#
-#		var tex = viewport.get_texture().get_data()
-#		var image = Image.new()
-#		image.create(pixels * planet.relative_scale, pixels * planet.relative_scale, false, Image.FORMAT_RGBA8)
-#
-#		var source_xy = 0
-#		var source_size = pixels*planet.relative_scale
-#		var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
-#		image.blit_rect(tex, source_rect, Vector2(0,0))
-#		exporter.add_frame(image, frame_delay, MedianCutQuantization)
-#
-#		progressbar.value = i
-#
-#	if cancel_gif:
-#		return
-#	if OS.get_name() != "HTML5" or !OS.has_feature('JavaScript'):
-#		var file: File = File.new()
-#		if OS.get_name() == "OSX":
-#			file.open("user://%s.gif"%String(sd), File.WRITE)
-#		else:
-#			file.open("res://%s.gif"%String(sd), File.WRITE)
-#		file.store_buffer(exporter.export_file_data())
-#		file.close()
-#	else:
-#		var data = Array(exporter.export_file_data())
-#		JavaScript.download_buffer(data, String(sd)+".gif", "image/gif")
-#
-#	planet.override_time = false
-#	$GifPopup.visible = false
-#	progressbar.visible = false
+	var planet = viewport_planet.get_child(0)
+	var exporter = GIFExporter.new(pixels*planet.relative_scale, pixels*planet.relative_scale)
+	progressbar.max_value = frames
 
+	planet.override_time = true
+	planet.set_custom_time(0.0)
+	await get_tree().process_frame
+
+	for i in range(frames):
+		if cancel_gif:
+			progressbar.value = 0
+			planet.override_time = false
+			break;
+			return;
+
+		planet.set_custom_time(lerp(0.0, 1.0, float(i)/float(frames)))
+
+		await get_tree().process_frame
+
+		var tex = viewport.get_texture().get_image()
+		var image = Image.create(pixels * planet.relative_scale, pixels * planet.relative_scale, false, Image.FORMAT_RGBA8)
+
+		var source_xy = 0
+		var source_size = pixels*planet.relative_scale
+		var source_rect = Rect2(source_xy, source_xy,source_size,source_size)
+		image.blit_rect(tex, source_rect, Vector2(0,0))
+		exporter.add_frame(image, frame_delay, MedianCutQuantization)
+
+		progressbar.value = i
+
+	if cancel_gif:
+		return
+	if OS.get_name() != "HTML5" or !OS.has_feature('JavaScript'):
+		var file: FileAccess
+		if OS.get_name() == "OSX":
+			file = FileAccess.open("user://%s.gif"%String.num_int64(sd), FileAccess.WRITE)
+		else:
+			file = FileAccess.open("res://%s.gif"%String.num_int64(sd), FileAccess.WRITE,)
+		file.store_buffer(exporter.export_file_data())
+		file.close()
+	else:
+		var data = Array(exporter.export_file_data())
+		JavaScriptBridge.download_buffer(data, String.num_int64(sd)+".gif", "image/gif")
+
+	planet.override_time = false
+	$GifPopup.visible = false
+	progressbar.visible = false
 
 func _on_GifPopup_cancel_gif():
 	cancel_gif = true

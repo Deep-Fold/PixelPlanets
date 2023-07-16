@@ -301,7 +301,6 @@ theme = ExtResource("2")
 text = "png"
 
 [node name="ExportGIF" type="Button" parent="Settings/VBoxContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("2")
 text = "GIF"
@@ -649,10 +648,10 @@ text = "x"
 
 [node name="ColorPicker" type="ColorPicker" parent="Panel"]
 layout_mode = 0
-offset_left = 28.0
-offset_top = 12.0
-offset_right = 310.0
-offset_bottom = 441.0
+offset_left = 36.0
+offset_top = 16.0
+offset_right = 314.0
+offset_bottom = 445.0
 theme = ExtResource("2")
 presets_visible = false
 
