@@ -195,8 +195,6 @@ func export_spritesheet(sheet_size, progressbar, pixel_margin = 0.0):
 	$Popup.visible = false
 
 func save_image(img):
-	print("save_image")
-	print(img)
 	if OS.get_name() == "HTML5" and OS.has_feature('JavaScript'):
 		JavaScriptBridge.download_buffer(img.save_png_to_buffer(), String.num_int64(sd)+".png", "image/png")
 	else:
