@@ -195,7 +195,7 @@ func export_spritesheet(sheet_size, progressbar, pixel_margin = 0.0):
 	$Popup.visible = false
 
 func save_image(img):
-	if OS.get_name() == "HTML5" and OS.has_feature('JavaScript'):
+	if OS.get_name() == "Web" and OS.has_feature('web'):
 		JavaScriptBridge.download_buffer(img.save_png_to_buffer(), String.num_int64(sd)+".png", "image/png")
 	else:
 		if OS.get_name() == "OSX":
@@ -275,7 +275,10 @@ func export_gif(frames, frame_delay, progressbar):
 
 	if cancel_gif:
 		return
-	if OS.get_name() != "HTML5" or !OS.has_feature('JavaScript'):
+	if OS.get_name() == "Web" and OS.has_feature('web'):
+		var data = Array(exporter.export_file_data())
+		JavaScriptBridge.download_buffer(data, String.num_int64(sd)+".gif", "image/gif")
+	else:
 		var file: FileAccess
 		if OS.get_name() == "OSX":
 			file = FileAccess.open("user://%s.gif"%String.num_int64(sd), FileAccess.WRITE)
@@ -283,9 +286,6 @@ func export_gif(frames, frame_delay, progressbar):
 			file = FileAccess.open("res://%s.gif"%String.num_int64(sd), FileAccess.WRITE,)
 		file.store_buffer(exporter.export_file_data())
 		file.close()
-	else:
-		var data = Array(exporter.export_file_data())
-		JavaScriptBridge.download_buffer(data, String.num_int64(sd)+".gif", "image/gif")
 
 	planet.override_time = false
 	$GifPopup.visible = false
