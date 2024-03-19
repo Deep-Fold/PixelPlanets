@@ -63,7 +63,7 @@ func _set_colors_from_vars(mat, vars, colors):
 func randomize_colors():
 	pass
 
-# Using ideas from https://www.iquilezles.org/www/articles/palettes/palettes.htm
+# Using ideas from https://iquilezles.org/articles/palettes/
 func _generate_new_colorscheme(n_colors, hue_diff = 0.9, saturation = 0.5):
 #	var a = Vector3(rand_range(0.0, 0.5), rand_range(0.0, 0.5), rand_range(0.0, 0.5))
 	var a = Vector3(0.5,0.5,0.5)
