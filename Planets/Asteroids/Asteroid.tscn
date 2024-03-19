@@ -1,33 +1,30 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://ddtlg3wmpfsyc"]
 
-[ext_resource path="res://Planets/Asteroids/Asteroids.shader" type="Shader" id=1]
-[ext_resource path="res://Planets/Planet.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Planets/Asteroids/Asteroid.gd" type="Script" id=3]
+[ext_resource type="Shader" path="res://Planets/Asteroids/Asteroids.gdshader" id="1"]
+[ext_resource type="PackedScene" path="res://Planets/Planet.tscn" id="2"]
+[ext_resource type="Script" path="res://Planets/Asteroids/Asteroid.gd" id="3"]
 
-[sub_resource type="ShaderMaterial" id=1]
-shader = ExtResource( 1 )
-shader_param/pixels = 100.0
-shader_param/rotation = 0.0
-shader_param/light_origin = Vector2( 0, 0 )
-shader_param/time_speed = 0.4
-shader_param/color1 = Color( 0.639216, 0.654902, 0.760784, 1 )
-shader_param/color2 = Color( 0.298039, 0.407843, 0.521569, 1 )
-shader_param/color3 = Color( 0.227451, 0.247059, 0.368627, 1 )
-shader_param/size = 5.294
-shader_param/OCTAVES = 2
-shader_param/seed = 1.567
-shader_param/should_dither = true
+[sub_resource type="ShaderMaterial" id="1"]
+shader = ExtResource("1")
+shader_parameter/pixels = 100.0
+shader_parameter/rotation = 0.0
+shader_parameter/light_origin = Vector2(0, 0)
+shader_parameter/time_speed = 0.4
+shader_parameter/color1 = Color(0.639216, 0.654902, 0.760784, 1)
+shader_parameter/color2 = Color(0.298039, 0.407843, 0.521569, 1)
+shader_parameter/color3 = Color(0.227451, 0.247059, 0.368627, 1)
+shader_parameter/size = 5.294
+shader_parameter/OCTAVES = 2
+shader_parameter/seed = 1.567
+shader_parameter/should_dither = true
 
-[node name="Asteroid" instance=ExtResource( 2 )]
-margin_right = -412.0
-margin_bottom = -200.0
-rect_min_size = Vector2( 100, 100 )
-script = ExtResource( 3 )
+[node name="Asteroid" instance=ExtResource("2")]
+layout_mode = 3
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3")
 
 [node name="Asteroid" type="ColorRect" parent="." index="0"]
-material = SubResource( 1 )
-margin_right = 100.0
-margin_bottom = 100.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+material = SubResource("1")
+layout_mode = 0

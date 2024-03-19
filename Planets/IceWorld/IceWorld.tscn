@@ -1,29 +1,29 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=9 format=3 uid="uid://du53ljjdcp2s4"]
 
-[ext_resource path="res://Planets/Planet.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Planets/LandMasses/PlanetUnder.shader" type="Shader" id=2]
-[ext_resource path="res://Planets/IceWorld/IceWorld.gd" type="Script" id=3]
-[ext_resource path="res://Planets/LandMasses/Clouds.shader" type="Shader" id=4]
+[ext_resource type="PackedScene" path="res://Planets/Planet.tscn" id="1"]
+[ext_resource type="Shader" path="res://Planets/LandMasses/PlanetUnder.gdshader" id="2"]
+[ext_resource type="Script" path="res://Planets/IceWorld/IceWorld.gd" id="3"]
+[ext_resource type="Shader" path="res://Planets/LandMasses/Clouds.gdshader" id="4"]
 
-[sub_resource type="ShaderMaterial" id=1]
-shader = ExtResource( 2 )
-shader_param/pixels = 100.0
-shader_param/rotation = 0.0
-shader_param/light_origin = Vector2( 0.3, 0.3 )
-shader_param/time_speed = 0.25
-shader_param/dither_size = 2.0
-shader_param/light_border_1 = 0.48
-shader_param/light_border_2 = 0.632
-shader_param/color1 = Color( 0.980392, 1, 1, 1 )
-shader_param/color2 = Color( 0.780392, 0.831373, 0.882353, 1 )
-shader_param/color3 = Color( 0.572549, 0.560784, 0.721569, 1 )
-shader_param/size = 8.0
-shader_param/OCTAVES = 2
-shader_param/seed = 1.036
-shader_param/time = 0.0
-shader_param/should_dither = true
+[sub_resource type="ShaderMaterial" id="1"]
+shader = ExtResource("2")
+shader_parameter/pixels = 100.0
+shader_parameter/rotation = 0.0
+shader_parameter/light_origin = Vector2(0.3, 0.3)
+shader_parameter/time_speed = 0.25
+shader_parameter/dither_size = 2.0
+shader_parameter/light_border_1 = 0.48
+shader_parameter/light_border_2 = 0.632
+shader_parameter/color1 = Color(0.980392, 1, 1, 1)
+shader_parameter/color2 = Color(0.780392, 0.831373, 0.882353, 1)
+shader_parameter/color3 = Color(0.572549, 0.560784, 0.721569, 1)
+shader_parameter/size = 8.0
+shader_parameter/OCTAVES = 2
+shader_parameter/seed = 1.036
+shader_parameter/time = 0.0
+shader_parameter/should_dither = true
 
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id="2"]
 code = "shader_type canvas_item;
 render_mode blend_mix;
 
@@ -35,9 +35,9 @@ uniform float light_border_1 : hint_range(0.0, 1.0) = 0.4;
 uniform float light_border_2 : hint_range(0.0, 1.0) = 0.5;
 uniform float lake_cutoff : hint_range(0.0, 1.0);
 
-uniform vec4 color1 : hint_color;
-uniform vec4 color2 : hint_color;
-uniform vec4 color3 : hint_color;
+uniform vec4 color1 : source_color;
+uniform vec4 color2 : source_color;
+uniform vec4 color3 : source_color;
 
 uniform float size = 50.0;
 uniform int OCTAVES : hint_range(0, 20, 1);
@@ -95,6 +95,11 @@ void fragment() {
 	
 	float d_light = distance(uv , light_origin);
 	
+	// cut out a circle
+	float d_circle = distance(uv, vec2(0.5));
+	// stepping over 0.5 instead of 0.49999 makes some pixels a little buggy
+	float circle_a = step(d_circle, 0.49999);
+
 	// give planet a tilt
 	uv = rotate(uv, rotation);
 
@@ -120,73 +125,60 @@ void fragment() {
 	
 	float a = step(lake_cutoff, lake);
 	a *= step(distance(vec2(0.5), uv), 0.5);
-	COLOR = vec4(col.rgb, a * col.a);
+	COLOR = vec4(col.rgb, circle_a * a * col.a);
 }
 "
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
-shader_param/pixels = 100.0
-shader_param/rotation = 0.0
-shader_param/light_origin = Vector2( 0.3, 0.3 )
-shader_param/time_speed = 0.2
-shader_param/light_border_1 = 0.024
-shader_param/light_border_2 = 0.047
-shader_param/lake_cutoff = 0.55
-shader_param/color1 = Color( 0.309804, 0.643137, 0.721569, 1 )
-shader_param/color2 = Color( 0.298039, 0.407843, 0.521569, 1 )
-shader_param/color3 = Color( 0.227451, 0.247059, 0.368627, 1 )
-shader_param/size = 10.0
-shader_param/OCTAVES = 3
-shader_param/seed = 1.14
-shader_param/time = 0.0
+[sub_resource type="ShaderMaterial" id="3"]
+shader = SubResource("2")
+shader_parameter/pixels = 100.0
+shader_parameter/rotation = 0.0
+shader_parameter/light_origin = Vector2(0.3, 0.3)
+shader_parameter/time_speed = 0.2
+shader_parameter/light_border_1 = 0.024
+shader_parameter/light_border_2 = 0.047
+shader_parameter/lake_cutoff = 0.55
+shader_parameter/color1 = Color(0.309804, 0.643137, 0.721569, 1)
+shader_parameter/color2 = Color(0.298039, 0.407843, 0.521569, 1)
+shader_parameter/color3 = Color(0.227451, 0.247059, 0.368627, 1)
+shader_parameter/size = 10.0
+shader_parameter/OCTAVES = 3
+shader_parameter/seed = 1.14
+shader_parameter/time = 0.0
 
-[sub_resource type="ShaderMaterial" id=4]
-shader = ExtResource( 4 )
-shader_param/pixels = 100.0
-shader_param/rotation = 0.0
-shader_param/cloud_cover = 0.546
-shader_param/light_origin = Vector2( 0.3, 0.3 )
-shader_param/time_speed = 0.1
-shader_param/stretch = 2.5
-shader_param/cloud_curve = 1.3
-shader_param/light_border_1 = 0.566
-shader_param/light_border_2 = 0.781
-shader_param/base_color = Color( 0.882353, 0.94902, 1, 1 )
-shader_param/outline_color = Color( 0.752941, 0.890196, 1, 1 )
-shader_param/shadow_base_color = Color( 0.368627, 0.439216, 0.647059, 1 )
-shader_param/shadow_outline_color = Color( 0.25098, 0.286275, 0.45098, 1 )
-shader_param/size = 4.0
-shader_param/OCTAVES = 4
-shader_param/seed = 1.14
-shader_param/time = 0.0
+[sub_resource type="ShaderMaterial" id="4"]
+shader = ExtResource("4")
+shader_parameter/pixels = 100.0
+shader_parameter/rotation = 0.0
+shader_parameter/cloud_cover = 0.546
+shader_parameter/light_origin = Vector2(0.3, 0.3)
+shader_parameter/time_speed = 0.1
+shader_parameter/stretch = 2.5
+shader_parameter/cloud_curve = 1.3
+shader_parameter/light_border_1 = 0.566
+shader_parameter/light_border_2 = 0.781
+shader_parameter/base_color = Color(0.882353, 0.94902, 1, 1)
+shader_parameter/outline_color = Color(0.752941, 0.890196, 1, 1)
+shader_parameter/shadow_base_color = Color(0.368627, 0.439216, 0.647059, 1)
+shader_parameter/shadow_outline_color = Color(0.25098, 0.286275, 0.45098, 1)
+shader_parameter/size = 4.0
+shader_parameter/OCTAVES = 4
+shader_parameter/seed = 1.14
+shader_parameter/time = 0.0
 
-[node name="Planet" instance=ExtResource( 1 )]
-margin_right = -412.0
-margin_bottom = -200.0
-rect_min_size = Vector2( 0, 0 )
-script = ExtResource( 3 )
+[node name="Planet" instance=ExtResource("1")]
+layout_mode = 3
+anchors_preset = 15
+script = ExtResource("3")
 
-[node name="PlanetUnder" type="ColorRect" parent="." index="0"]
-material = SubResource( 1 )
-margin_right = 100.0
-margin_bottom = 100.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Land" type="ColorRect" parent="." index="0"]
+material = SubResource("1")
+layout_mode = 0
 
 [node name="Lakes" type="ColorRect" parent="." index="1"]
-material = SubResource( 3 )
-margin_right = 100.0
-margin_bottom = 100.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+material = SubResource("3")
+layout_mode = 0
 
 [node name="Clouds" type="ColorRect" parent="." index="2"]
-material = SubResource( 4 )
-margin_right = 100.0
-margin_bottom = 100.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+material = SubResource("4")
+layout_mode = 0

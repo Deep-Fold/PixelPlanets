@@ -1,71 +1,59 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://bxp1rnfomnjut"]
 
-[ext_resource path="res://Planets/GasPlanet/GasPlanet.gd" type="Script" id=1]
-[ext_resource path="res://Planets/GasPlanet/GasPlanet.shader" type="Shader" id=2]
+[ext_resource type="Script" path="res://Planets/GasPlanet/GasPlanet.gd" id="1"]
+[ext_resource type="Shader" path="res://Planets/GasPlanet/GasPlanet.gdshader" id="2"]
 
-[sub_resource type="ShaderMaterial" id=1]
-shader = ExtResource( 2 )
-shader_param/pixels = 100.0
-shader_param/cloud_cover = 0.0
-shader_param/light_origin = Vector2( 0.25, 0.25 )
-shader_param/time_speed = 0.7
-shader_param/stretch = 1.0
-shader_param/cloud_curve = 1.3
-shader_param/light_border_1 = 0.692
-shader_param/light_border_2 = 0.666
-shader_param/rotation = 0.0
-shader_param/base_color = Color( 0.231373, 0.12549, 0.152941, 1 )
-shader_param/outline_color = Color( 0.231373, 0.12549, 0.152941, 1 )
-shader_param/shadow_base_color = Color( 0.129412, 0.0941176, 0.105882, 1 )
-shader_param/shadow_outline_color = Color( 0.129412, 0.0941176, 0.105882, 1 )
-shader_param/size = 9.0
-shader_param/OCTAVES = 5
-shader_param/seed = 5.939
-shader_param/time = 0.0
+[sub_resource type="ShaderMaterial" id="1"]
+shader = ExtResource("2")
+shader_parameter/pixels = 100.0
+shader_parameter/cloud_cover = 0.0
+shader_parameter/light_origin = Vector2(0.25, 0.25)
+shader_parameter/time_speed = 0.7
+shader_parameter/stretch = 1.0
+shader_parameter/cloud_curve = 1.3
+shader_parameter/light_border_1 = 0.692
+shader_parameter/light_border_2 = 0.666
+shader_parameter/rotation = 0.0
+shader_parameter/base_color = Color(0.231373, 0.12549, 0.152941, 1)
+shader_parameter/outline_color = Color(0.231373, 0.12549, 0.152941, 1)
+shader_parameter/shadow_base_color = Color(0.129412, 0.0941176, 0.105882, 1)
+shader_parameter/shadow_outline_color = Color(0.129412, 0.0941176, 0.105882, 1)
+shader_parameter/size = 9.0
+shader_parameter/OCTAVES = 5
+shader_parameter/seed = 5.939
+shader_parameter/time = 0.0
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = ExtResource( 2 )
-shader_param/pixels = 100.0
-shader_param/cloud_cover = 0.538
-shader_param/light_origin = Vector2( 0.25, 0.25 )
-shader_param/time_speed = 0.47
-shader_param/stretch = 1.0
-shader_param/cloud_curve = 1.3
-shader_param/light_border_1 = 0.439
-shader_param/light_border_2 = 0.746
-shader_param/rotation = 0.0
-shader_param/base_color = Color( 0.941176, 0.709804, 0.254902, 1 )
-shader_param/outline_color = Color( 0.811765, 0.458824, 0.168627, 1 )
-shader_param/shadow_base_color = Color( 0.670588, 0.317647, 0.188235, 1 )
-shader_param/shadow_outline_color = Color( 0.490196, 0.219608, 0.2, 1 )
-shader_param/size = 9.0
-shader_param/OCTAVES = 5
-shader_param/seed = 5.939
-shader_param/time = 0.0
+[sub_resource type="ShaderMaterial" id="2"]
+shader = ExtResource("2")
+shader_parameter/pixels = 100.0
+shader_parameter/cloud_cover = 0.538
+shader_parameter/light_origin = Vector2(0.25, 0.25)
+shader_parameter/time_speed = 0.47
+shader_parameter/stretch = 1.0
+shader_parameter/cloud_curve = 1.3
+shader_parameter/light_border_1 = 0.439
+shader_parameter/light_border_2 = 0.746
+shader_parameter/rotation = 0.0
+shader_parameter/base_color = Color(0.941176, 0.709804, 0.254902, 1)
+shader_parameter/outline_color = Color(0.811765, 0.458824, 0.168627, 1)
+shader_parameter/shadow_base_color = Color(0.670588, 0.317647, 0.188235, 1)
+shader_parameter/shadow_outline_color = Color(0.490196, 0.219608, 0.2, 1)
+shader_parameter/size = 9.0
+shader_parameter/OCTAVES = 5
+shader_parameter/seed = 5.939
+shader_parameter/time = 0.0
 
 [node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -412.0
-margin_bottom = -200.0
-rect_pivot_offset = Vector2( 100, 100 )
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")
 
 [node name="Cloud" type="ColorRect" parent="."]
-material = SubResource( 1 )
-margin_right = 100.0
-margin_bottom = 100.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+material = SubResource("1")
+layout_mode = 0
 
 [node name="Cloud2" type="ColorRect" parent="."]
-material = SubResource( 2 )
-margin_right = 100.0
-margin_bottom = 100.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+material = SubResource("2")
+layout_mode = 0

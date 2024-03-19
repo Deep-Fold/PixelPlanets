@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Planets/Planet.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Planets/Asteroids/Asteroids.shader" type="Shader" id=2]
-[ext_resource path="res://Planets/NoAtmosphere/Craters.shader" type="Shader" id=3]
+[ext_resource path="res://Planets/Asteroids/Asteroids.gdshader" type="Shader" id=2]
+[ext_resource path="res://Planets/NoAtmosphere/Craters.gdshader" type="Shader" id=3]
 [ext_resource path="res://Planets/NoAtmosphere/NoAtmosphere.gd" type="Script" id=4]
 
 [sub_resource type="ShaderMaterial" id=1]
